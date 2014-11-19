@@ -1,0 +1,12 @@
+SpiritOfAdventure/Library/
+SpiritOfAdventure/SpiritOfAdventure.userprefs
+SpiritOfAdventure/Assets/Scripts/GameScripts/Player.cs.orig
+SpiritOfAdventure/Assets/Scripts/GameScripts/Player.cs.orig.meta
+SpiritOfAdventure/Temp
+*.sln
+*.csproj
+*.orig
+SpiritOfAdventure/obj/
+*.suo
+*.unityproj
+*.psd
