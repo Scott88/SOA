@@ -1,0 +1,314 @@
+fileFormatVersion: 2
+guid: ec1a32e5653cf6949b711448f7f30133
+TextureImporter:
+  serializedVersion: 2
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    linearTexture: 0
+    correctGamma: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: .25
+    normalMapFilter: 0
+  isReadable: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 0
+  seamlessCubemap: 0
+  textureFormat: 4
+  maxTextureSize: 1024
+  textureSettings:
+    filterMode: 0
+    aniso: 1
+    mipBias: -1
+    wrapMode: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: .5, y: .5}
+  spritePixelsToUnits: 100
+  alphaIsTransparency: 1
+  textureType: 5
+  buildTargetSettings:
+  - buildTarget: iPhone
+    maxTextureSize: 1024
+    textureFormat: 13
+    compressionQuality: 50
+  - buildTarget: Android
+    maxTextureSize: 2048
+    textureFormat: 4
+    compressionQuality: 50
+  spriteSheet:
+    sprites:
+    - name: Plants_0
+      rect:
+        serializedVersion: 2
+        x: 1
+        y: 1051
+        width: 985
+        height: 913
+      alignment: 0
+      pivot: {x: .5, y: .5}
+    - name: Plants_1
+      rect:
+        serializedVersion: 2
+        x: 1440
+        y: 1845
+        width: 257
+        height: 134
+      alignment: 0
+      pivot: {x: .5, y: .5}
+    - name: Plants_2
+      rect:
+        serializedVersion: 2
+        x: 1702
+        y: 1741
+        width: 183
+        height: 238
+      alignment: 0
+      pivot: {x: .5, y: .5}
+    - name: Plants_4
+      rect:
+        serializedVersion: 2
+        x: 1897
+        y: 1833
+        width: 66
+        height: 80
+      alignment: 0
+      pivot: {x: .5, y: .5}
+    - name: Plants_5
+      rect:
+        serializedVersion: 2
+        x: 997
+        y: 1553
+        width: 433
+        height: 427
+      alignment: 0
+      pivot: {x: .5, y: .5}
+    - name: Plants_7
+      rect:
+        serializedVersion: 2
+        x: 1441
+        y: 1705
+        width: 259
+        height: 140
+      alignment: 0
+      pivot: {x: .5, y: .5}
+    - name: Plants_8
+      rect:
+        serializedVersion: 2
+        x: 1774
+        y: 1496
+        width: 179
+        height: 242
+      alignment: 0
+      pivot: {x: .5, y: .5}
+    - name: Plants_9
+      rect:
+        serializedVersion: 2
+        x: 1441
+        y: 1563
+        width: 259
+        height: 140
+      alignment: 0
+      pivot: {x: .5, y: .5}
+    - name: Plants_10
+      rect:
+        serializedVersion: 2
+        x: 993
+        y: 1218
+        width: 263
+        height: 337
+      alignment: 0
+      pivot: {x: .5, y: .5}
+    - name: Plants_11
+      rect:
+        serializedVersion: 2
+        x: 1259
+        y: 1411
+        width: 260
+        height: 140
+      alignment: 0
+      pivot: {x: .5, y: .5}
+    - name: Plants_12
+      rect:
+        serializedVersion: 2
+        x: 1521
+        y: 1456
+        width: 247
+        height: 105
+      alignment: 0
+      pivot: {x: .5, y: .5}
+    - name: Plants_13
+      rect:
+        serializedVersion: 2
+        x: 1766
+        y: 1253
+        width: 226
+        height: 242
+      alignment: 0
+      pivot: {x: .5, y: .5}
+    - name: Plants_14
+      rect:
+        serializedVersion: 2
+        x: 1259
+        y: 1269
+        width: 260
+        height: 140
+      alignment: 0
+      pivot: {x: .5, y: .5}
+    - name: Plants_15
+      rect:
+        serializedVersion: 2
+        x: 1521
+        y: 1298
+        width: 234
+        height: 154
+      alignment: 0
+      pivot: {x: .5, y: .5}
+    - name: Plants_16
+      rect:
+        serializedVersion: 2
+        x: 994
+        y: 1072
+        width: 259
+        height: 138
+      alignment: 0
+      pivot: {x: .5, y: .5}
+    - name: Plants_17
+      rect:
+        serializedVersion: 2
+        x: 1255
+        y: 1072
+        width: 258
+        height: 140
+      alignment: 0
+      pivot: {x: .5, y: .5}
+    - name: Plants_18
+      rect:
+        serializedVersion: 2
+        x: 1515
+        y: 1127
+        width: 259
+        height: 140
+      alignment: 0
+      pivot: {x: .5, y: .5}
+    - name: Plants_19
+      rect:
+        serializedVersion: 2
+        x: 1774
+        y: 1068
+        width: 146
+        height: 181
+      alignment: 0
+      pivot: {x: .5, y: .5}
+    - name: Plants_20
+      rect:
+        serializedVersion: 2
+        x: 1
+        y: 216
+        width: 980
+        height: 833
+      alignment: 0
+      pivot: {x: .5, y: .5}
+    - name: Plants_21
+      rect:
+        serializedVersion: 2
+        x: 986
+        y: 222
+        width: 1006
+        height: 827
+      alignment: 0
+      pivot: {x: .5, y: .5}
+    - name: Plants_22
+      rect:
+        serializedVersion: 2
+        x: 1132
+        y: 80
+        width: 263
+        height: 140
+      alignment: 0
+      pivot: {x: .5, y: .5}
+    - name: Plants_23
+      rect:
+        serializedVersion: 2
+        x: 1397
+        y: 80
+        width: 260
+        height: 140
+      alignment: 0
+      pivot: {x: .5, y: .5}
+    - name: Plants_24
+      rect:
+        serializedVersion: 2
+        x: 1844
+        y: 31
+        width: 144
+        height: 194
+      alignment: 0
+      pivot: {x: .5, y: .5}
+    - name: Plants_25
+      rect:
+        serializedVersion: 2
+        x: 3
+        y: 97
+        width: 699
+        height: 99
+      alignment: 0
+      pivot: {x: .5, y: .5}
+    - name: Plants_26
+      rect:
+        serializedVersion: 2
+        x: 704
+        y: 90
+        width: 426
+        height: 118
+      alignment: 0
+      pivot: {x: .5, y: .5}
+    - name: Plants_27
+      rect:
+        serializedVersion: 2
+        x: 1679
+        y: 49
+        width: 161
+        height: 159
+      alignment: 0
+      pivot: {x: .5, y: .5}
+    - name: Plants_28
+      rect:
+        serializedVersion: 2
+        x: 6
+        y: 4
+        width: 246
+        height: 69
+      alignment: 0
+      pivot: {x: .5, y: .5}
+    - name: Plants_29
+      rect:
+        serializedVersion: 2
+        x: 251
+        y: 18
+        width: 184
+        height: 52
+      alignment: 0
+      pivot: {x: .5, y: .5}
+    - name: Plants_30
+      rect:
+        serializedVersion: 2
+        x: 562
+        y: 2
+        width: 183
+        height: 96
+      alignment: 0
+      pivot: {x: .5, y: .5}
+  spritePackingTag: 
+  userData: 

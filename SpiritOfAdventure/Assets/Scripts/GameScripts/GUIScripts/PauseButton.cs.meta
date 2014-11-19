@@ -1,0 +1,11 @@
+fileFormatVersion: 2
+guid: 740452cc489c5da4cbe9f3085aabe087
+MonoImporter:
+  serializedVersion: 2
+  defaultReferences:
+  - playerCamera: {instanceID: 0}
+  - pauseCamera: {instanceID: 0}
+  - mySkin: {instanceID: 0}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 

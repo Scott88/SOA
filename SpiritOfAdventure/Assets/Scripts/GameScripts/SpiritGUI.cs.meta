@@ -1,0 +1,9 @@
+fileFormatVersion: 2
+guid: f1efd06e8e0928f449140cfaab05a6b5
+MonoImporter:
+  serializedVersion: 2
+  defaultReferences:
+  - GreenSpirit: {fileID: 100000, guid: 316700b9a7d66f94d9cb4ed55de3b3cd, type: 2}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 

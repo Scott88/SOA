@@ -1,0 +1,13 @@
+fileFormatVersion: 2
+guid: 01ac606a441ea1c4cbad4d6452fd5f78
+MonoImporter:
+  serializedVersion: 2
+  defaultReferences:
+  - mySkin: {fileID: 11400000, guid: 478a6944a9136df49b17ab4caa821de5, type: 2}
+  - WinCamera: {instanceID: 0}
+  - firstStar: {instanceID: 0}
+  - secondStar: {instanceID: 0}
+  - thirdStar: {instanceID: 0}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 

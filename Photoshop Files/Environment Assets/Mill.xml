@@ -1,0 +1,6 @@
+<TextureAtlas imagePath="Mill.png">
+	<SubTexture name="Building_Crane.png" x="0" y="0" width="1024" height="849"/>
+	<SubTexture name="Building_CraneWheel.png" x="0" y="1325" width="126" height="126"/>
+	<SubTexture name="Building_WaterMill.png" x="0" y="854" width="988" height="466"/>
+	<SubTexture name="Building_WaterWheel.png" x="993" y="854" width="479" height="479"/>
+</TextureAtlas>

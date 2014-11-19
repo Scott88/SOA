@@ -1,0 +1,7 @@
+<TextureAtlas imagePath="Mine.png">
+	<SubTexture name="Building_CranePlatform.png" x="0" y="0" width="499" height="466"/>
+	<SubTexture name="Mine_Cart00.png" x="0" y="471" width="256" height="175"/>
+	<SubTexture name="Mine_CartBumper00.png" x="261" y="491" width="128" height="120"/>
+	<SubTexture name="Mine_CartTracks00.png" x="261" y="471" width="128" height="15"/>
+	<SubTexture name="Mine_CartWheel00.png" x="394" y="471" width="58" height="57"/>
+</TextureAtlas>
