@@ -1,6 +1,14 @@
 fileFormatVersion: 2
 guid: 383ac40c873da5c49bbfac6ce8be3504
 TextureImporter:
+  fileIDToRecycleName:
+    21300000: DropperBucket02_0
+    21300002: DropperBucket02_1
+    21300004: DropperBucket02_2
+    21300006: DropperBucket02_3
+    21300008: DropperBucket02_4
+    21300010: DropperBucket02_5
+    21300012: DropperBucket02_6
   serializedVersion: 2
   mipmaps:
     mipMapMode: 0

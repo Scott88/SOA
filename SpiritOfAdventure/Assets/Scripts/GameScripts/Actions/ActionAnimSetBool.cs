@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class ActionAnimSetBool : Action
+public class ActionAnimSetBool : SOAAction
 {
 	public string variable;
 	public bool value;

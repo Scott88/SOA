@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class ActionDestroyer : Action
+public class ActionDestroyer : SOAAction
 {
 	public float time = 1f;
 	public bool fadeOut = false;

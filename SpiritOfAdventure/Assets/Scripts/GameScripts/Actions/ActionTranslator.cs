@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class ActionTranslator : Action
+public class ActionTranslator : SOAAction
 {
 	public Vector3 offset;
 	public float time;

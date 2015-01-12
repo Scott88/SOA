@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class ActionFadeOutSound : Action
+public class ActionFadeOutSound : SOAAction
 {
 	public AudioSource target;
 

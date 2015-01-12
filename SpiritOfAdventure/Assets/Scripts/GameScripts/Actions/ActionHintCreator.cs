@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class ActionHintCreator : Action
+public class ActionHintCreator : SOAAction
 {
 	public GUISkin skin;
 	public Vector3 offset;

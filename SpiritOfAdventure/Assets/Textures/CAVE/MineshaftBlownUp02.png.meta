@@ -1,6 +1,7 @@
 fileFormatVersion: 2
 guid: dd9e979224e845f4f996fe598b79cdb7
 TextureImporter:
+  fileIDToRecycleName: {}
   serializedVersion: 2
   mipmaps:
     mipMapMode: 0
@@ -24,9 +25,9 @@ TextureImporter:
   maxTextureSize: 1024
   textureSettings:
     filterMode: 0
-    aniso: -1
+    aniso: 1
     mipBias: -1
-    wrapMode: -1
+    wrapMode: 1
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
@@ -38,15 +39,15 @@ TextureImporter:
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spritePixelsToUnits: 100
   alphaIsTransparency: 1
-  textureType: 8
+  textureType: 5
   buildTargetSettings:
   - buildTarget: Standalone
     maxTextureSize: 1024
-    textureFormat: -1
+    textureFormat: 12
     compressionQuality: 50
   - buildTarget: Android
     maxTextureSize: 1024
-    textureFormat: -3
+    textureFormat: 31
     compressionQuality: 50
   spriteSheet:
     sprites: []

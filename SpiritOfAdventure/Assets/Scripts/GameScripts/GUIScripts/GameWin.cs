@@ -48,6 +48,18 @@ public class GameWin : MonoBehaviour
 
 	void Start()
 	{
+		if (Screen.width >= (1080)) 
+		{
+			mySkin.button.fontSize = Screen.width / (50);
+			mySkin.label.fontSize = Screen.width / (40);
+		}
+		
+		if (Screen.width < (1080))
+		{
+			mySkin.button.fontSize = Screen.width / (50);
+			mySkin.label.fontSize = Screen.width / (40);
+		}
+
 		winScreenPosition.z = -60f;
 		winTriggered = false;
 	}
@@ -67,6 +79,7 @@ public class GameWin : MonoBehaviour
 		if (pathB == true) 
 		{
 			PlayerPrefs.SetInt("pb",2);
+			PlayerPrefs.DeleteKey("pa");
 		}
 
 		if (pathC == true) 

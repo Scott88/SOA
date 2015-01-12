@@ -1,13 +1,14 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class ActionFadeIn : Action
+public class ActionFadeIn : SOAAction
 {
 	public float time = 1f;
 	
 	private bool fade;
 	private Color col;
-	
+
+
 	void Start()
 	{
 		fade = false;

@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class PrefDel : Action
+public class PrefDel : SOAAction
 {
 	public bool pA;
 	public bool pB;

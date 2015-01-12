@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class ActionCamToPlayer : Action
+public class ActionCamToPlayer : SOAAction
 {
 	public float leadingDistance = 6f;
 	public float timeToReachTarget = 0.5f;

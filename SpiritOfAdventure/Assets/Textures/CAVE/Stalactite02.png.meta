@@ -1,6 +1,9 @@
 fileFormatVersion: 2
 guid: 3ca263b567c98e04f81322b4d4d01167
 TextureImporter:
+  fileIDToRecycleName:
+    21300000: Stalactite02_0
+    21300002: Stalactite02_1
   serializedVersion: 2
   mipmaps:
     mipMapMode: 0

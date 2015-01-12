@@ -81,7 +81,7 @@ public class Chapter : FocusPoint
 		}
 
 		if (GUI.Button(new Rect(Screen.width * (menuTopLeftCorner.x), Screen.height * (menuTopLeftCorner.y),
-								Screen.width * (menuSize.x), Screen.height * (menuSize.y)), "Main Menu"))
+								Screen.width * (menuSize.x), Screen.height * (menuSize.y)), "Menu"))
 		{
 			focus.PlayButtonSound();
 			focus.SetTarget(mainMenu);

@@ -8,7 +8,7 @@
 using UnityEngine;
 using System.Collections;
 
-public class ActionRandomSpawner : Action
+public class ActionRandomSpawner : SOAAction
 {
 	public GameObject[] Spawned;
 

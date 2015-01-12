@@ -7,11 +7,11 @@
 
 using UnityEngine;
 
-public abstract class Action : MonoBehaviour
+public abstract class SOAAction : MonoBehaviour
 {
 	public float delay;
 	public AudioClip[] activationSounds;
-	public Action[] resultingActions = null;
+	public SOAAction[] resultingActions = null;
 
 	public bool triggered { get; set; }
 

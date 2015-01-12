@@ -1,6 +1,11 @@
 fileFormatVersion: 2
 guid: 53c5abec2b258734cb9a1b53cd6fa1ce
 TextureImporter:
+  fileIDToRecycleName:
+    21300000: Mill_0
+    21300002: Mill_1
+    21300004: Mill_2
+    21300006: Mill_4
   serializedVersion: 2
   mipmaps:
     mipMapMode: 0
@@ -38,15 +43,15 @@ TextureImporter:
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spritePixelsToUnits: 100
   alphaIsTransparency: 1
-  textureType: 8
+  textureType: 5
   buildTargetSettings:
   - buildTarget: iPhone
     maxTextureSize: 1024
-    textureFormat: -2
+    textureFormat: 13
     compressionQuality: 50
   - buildTarget: Android
     maxTextureSize: 1024
-    textureFormat: -3
+    textureFormat: 31
     compressionQuality: 50
   spriteSheet:
     sprites:

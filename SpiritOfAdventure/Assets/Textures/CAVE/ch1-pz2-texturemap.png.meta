@@ -1,6 +1,19 @@
 fileFormatVersion: 2
 guid: c636c1fd8b00b5b45bb7bcd74e365d8d
 TextureImporter:
+  fileIDToRecycleName:
+    21300000: ch1-pz2-texturemap_0
+    21300002: ch1-pz2-texturemap_2
+    21300004: ch1-pz2-texturemap_3
+    21300006: ch1-pz2-texturemap_4
+    21300008: ch1-pz2-texturemap_5
+    21300010: ch1-pz2-texturemap_6
+    21300012: ch1-pz2-texturemap_7
+    21300014: ch1-pz2-texturemap_8
+    21300016: ch1-pz2-texturemap_9
+    21300018: ch1-pz2-texturemap_10
+    21300020: ch1-pz2-texturemap_11
+    21300022: ch1-pz2-texturemap_12
   serializedVersion: 2
   mipmaps:
     mipMapMode: 0
@@ -38,11 +51,11 @@ TextureImporter:
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spritePixelsToUnits: 100
   alphaIsTransparency: 1
-  textureType: 8
+  textureType: 5
   buildTargetSettings:
   - buildTarget: Android
     maxTextureSize: 1024
-    textureFormat: -3
+    textureFormat: 31
     compressionQuality: 50
   spriteSheet:
     sprites:

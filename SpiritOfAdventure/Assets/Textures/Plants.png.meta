@@ -1,6 +1,36 @@
 fileFormatVersion: 2
 guid: ec1a32e5653cf6949b711448f7f30133
 TextureImporter:
+  fileIDToRecycleName:
+    21300000: Plants_0
+    21300002: Plants_1
+    21300004: Plants_2
+    21300006: Plants_4
+    21300008: Plants_5
+    21300010: Plants_7
+    21300012: Plants_8
+    21300014: Plants_9
+    21300016: Plants_10
+    21300018: Plants_11
+    21300020: Plants_12
+    21300022: Plants_13
+    21300024: Plants_14
+    21300026: Plants_15
+    21300028: Plants_16
+    21300030: Plants_17
+    21300032: Plants_18
+    21300034: Plants_19
+    21300036: Plants_20
+    21300038: Plants_21
+    21300040: Plants_22
+    21300042: Plants_23
+    21300044: Plants_24
+    21300046: Plants_25
+    21300048: Plants_26
+    21300050: Plants_27
+    21300052: Plants_28
+    21300054: Plants_29
+    21300056: Plants_30
   serializedVersion: 2
   mipmaps:
     mipMapMode: 0
@@ -35,6 +65,7 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: .5, y: .5}
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spritePixelsToUnits: 100
   alphaIsTransparency: 1
   textureType: 5
@@ -44,8 +75,8 @@ TextureImporter:
     textureFormat: 13
     compressionQuality: 50
   - buildTarget: Android
-    maxTextureSize: 2048
-    textureFormat: 4
+    maxTextureSize: 1024
+    textureFormat: 31
     compressionQuality: 50
   spriteSheet:
     sprites:
@@ -58,6 +89,7 @@ TextureImporter:
         height: 913
       alignment: 0
       pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
     - name: Plants_1
       rect:
         serializedVersion: 2
@@ -67,6 +99,7 @@ TextureImporter:
         height: 134
       alignment: 0
       pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
     - name: Plants_2
       rect:
         serializedVersion: 2
@@ -76,6 +109,7 @@ TextureImporter:
         height: 238
       alignment: 0
       pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
     - name: Plants_4
       rect:
         serializedVersion: 2
@@ -85,6 +119,7 @@ TextureImporter:
         height: 80
       alignment: 0
       pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
     - name: Plants_5
       rect:
         serializedVersion: 2
@@ -94,6 +129,7 @@ TextureImporter:
         height: 427
       alignment: 0
       pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
     - name: Plants_7
       rect:
         serializedVersion: 2
@@ -103,6 +139,7 @@ TextureImporter:
         height: 140
       alignment: 0
       pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
     - name: Plants_8
       rect:
         serializedVersion: 2
@@ -112,6 +149,7 @@ TextureImporter:
         height: 242
       alignment: 0
       pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
     - name: Plants_9
       rect:
         serializedVersion: 2
@@ -121,6 +159,7 @@ TextureImporter:
         height: 140
       alignment: 0
       pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
     - name: Plants_10
       rect:
         serializedVersion: 2
@@ -130,6 +169,7 @@ TextureImporter:
         height: 337
       alignment: 0
       pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
     - name: Plants_11
       rect:
         serializedVersion: 2
@@ -139,6 +179,7 @@ TextureImporter:
         height: 140
       alignment: 0
       pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
     - name: Plants_12
       rect:
         serializedVersion: 2
@@ -148,6 +189,7 @@ TextureImporter:
         height: 105
       alignment: 0
       pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
     - name: Plants_13
       rect:
         serializedVersion: 2
@@ -157,6 +199,7 @@ TextureImporter:
         height: 242
       alignment: 0
       pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
     - name: Plants_14
       rect:
         serializedVersion: 2
@@ -166,6 +209,7 @@ TextureImporter:
         height: 140
       alignment: 0
       pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
     - name: Plants_15
       rect:
         serializedVersion: 2
@@ -175,6 +219,7 @@ TextureImporter:
         height: 154
       alignment: 0
       pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
     - name: Plants_16
       rect:
         serializedVersion: 2
@@ -184,6 +229,7 @@ TextureImporter:
         height: 138
       alignment: 0
       pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
     - name: Plants_17
       rect:
         serializedVersion: 2
@@ -193,6 +239,7 @@ TextureImporter:
         height: 140
       alignment: 0
       pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
     - name: Plants_18
       rect:
         serializedVersion: 2
@@ -202,6 +249,7 @@ TextureImporter:
         height: 140
       alignment: 0
       pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
     - name: Plants_19
       rect:
         serializedVersion: 2
@@ -211,6 +259,7 @@ TextureImporter:
         height: 181
       alignment: 0
       pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
     - name: Plants_20
       rect:
         serializedVersion: 2
@@ -220,6 +269,7 @@ TextureImporter:
         height: 833
       alignment: 0
       pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
     - name: Plants_21
       rect:
         serializedVersion: 2
@@ -229,6 +279,7 @@ TextureImporter:
         height: 827
       alignment: 0
       pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
     - name: Plants_22
       rect:
         serializedVersion: 2
@@ -238,6 +289,7 @@ TextureImporter:
         height: 140
       alignment: 0
       pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
     - name: Plants_23
       rect:
         serializedVersion: 2
@@ -247,6 +299,7 @@ TextureImporter:
         height: 140
       alignment: 0
       pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
     - name: Plants_24
       rect:
         serializedVersion: 2
@@ -256,6 +309,7 @@ TextureImporter:
         height: 194
       alignment: 0
       pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
     - name: Plants_25
       rect:
         serializedVersion: 2
@@ -265,6 +319,7 @@ TextureImporter:
         height: 99
       alignment: 0
       pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
     - name: Plants_26
       rect:
         serializedVersion: 2
@@ -274,6 +329,7 @@ TextureImporter:
         height: 118
       alignment: 0
       pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
     - name: Plants_27
       rect:
         serializedVersion: 2
@@ -283,6 +339,7 @@ TextureImporter:
         height: 159
       alignment: 0
       pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
     - name: Plants_28
       rect:
         serializedVersion: 2
@@ -292,6 +349,7 @@ TextureImporter:
         height: 69
       alignment: 0
       pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
     - name: Plants_29
       rect:
         serializedVersion: 2
@@ -301,6 +359,7 @@ TextureImporter:
         height: 52
       alignment: 0
       pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
     - name: Plants_30
       rect:
         serializedVersion: 2
@@ -310,5 +369,6 @@ TextureImporter:
         height: 96
       alignment: 0
       pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
   spritePackingTag: 
   userData: 

@@ -1,6 +1,22 @@
 fileFormatVersion: 2
 guid: 71d992a5a85da4b4fa0d4734d78aade8
 TextureImporter:
+  fileIDToRecycleName:
+    21300000: CraneTextureMap02_0
+    21300002: CraneTextureMap02_1
+    21300004: CraneTextureMap02_2
+    21300006: CraneTextureMap02_3
+    21300008: CraneTextureMap02_4
+    21300010: CraneTextureMap02_5
+    21300012: CraneTextureMap02_6
+    21300014: CraneTextureMap02_7
+    21300016: CraneTextureMap02_8
+    21300018: CraneTextureMap02_9
+    21300020: CraneTextureMap02_10
+    21300022: CraneTextureMap02_11
+    21300024: CraneTextureMap02_12
+    21300026: CraneTextureMap02_13
+    21300028: CraneTextureMap02_14
   serializedVersion: 2
   mipmaps:
     mipMapMode: 0
@@ -38,11 +54,11 @@ TextureImporter:
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spritePixelsToUnits: 100
   alphaIsTransparency: 1
-  textureType: 8
+  textureType: 5
   buildTargetSettings:
   - buildTarget: Android
     maxTextureSize: 1024
-    textureFormat: -3
+    textureFormat: 31
     compressionQuality: 50
   spriteSheet:
     sprites:

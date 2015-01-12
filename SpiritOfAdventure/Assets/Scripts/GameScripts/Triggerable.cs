@@ -10,7 +10,7 @@ using UnityEngine;
 
 public class Triggerable : MonoBehaviour
 {
-	public Action[] actionList;
+	public SOAAction[] actionList;
     public bool onlyTriggerOnce = false;
 
 	protected bool hasTriggered;

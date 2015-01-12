@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class ActionStopTimerEarly : Action
+public class ActionStopTimerEarly : SOAAction
 {
 	private LevelTimer timer;
 

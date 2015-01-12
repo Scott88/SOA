@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class ActionScale : Action
+public class ActionScale : SOAAction
 {
 	public Vector3 scale;
 	public float time;

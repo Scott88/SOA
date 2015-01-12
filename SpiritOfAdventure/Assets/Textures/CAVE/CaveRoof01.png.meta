@@ -1,6 +1,13 @@
 fileFormatVersion: 2
 guid: 6817540f813003b4081023e99ff05ab0
 TextureImporter:
+  fileIDToRecycleName:
+    21300000: CaveRoof01_0
+    21300002: CaveRoof01_1
+    21300004: CaveRoof01_3
+    21300006: CaveRoof01_6
+    21300008: CaveRoof01_7
+    21300010: CaveRoof01_8
   serializedVersion: 2
   mipmaps:
     mipMapMode: 0

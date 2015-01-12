@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class ActionToggleCollider : Action
+public class ActionToggleCollider : SOAAction
 {
 	public bool startEnabled;
 	

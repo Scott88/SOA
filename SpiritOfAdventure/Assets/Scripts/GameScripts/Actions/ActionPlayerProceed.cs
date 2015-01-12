@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class ActionPlayerProceed : Action
+public class ActionPlayerProceed : SOAAction
 {
 	public GameObject stopTrigger;
 	public bool stopMonsterTimer;

@@ -1,6 +1,11 @@
 fileFormatVersion: 2
 guid: 5a54bc2e6e4e7ac4da7425078e84ee71
 TextureImporter:
+  fileIDToRecycleName:
+    21300000: Ground1_0
+    21300002: Ground1_1
+    21300004: Ground1_2
+    21300006: Ground1_3
   serializedVersion: 2
   mipmaps:
     mipMapMode: 0
@@ -35,6 +40,7 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: .5, y: .5}
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spritePixelsToUnits: 100
   alphaIsTransparency: 1
   textureType: 8
@@ -44,7 +50,7 @@ TextureImporter:
     textureFormat: -2
     compressionQuality: 50
   - buildTarget: Android
-    maxTextureSize: 2048
+    maxTextureSize: 1024
     textureFormat: -3
     compressionQuality: 50
   spriteSheet:
@@ -58,6 +64,7 @@ TextureImporter:
         height: 414
       alignment: 0
       pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
     - name: Ground1_1
       rect:
         serializedVersion: 2
@@ -67,6 +74,7 @@ TextureImporter:
         height: 415
       alignment: 0
       pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
     - name: Ground1_2
       rect:
         serializedVersion: 2
@@ -76,6 +84,7 @@ TextureImporter:
         height: 452
       alignment: 0
       pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
     - name: Ground1_3
       rect:
         serializedVersion: 2
@@ -85,5 +94,6 @@ TextureImporter:
         height: 722
       alignment: 0
       pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
   spritePackingTag: 
   userData: 

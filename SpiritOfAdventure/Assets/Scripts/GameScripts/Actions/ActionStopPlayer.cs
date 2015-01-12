@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class ActionStopPlayer : Action
+public class ActionStopPlayer : SOAAction
 {
 	public bool attachPlayer;
 

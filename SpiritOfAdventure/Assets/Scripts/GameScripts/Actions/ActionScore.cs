@@ -1,4 +1,4 @@
-﻿public class ActionScore : Action
+﻿public class ActionScore : SOAAction
 {
 	public int points;
 

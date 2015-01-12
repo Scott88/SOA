@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Spawner : Action
+public class Spawner : SOAAction
 {
 	public Vector3 pA;
 	public Vector3 pB;

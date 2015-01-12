@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class ActionSpawner : Action
+public class ActionSpawner : SOAAction
 {
 	public GameObject Spawned;
 

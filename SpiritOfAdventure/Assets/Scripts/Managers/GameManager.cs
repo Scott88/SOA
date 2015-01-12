@@ -25,6 +25,7 @@ public class GameManager : MonoBehaviour
 	private bool spiritGUIClicked;
 	private MonsterSpawner activeSpawner = null;
 	private Collider2D clickedOn;
+	
 
 	void Start()
 	{
@@ -139,7 +140,7 @@ public class GameManager : MonoBehaviour
 		GameWin.Win = false;
 		GameWin.goingToWin = false;
 
-		PauseButton.paused = false;
+		//PauseButton.paused = false;
 
 		Time.timeScale = 1f;
 	}

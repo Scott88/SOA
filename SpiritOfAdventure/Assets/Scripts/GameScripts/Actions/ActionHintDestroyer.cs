@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class ActionHintDestroyer : Action
+public class ActionHintDestroyer : SOAAction
 {
 	public ActionHintCreator hinterToStop;
 

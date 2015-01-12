@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class ActionIlluminate : Action
+public class ActionIlluminate : SOAAction
 {
 	public Light Mlight = null;
 

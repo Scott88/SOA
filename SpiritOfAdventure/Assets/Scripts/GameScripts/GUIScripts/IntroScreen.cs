@@ -14,7 +14,6 @@ public class IntroScreen : MonoBehaviour
 		renderer.material.color = alphaController;
 		StartCoroutine(Go());
 		Time.timeScale = 1;
-		//PlayerPrefs.DeleteAll ();
 	}
 
 
@@ -49,7 +48,7 @@ public class IntroScreen : MonoBehaviour
 			yield return 0;
 		}
 
-		Application.LoadLevel("MainMenu");
+		Application.LoadLevel("CutScene");
 	}
 
 }

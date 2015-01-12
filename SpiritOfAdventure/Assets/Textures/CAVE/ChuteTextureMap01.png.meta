@@ -1,6 +1,12 @@
 fileFormatVersion: 2
 guid: 55710216391e7384a9786ac76ade416e
 TextureImporter:
+  fileIDToRecycleName:
+    21300000: ChuteTextureMap01_0
+    21300002: ChuteTextureMap01_1
+    21300004: ChuteTextureMap01_2
+    21300006: ChuteTextureMap01_4
+    21300008: ChuteTextureMap01_5
   serializedVersion: 2
   mipmaps:
     mipMapMode: 0
@@ -38,11 +44,11 @@ TextureImporter:
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spritePixelsToUnits: 100
   alphaIsTransparency: 1
-  textureType: 8
+  textureType: 5
   buildTargetSettings:
   - buildTarget: Android
     maxTextureSize: 1024
-    textureFormat: -3
+    textureFormat: 31
     compressionQuality: 50
   spriteSheet:
     sprites:

@@ -8,7 +8,7 @@
 using UnityEngine;
 using System.Collections;
 
-public class ActionCameraZoom : Action 
+public class ActionCameraZoom : SOAAction 
 {
 	public float zoomTo = 5f;
 	public float timer = 1f;

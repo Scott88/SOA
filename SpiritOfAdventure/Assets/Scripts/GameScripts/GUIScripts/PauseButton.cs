@@ -31,7 +31,7 @@ public class PauseButton : MonoBehaviour
 		if (paused == false & GameWin.Win == false)
 		{	                           //left or right              //up or down				//width						//length
 			//GUI.Box(new Rect(Screen.width * (1f/1.15f),Screen.height * (0.1f/6.55f),Screen.width * (0.12f/1f), Screen.height * (0.85f/6.3f)), "Pause Game");
-			if (GUI.Button(new Rect(Screen.width * (1f / 60f), Screen.height * (0.1f / 6.55f), Screen.width * (1f / 6f), Screen.height * (1f / 8f)), "Pause Game"))
+			if (GUI.Button(new Rect(Screen.width * (1f / 60f), Screen.height * (0.1f / 6.55f), Screen.width * (1f / 6f), Screen.height * (1f / 8f)), "Pause"))
 			{
 				gameManager.effectManager.PlayButtonSound();
 				Time.timeScale = 0;
@@ -106,7 +106,7 @@ public class PauseButton : MonoBehaviour
 				{
 					//AudioListener.volume = 0.0f;
 					mute = true;
-					PlayerPrefs.DeleteAll();
+					//PlayerPrefs.DeleteAll();
 				}
 			}
 		}

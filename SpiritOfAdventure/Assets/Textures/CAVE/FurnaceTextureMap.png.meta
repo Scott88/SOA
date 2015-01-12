@@ -1,6 +1,15 @@
 fileFormatVersion: 2
 guid: f83c9aaa666fa4349a61998712b8929b
 TextureImporter:
+  fileIDToRecycleName:
+    21300000: FurnaceTextureMap_0
+    21300002: FurnaceTextureMap_1
+    21300004: FurnaceTextureMap_2
+    21300006: FurnaceTextureMap_3
+    21300008: FurnaceTextureMap_4
+    21300010: FurnaceTextureMap_5
+    21300012: FurnaceTextureMap_6
+    21300014: FurnaceTextureMap_7
   serializedVersion: 2
   mipmaps:
     mipMapMode: 0
@@ -38,11 +47,11 @@ TextureImporter:
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spritePixelsToUnits: 100
   alphaIsTransparency: 1
-  textureType: 8
+  textureType: 5
   buildTargetSettings:
   - buildTarget: Android
     maxTextureSize: 1024
-    textureFormat: -3
+    textureFormat: 31
     compressionQuality: 50
   spriteSheet:
     sprites:

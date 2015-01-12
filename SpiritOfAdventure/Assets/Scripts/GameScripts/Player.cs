@@ -14,6 +14,7 @@ public class Player : MonoBehaviour
 	private static Vector2 movement;
 	public static Animator animator;
 
+	public static bool WalkK;
 	public static bool Walk;
 	public static bool Idle;
 	public Material LightMaterial;
@@ -22,8 +23,17 @@ public class Player : MonoBehaviour
 	void Start()
 	{
 		animator = GetComponent<Animator>();
+
+		if (PlayerPrefs.HasKey ("costume"))
+		{
+			animator.SetInteger ("costume", PlayerPrefs.GetInt ("costume"));
+		}
+		else 
+		{
+			animator.SetInteger ("costume", 0);
+		}
+
 		Proceed ();
-		animator.SetBool ("Walk", Walk);
 	}
 
 	void FixedUpdate () 
@@ -75,14 +85,18 @@ public class Player : MonoBehaviour
 	public static void Stop()
 	{
 		isMoving = false;
-		animator.SetBool ("Walk", true);
+
+			animator.SetBool ("Walk", true);
+
 
 	}
 
 	public static void Proceed()
 	{
 		isMoving = true;
-		animator.SetBool ("Walk", false);
+
+			animator.SetBool ("Walk", false);
+
 	}
 
 	public static void VictoryCheer()

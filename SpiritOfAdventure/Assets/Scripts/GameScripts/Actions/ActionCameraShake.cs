@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class ActionCameraShake : Action
+public class ActionCameraShake : SOAAction
 {
 	public float intensity = 2f;
 	public float time = 1f;

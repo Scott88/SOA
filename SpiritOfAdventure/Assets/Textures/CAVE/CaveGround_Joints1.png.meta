@@ -1,6 +1,9 @@
 fileFormatVersion: 2
 guid: b307b15eed8c6b44391aa1692490c4a3
 TextureImporter:
+  fileIDToRecycleName:
+    21300000: CaveGround_Joints1_1
+    21300002: CaveGround_Joints1_2
   serializedVersion: 2
   mipmaps:
     mipMapMode: 0
