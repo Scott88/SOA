@@ -14,6 +14,10 @@ public class Networker : MonoBehaviour {
 
     private NetworkAction action = NetworkAction.NS_NULL;
 
+    private HostData[] hostList;
+
+    private bool readyToConnect = false;
+
 	// Use this for initialization
 	void Start ()
     {
@@ -23,9 +27,14 @@ public class Networker : MonoBehaviour {
 	// Update is called once per frame
 	void Update ()
     {
-        if (action == NetworkAction.NS_NULL)
+        if (readyToConnect)
         {
-
+            if (hostList.Length >= 1)
+            {
+                debugMessage.text = "Connecting to server";
+                Network.Connect(hostList[0]);
+                readyToConnect = false;
+            }
         }
 	}
 
@@ -36,31 +45,49 @@ public class Networker : MonoBehaviour {
             if (GUI.Button(new Rect(Screen.width * (0.125f), Screen.height * (0.4f), Screen.width * (1f / 4f), Screen.height * (1f / 6f)),
                            "Host Server"))
             {
-                Network.InitializeServer(1, 25311, !Network.HavePublicAddress());
+                debugMessage.text = "Creating a Server...";
+                Network.InitializeServer(3, 25311, !Network.HavePublicAddress());
+                //MasterServer.ipAddress = "127.0.0.1";
+                //MasterServer.port = 23466;
+                MasterServer.RegisterHost("TestingTheTestOfTests", "SpiritOfTestventure");
                 action = NetworkAction.NS_SERVER;
-                debugMessage.text = "Created a Server";
-            }
-
-            if (GUI.Button(new Rect(Screen.width * (0.625f), Screen.height * (0.4f), Screen.width * (1f / 4f), Screen.height * (1f / 6f)),
-                           "Connect to Server"))
-            {
-                debugMessage.text = "Connecting to server";
-                Network.Connect("192.168.56.1", 25311);
-                action = NetworkAction.NS_CONNECT;
             }
         }
+
+        if (GUI.Button(new Rect(Screen.width * (0.625f), Screen.height * (0.4f), Screen.width * (1f / 4f), Screen.height * (1f / 6f)),
+                           "Connect to Server"))
+        {         
+            RefreshHostList();
+            action = NetworkAction.NS_CONNECT;
+        }
+    }
+
+    void OnServerInitialized()
+    {
+        debugMessage.text = "Server initialized and ready";
     }
 
     void OnPlayerConnected(NetworkPlayer player)
     {
-        if (action == NetworkAction.NS_SERVER)
-        {
-            debugMessage.text = "Someone has connected!";
-        }
+        debugMessage.text = "Someone has connected!";      
     }
 
     void OnFailedToConnect(NetworkConnectionError info)
     {
         debugMessage.text = "Something went wrong...";  
+    }
+
+    private void RefreshHostList()
+    {
+		MasterServer.RequestHostList("TestingTheTestOfTests");
+    }
+
+    void OnMasterServerEvent(MasterServerEvent msEvent)
+    {
+        if (msEvent == MasterServerEvent.HostListReceived)
+        {
+            hostList = MasterServer.PollHostList();
+            readyToConnect = true;
+        }
     }
 }
