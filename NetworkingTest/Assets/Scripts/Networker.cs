@@ -47,8 +47,8 @@ public class Networker : MonoBehaviour {
             {
                 debugMessage.text = "Creating a Server...";
                 Network.InitializeServer(3, 25311, !Network.HavePublicAddress());
-                //MasterServer.ipAddress = "127.0.0.1";
-                //MasterServer.port = 23466;
+				MasterServer.ipAddress = "10.10.10.181";
+                MasterServer.port = 23466;
                 MasterServer.RegisterHost("TestingTheTestOfTests", "SpiritOfTestventure");
                 action = NetworkAction.NS_SERVER;
             }
