@@ -7,15 +7,17 @@ public class Movement : MonoBehaviour {
 
     public bool myTurn = true;
 
-    //void Start()
-    //{
-    //    if (Network.isServer)
-    //    {
-    //        PlayerSpawner spawner = FindObjectOfType<PlayerSpawner>();
-
-    //        spawner.AddPlayer(this);
-    //    }
-    //}
+    void Start()
+    {
+        if (networkView.isMine)
+        {
+            PlayerManager.SetPlayer(this);
+        }
+        else
+        {
+            PlayerManager.SetEnemy(this);
+        }      
+    }
 	
 	// Update is called once per frame
 	void Update ()
@@ -83,6 +85,7 @@ public class Movement : MonoBehaviour {
                 {
                     transform.Translate(0.0f, 1.0f, 0.0f);
                     myTurn = false;
+                    PlayerManager.TheirTurn();
                 }
 
                 if (GUI.Button(new Rect(Screen.width * (0.025f), Screen.height * (0.875f), Screen.width * (0.05f), Screen.height * (0.05f)),
@@ -90,6 +93,7 @@ public class Movement : MonoBehaviour {
                 {
                     transform.Translate(-1.0f, 0.0f, 0.0f);
                     myTurn = false;
+                    PlayerManager.TheirTurn();
                 }
 
                 if (GUI.Button(new Rect(Screen.width * (0.125f), Screen.height * (0.875f), Screen.width * (0.05f), Screen.height * (0.05f)),
@@ -97,6 +101,7 @@ public class Movement : MonoBehaviour {
                 {
                     transform.Translate(1.0f, 0.0f, 0.0f);
                     myTurn = false;
+                    PlayerManager.TheirTurn();
                 }
 
                 if (GUI.Button(new Rect(Screen.width * (0.075f), Screen.height * (0.925f), Screen.width * (0.05f), Screen.height * (0.05f)),
@@ -104,11 +109,7 @@ public class Movement : MonoBehaviour {
                 {
                     transform.Translate(0.0f, -1.0f, 0.0f);
                     myTurn = false;
-                }
-
-                if (!myTurn)
-                {
-                    networkView.RPC("TurnOver", RPCMode.Others);
+                    PlayerManager.TheirTurn();
                 }
             }
         }
@@ -140,8 +141,14 @@ public class Movement : MonoBehaviour {
         }
     }
 
+    
+    public void MyTurn()
+    {
+        networkView.RPC("SetMyTurn", RPCMode.All);
+    }
+
     [RPC]
-    void TurnOver()
+    void SetMyTurn()
     {
         myTurn = true;
     }
