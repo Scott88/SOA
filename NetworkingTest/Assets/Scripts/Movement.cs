@@ -109,6 +109,7 @@ public class Movement : MonoBehaviour {
                 if (!myTurn)
                 {
                     networkView.RPC("TurnOver", RPCMode.Others);
+					Debug.Log ("sending Turnover RPC!");
                 }
             }
         }
@@ -144,5 +145,6 @@ public class Movement : MonoBehaviour {
     void TurnOver()
     {
         myTurn = true;
+		Debug.Log ("TURN");
     }
 }
