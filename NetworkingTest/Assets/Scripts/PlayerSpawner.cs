@@ -9,11 +9,16 @@ public class PlayerSpawner : MonoBehaviour {
 
     public Vector3 spawnPosition;
 
+    private Movement[] players;
+    int playerCount = 0;
+
 	// Use this for initialization
 	void Start ()
     {
-        if (Network.peerType == NetworkPeerType.Server)
+        if (Network.isServer)
         {
+            players = new Movement[2];
+
             Spawn(spawnPosition);
             spawnPosition.x += spawnXShift;
 
@@ -27,12 +32,38 @@ public class PlayerSpawner : MonoBehaviour {
         {
             GameObject.Instantiate(playerPrefab, spawnPosition, new Quaternion());
         }
+
+        if (!Network.isServer)
+        {
+            GameObject.Destroy(gameObject);
+        }
 	}
 
     [RPC]
     private void Spawn(Vector3 position)
     {
         Network.Instantiate(playerPrefab, position, new Quaternion(), 0);
+    }
+
+    public void AddPlayer(Movement player)
+    {
+        players[playerCount++] = player;
+
+        if (playerCount == 2)
+        {
+            int goesFirst;
+
+            if (Random.value > 0.5f)
+            {
+                goesFirst = 1;
+            }
+            else
+            {
+                goesFirst = 0;
+            }
+
+            players[goesFirst].myTurn = true;
+        }
     }
 
     void OnDrawGizmosSelected()
