@@ -107,14 +107,7 @@ public class Networker : MonoBehaviour {
 
     private void RefreshHostList()
     {
-        if (Network.peerType == NetworkPeerType.Client)
-        {
-            MasterServer.RequestHostList("TestingTheTestOfTests");
-        }
-        else
-        {
-            debugMessage.text = "Could not retrieve host list from master server!";
-        }
+        MasterServer.RequestHostList("TestingTheTestOfTests");
     }
 
     void OnFailedToConnectToMasterServer(NetworkConnectionError info)

@@ -8,9 +8,12 @@ public class Movement : MonoBehaviour {
 	// Update is called once per frame
 	void Update ()
     {
-        float x = Input.GetAxis("Horizontal");
-        float y = Input.GetAxis("Vertical");
+        if (networkView.isMine)
+        {
+            float x = Input.GetAxis("Horizontal");
+            float y = Input.GetAxis("Vertical");
 
-        transform.Translate(x * Time.deltaTime * speed, y * Time.deltaTime * speed, 0f);
+            transform.Translate(x * Time.deltaTime * speed, y * Time.deltaTime * speed, 0f);
+        }
 	}
 }
