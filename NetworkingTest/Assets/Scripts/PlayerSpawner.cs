@@ -23,6 +23,10 @@ public class PlayerSpawner : MonoBehaviour {
                 spawnPosition.x += spawnXShift;
             }
         }
+        else if (Network.peerType == NetworkPeerType.Disconnected)
+        {
+            GameObject.Instantiate(playerPrefab, spawnPosition, new Quaternion());
+        }
 	}
 
     [RPC]
