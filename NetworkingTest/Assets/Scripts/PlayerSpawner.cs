@@ -9,18 +9,12 @@ public class PlayerSpawner : MonoBehaviour {
 
     public Vector3 spawnPosition;
 
+    private bool hasSpawned = false;
+
 	// Use this for initialization
 	void Start ()
     {
-        if (Network.peerType == NetworkPeerType.Disconnected)
-        {
-            GameObject.Instantiate(playerPrefab, spawnPosition, new Quaternion());
-        }
-        else
-        {
-            Network.Instantiate(playerPrefab, spawnPosition, new Quaternion(), 0);
-            spawnPosition.x += 10;
-        }
+       
 	}
 
     void OnSerializeNetworkView(BitStream stream, NetworkMessageInfo info)
@@ -36,6 +30,25 @@ public class PlayerSpawner : MonoBehaviour {
             stream.Serialize(ref position);
             spawnPosition = position;
         }
+    }
+
+    void OnGUI()
+    {
+        if (!hasSpawned)
+        {
+            if (GUI.Button(new Rect(Screen.width * (0.375f), Screen.height * (0.4f), Screen.width * (1f / 4f), Screen.height * (1f / 6f)),
+                              "Spawn"))
+            {
+                Spawn();
+            }
+        }
+    }
+
+    private void Spawn()
+    {
+        Network.Instantiate(playerPrefab, spawnPosition, new Quaternion(), 0);
+        spawnPosition.x += 10;
+        hasSpawned = true;
     }
 
     void OnDrawGizmosSelected()
