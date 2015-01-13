@@ -40,7 +40,7 @@ public class MainMenu : FocusPoint
 
 
 
-			if(GUI.Button(new Rect(Screen.width * (0.2f),Screen.height * (0.32f),Screen.width * (0.25f), Screen.height * (1f/7f)), "Start"))
+			if(GUI.Button(new Rect(Screen.width * (0.35f),Screen.height * (0.32f),Screen.width * (0.25f), Screen.height * (1f/7f)), "Start"))
 			{
 				focus.PlayButtonSound();
 				focus.SetTarget(firstChapter);
@@ -60,13 +60,13 @@ public class MainMenu : FocusPoint
 				//PlayerPrefs.DeleteAll();
 			}
 
-			if(GUI.Button(new Rect(Screen.width * (0.53f),Screen.height * (0.32f),Screen.width * (0.25f), Screen.height * (1f/7f)), "DESTRUCTORNATOR"))
-			{
+			//if(GUI.Button(new Rect(Screen.width * (0.53f),Screen.height * (0.32f),Screen.width * (0.25f), Screen.height * (1f/7f)), "DESTRUCTORNATOR"))
+			//{
 
-			focus.PlayButtonSound();
-			Application.LoadLevel("MiniGame");
+			//focus.PlayButtonSound();
+			//Application.LoadLevel("MiniGame");
 
-			}
+			//}
 
 	}
 }
