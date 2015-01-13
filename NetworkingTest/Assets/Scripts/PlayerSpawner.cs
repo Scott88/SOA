@@ -32,11 +32,6 @@ public class PlayerSpawner : MonoBehaviour {
         {
             GameObject.Instantiate(playerPrefab, spawnPosition, new Quaternion());
         }
-
-        if (!Network.isServer)
-        {
-            GameObject.Destroy(gameObject);
-        }
 	}
 
     [RPC]
@@ -45,26 +40,26 @@ public class PlayerSpawner : MonoBehaviour {
         Network.Instantiate(playerPrefab, position, new Quaternion(), 0);
     }
 
-    public void AddPlayer(Movement player)
-    {
-        players[playerCount++] = player;
+    //public void AddPlayer(Movement player)
+    //{
+    //    players[playerCount++] = player;
 
-        if (playerCount == 2)
-        {
-            int goesFirst;
+    //    if (playerCount == 2)
+    //    {
+    //        int goesFirst;
 
-            if (Random.value > 0.5f)
-            {
-                goesFirst = 1;
-            }
-            else
-            {
-                goesFirst = 0;
-            }
+    //        if (Random.value > 0.5f)
+    //        {
+    //            goesFirst = 1;
+    //        }
+    //        else
+    //        {
+    //            goesFirst = 0;
+    //        }
 
-            players[goesFirst].myTurn = true;
-        }
-    }
+    //        players[goesFirst].myTurn = true;
+    //    }
+    //}
 
     void OnDrawGizmosSelected()
     {

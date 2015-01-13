@@ -5,17 +5,17 @@ public class Movement : MonoBehaviour {
 
     public float speed = 1f;
 
-    public bool myTurn = false;
+    public bool myTurn = true;
 
-    void Start()
-    {
-        if (Network.isServer)
-        {
-            PlayerSpawner spawner = FindObjectOfType<PlayerSpawner>();
+    //void Start()
+    //{
+    //    if (Network.isServer)
+    //    {
+    //        PlayerSpawner spawner = FindObjectOfType<PlayerSpawner>();
 
-            spawner.AddPlayer(this);
-        }
-    }
+    //        spawner.AddPlayer(this);
+    //    }
+    //}
 	
 	// Update is called once per frame
 	void Update ()
