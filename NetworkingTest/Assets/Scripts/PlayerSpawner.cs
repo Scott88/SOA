@@ -9,46 +9,26 @@ public class PlayerSpawner : MonoBehaviour {
 
     public Vector3 spawnPosition;
 
-    private bool hasSpawned = false;
-
 	// Use this for initialization
 	void Start ()
     {
-       
-	}
+        if (Network.peerType == NetworkPeerType.Server)
+        {
+            Spawn(spawnPosition);
+            spawnPosition.x += spawnXShift;
 
-    void OnSerializeNetworkView(BitStream stream, NetworkMessageInfo info)
-    {
-        if (stream.isWriting)
-        {
-            Vector3 position = spawnPosition;
-            stream.Serialize(ref position);
-        }
-        else
-        {
-            Vector3 position = new Vector3();
-            stream.Serialize(ref position);
-            spawnPosition = position;
-        }
-    }
-
-    void OnGUI()
-    {
-        if (!hasSpawned)
-        {
-            if (GUI.Button(new Rect(Screen.width * (0.375f), Screen.height * (0.4f), Screen.width * (1f / 4f), Screen.height * (1f / 6f)),
-                              "Spawn"))
+            for (int j = 0; j < Network.connections.Length; j++)
             {
-                Spawn();
+                networkView.RPC("Spawn", Network.connections[j], spawnPosition);
+                spawnPosition.x += spawnXShift;
             }
         }
-    }
+	}
 
-    private void Spawn()
+    [RPC]
+    private void Spawn(Vector3 position)
     {
-        Network.Instantiate(playerPrefab, spawnPosition, new Quaternion(), 0);
-        spawnPosition.x += 10;
-        hasSpawned = true;
+        Network.Instantiate(playerPrefab, position, new Quaternion(), 0);
     }
 
     void OnDrawGizmosSelected()
