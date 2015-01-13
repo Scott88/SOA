@@ -1,8 +1,8 @@
 ﻿<Properties>
   <MonoDevelop.Ide.Workspace />
-  <MonoDevelop.Ide.Workbench ActiveDocument="..\SpiritOfAdventure\Assets\Scripts\GameScripts\GUIScripts\MainMenu.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="..\SpiritOfAdventure\Assets\Scripts\GameScripts\Player.cs">
     <Files>
-      <File FileName="..\SpiritOfAdventure\Assets\Scripts\GameScripts\GUIScripts\MainMenu.cs" Line="43" Column="47" />
+      <File FileName="..\SpiritOfAdventure\Assets\Scripts\GameScripts\Player.cs" Line="26" Column="3" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
