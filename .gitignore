@@ -10,3 +10,4 @@ SpiritOfAdventure/obj/
 *.suo
 *.unityproj
 *.psd
+/NetworkingTest/Library/ScriptAssemblies/CompilationCompleted.txt
