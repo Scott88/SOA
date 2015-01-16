@@ -3,6 +3,9 @@ using System.Collections;
 
 public class BlockInventory : MonoBehaviour
 {
+    public TextMesh blockCounter;
+    public GameObject selectionIndicator;
+
     private int blocks;
 
     private bool selected = false;
@@ -19,18 +22,34 @@ public class BlockInventory : MonoBehaviour
             blocks = 4;
             PlayerPrefs.SetInt("Blocks", blocks);
         }
+
+        blockCounter.text = "x" + blocks.ToString();
     }
 
     public void Select()
     {
-        blocks--;
-        selected = true;
+        if (blocks > 0)
+        {
+            blocks--;
+            blockCounter.text = "x" + blocks.ToString();
+            selected = true;
+            selectionIndicator.SetActive(true);
+        }
     }
 
-    public void Deselect()
+    public void Deselect(bool blockPlaced)
     {
-        blocks++;
-        selected = false;
+        if (selected)
+        {
+            if (!blockPlaced)
+            {
+                blocks++;
+                blockCounter.text = "x" + blocks.ToString();
+            }
+
+            selected = false;
+            selectionIndicator.SetActive(false);
+        }
     }
 
     public bool IsSelected()
@@ -40,6 +59,6 @@ public class BlockInventory : MonoBehaviour
 
     public void Save()
     {
-        PlayerPrefs.SetInt("Blocks", blocks);
+        PlayerPrefs.SetInt("Blocks", blocks > 3 ? blocks : 3);
     }
 }

@@ -8,6 +8,8 @@ public class GameManager : MonoBehaviour {
 
     public BlockInventory playerInventory;
 
+    public GameObject spawnedBlock;
+
     public int myTeam { get; set; }
 
     private bool myTurn = false;
@@ -33,7 +35,7 @@ public class GameManager : MonoBehaviour {
 
     void Update()
     {
-        if (Input.GetMouseButtonDown(0) && myTurn)
+        if (Input.GetMouseButtonDown(0))
         {
             GetClickedOn();
         }
@@ -50,11 +52,34 @@ public class GameManager : MonoBehaviour {
 
             if (breakable)
             {
-                TryBreakBlock(breakable);
+                if (!playerInventory.IsSelected() && myTurn)
+                {
+                    TryBreakBlock(breakable);
+                }
+
                 return;
             }
 
             BlockInventory inventory = hit.collider.gameObject.GetComponent<BlockInventory>();
+
+            if (inventory)
+            {
+                if (playerInventory.IsSelected())
+                {
+                    DeselectInventory();
+                }
+                else
+                {
+                    SelectInventory();
+                }
+
+                return;
+            }
+        }
+
+        if (playerInventory.IsSelected())
+        {
+            PlaceBlock(playerCamera.ScreenToWorldPoint(Input.mousePosition));
         }
     }
 
@@ -122,7 +147,17 @@ public class GameManager : MonoBehaviour {
     {
         position.z = 0;
 
-        
+        GameObject block = Network.Instantiate(spawnedBlock, position, new Quaternion(), 0) as GameObject;
+
+        Breakable b = block.GetComponent<Breakable>();
+        b.SetTeam(myTeam);
+
+        playerInventory.Deselect(true);
+    }
+
+    void DeselectInventory()
+    {
+        playerInventory.Deselect(false);
     }
 
     void OnGUI()
@@ -171,6 +206,9 @@ public class GameManager : MonoBehaviour {
             PlayerPrefs.SetInt("Points", myPoints);
         }
 
+        playerInventory.Deselect(false);
+        playerInventory.Save();
+
         FindObjectOfType<Networker>().Reset();
 
         Application.LoadLevel("menu");
@@ -186,6 +224,9 @@ public class GameManager : MonoBehaviour {
         {
             PlayerPrefs.SetInt("Points", myPoints);
         }
+
+        playerInventory.Deselect(false);
+        playerInventory.Save();
 
         FindObjectOfType<Networker>().Reset();
 
