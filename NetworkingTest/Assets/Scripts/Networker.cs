@@ -81,7 +81,7 @@ public class Networker : MonoBehaviour {
         Network.SetSendingEnabled(0, false);
         Network.isMessageQueueRunning = false;
 
-        Network.SetLevelPrefix(levelPrefix++);
+        Network.SetLevelPrefix(++levelPrefix);
         Application.LoadLevel("game");
 
         Network.isMessageQueueRunning = true;
