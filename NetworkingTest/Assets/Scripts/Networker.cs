@@ -5,17 +5,28 @@ public class Networker : MonoBehaviour {
 
     public TextMesh debugMessage;
 
-    private HostData[] hostList;
+    private static bool created = false;
 
-    private bool readyToConnect = false;
+    private bool showOptions = true;
+
     private bool readyToStart = false;
 
     private int levelPrefix = 0;
 
     void Awake()
     {
-        DontDestroyOnLoad(this);
-        networkView.group = 1;
+        if (!created)
+        {
+            DontDestroyOnLoad(this);
+            networkView.group = 1;
+
+            created = true;
+        }
+        else
+        {
+            showOptions = true;
+            DestroyImmediate(gameObject);
+        }
     }
 
 	// Use this for initialization
@@ -24,46 +35,42 @@ public class Networker : MonoBehaviour {
 		MasterServer.ipAddress = "10.10.10.181";
 		MasterServer.port = 23466;
 	}
-	
-	// Update is called once per frame
-	void Update ()
-    {
-        if (readyToConnect)
-        {
-            if (hostList.Length >= 1)
-            {
-                debugMessage.text = "Connecting to server";
-                Network.Connect(hostList[0]);
-                readyToConnect = false;
-            }
-        }
-	}
 
     void OnGUI()
     {
-        if (Network.peerType == NetworkPeerType.Disconnected)
+        if (showOptions)
         {
-            if (GUI.Button(new Rect(Screen.width * (0.125f), Screen.height * (0.4f), Screen.width * (1f / 4f), Screen.height * (1f / 6f)),
-                           "Host Server"))
+            if (Network.peerType == NetworkPeerType.Disconnected)
             {
-                debugMessage.text = "Creating a Server...";
-                Network.InitializeServer(3, 25311, !Network.HavePublicAddress());
-                MasterServer.RegisterHost("TestingTheTestOfTests", "SpiritOfTestventure");
+                if (GUI.Button(new Rect(Screen.width * (0.125f), Screen.height * (0.4f), Screen.width * (1f / 4f), Screen.height * (1f / 6f)),
+                               "Host Server"))
+                {
+                    debugMessage.text = "Creating a Server...";
+                    Network.InitializeServer(3, 25311, !Network.HavePublicAddress());
+
+                    if (!PlayerPrefs.HasKey("Points"))
+                    {
+                        PlayerPrefs.SetInt("Points", 15);  
+                    }
+
+                    MasterServer.RegisterHost("TestingTheTestOfTests", "SpiritOfTestventure", PlayerPrefs.GetInt("Points").ToString());
+                }
+
+                if (GUI.Button(new Rect(Screen.width * (0.625f), Screen.height * (0.4f), Screen.width * (1f / 4f), Screen.height * (1f / 6f)),
+                               "Connect to Server"))
+                {
+                    RefreshHostList();
+                }
             }
 
-            if (GUI.Button(new Rect(Screen.width * (0.625f), Screen.height * (0.4f), Screen.width * (1f / 4f), Screen.height * (1f / 6f)),
-                           "Connect to Server"))
+            if (readyToStart)
             {
-                RefreshHostList();
-            }
-        }
-
-        if (readyToStart)
-        {
-            if (GUI.Button(new Rect(Screen.width * (0.375f), Screen.height * (0.4f), Screen.width * (1f / 4f), Screen.height * (1f / 6f)),
-                           "Load Game"))
-            {
-                networkView.RPC("LoadNetworkedLevel", RPCMode.AllBuffered);
+                if (GUI.Button(new Rect(Screen.width * (0.375f), Screen.height * (0.4f), Screen.width * (1f / 4f), Screen.height * (1f / 6f)),
+                               "Load Game"))
+                {
+                    MasterServer.UnregisterHost();
+                    networkView.RPC("LoadNetworkedLevel", RPCMode.AllBuffered);
+                }
             }
         }
     }
@@ -72,7 +79,6 @@ public class Networker : MonoBehaviour {
     void LoadNetworkedLevel()
     {
         Network.SetSendingEnabled(0, false);
-
         Network.isMessageQueueRunning = false;
 
         Network.SetLevelPrefix(levelPrefix++);
@@ -81,7 +87,8 @@ public class Networker : MonoBehaviour {
         Network.isMessageQueueRunning = true;
         Network.SetSendingEnabled(0, true);
 
-        gameObject.SetActive(false);
+        debugMessage.text = "";
+        showOptions = false;
     }
 
     void OnServerInitialized()
@@ -119,8 +126,38 @@ public class Networker : MonoBehaviour {
     {
         if (msEvent == MasterServerEvent.HostListReceived)
         {
-            hostList = MasterServer.PollHostList();
-            readyToConnect = true;
+            HostData[] hostList = MasterServer.PollHostList();
+
+            if (!PlayerPrefs.HasKey("Points"))
+            {
+                PlayerPrefs.SetInt("Points", 15);
+            }
+
+            int myPoints = PlayerPrefs.GetInt("Points");
+            int closestServer = -1;
+            int closestPoints = -100;
+
+            for (int j = 0; j < hostList.Length; j++)
+            {
+                int hostPoints = int.Parse(hostList[j].comment);
+
+                if (Mathf.Abs(myPoints - closestPoints) > Mathf.Abs(myPoints - hostPoints))
+                {
+                    closestPoints = hostPoints;
+                    closestServer = j;
+                }
+            }
+
+            debugMessage.text = "Connecting to server with " + hostList[closestServer].comment + " points...";
+            Network.Connect(hostList[closestServer]);
         }
+    }
+
+    public void Reset()
+    {
+        showOptions = true;
+        readyToStart = false;
+
+        debugMessage.text = "";
     }
 }

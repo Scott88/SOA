@@ -5,7 +5,7 @@ public class Movement : MonoBehaviour {
 
     public float speed = 1f;
 
-    public bool myTurn = true;
+    private bool myTurn = false;
 
     void Start()
     {
@@ -16,63 +16,8 @@ public class Movement : MonoBehaviour {
         else
         {
             PlayerManager.SetEnemy(this);
-        }      
-    }
-	
-	// Update is called once per frame
-	void Update ()
-    {
-        /*if (Network.isClient || Network.isServer)
-        {
-            if (networkView.isMine && myTurn)
-            {
-                if (Input.GetKeyDown(KeyCode.W))
-                {
-                    transform.Translate(0.0f, 1.0f, 0.0f);
-                    myTurn = false;
-                }
-                else if (Input.GetKeyDown(KeyCode.S))
-                {
-                    transform.Translate(0.0f, -1.0f, 0.0f);
-                    myTurn = false;
-                }
-                else if (Input.GetKeyDown(KeyCode.A))
-                {
-                    transform.Translate(-1.0f, 0.0f, 0.0f);
-                    myTurn = false;
-                }
-                else if (Input.GetKeyDown(KeyCode.D))
-                {
-                    transform.Translate(1.0f, 0.0f, 0.0f);
-                    myTurn = false;
-                }
-
-                if (!myTurn)
-                {
-                    networkView.RPC("TurnOver", RPCMode.Others);
-                }
-            }
         }
-        else
-        {
-            if (Input.GetKeyDown(KeyCode.W))
-            {
-                transform.Translate(0.0f, 1.0f, 0.0f);
-            }
-            else if (Input.GetKeyDown(KeyCode.S))
-            {
-                transform.Translate(0.0f, -1.0f, 0.0f);
-            }
-            else if (Input.GetKeyDown(KeyCode.A))
-            {
-                transform.Translate(-1.0f, 0.0f, 0.0f);
-            }
-            else if (Input.GetKeyDown(KeyCode.D))
-            {
-                transform.Translate(1.0f, 0.0f, 0.0f);
-            }
-        }*/
-	}
+    }
 
     void OnGUI()
     {
@@ -80,7 +25,7 @@ public class Movement : MonoBehaviour {
         {
             if (networkView.isMine && myTurn)
             {
-                if (GUI.Button(new Rect(Screen.width * (0.075f), Screen.height * (0.825f), Screen.width * (0.05f), Screen.height * (0.05f)),
+                if (GUI.Button(new Rect(Screen.width * (0.1f), Screen.height * (0.805f), Screen.width * (0.07f), Screen.height * (0.07f)),
                                "^"))
                 {
                     transform.Translate(0.0f, 1.0f, 0.0f);
@@ -88,7 +33,7 @@ public class Movement : MonoBehaviour {
                     PlayerManager.TheirTurn();
                 }
 
-                if (GUI.Button(new Rect(Screen.width * (0.025f), Screen.height * (0.875f), Screen.width * (0.05f), Screen.height * (0.05f)),
+                if (GUI.Button(new Rect(Screen.width * (0.025f), Screen.height * (0.855f), Screen.width * (0.07f), Screen.height * (0.07f)),
                                "<"))
                 {
                     transform.Translate(-1.0f, 0.0f, 0.0f);
@@ -96,7 +41,7 @@ public class Movement : MonoBehaviour {
                     PlayerManager.TheirTurn();
                 }
 
-                if (GUI.Button(new Rect(Screen.width * (0.125f), Screen.height * (0.875f), Screen.width * (0.05f), Screen.height * (0.05f)),
+                if (GUI.Button(new Rect(Screen.width * (0.175f), Screen.height * (0.855f), Screen.width * (0.07f), Screen.height * (0.07f)),
                                ">"))
                 {
                     transform.Translate(1.0f, 0.0f, 0.0f);
@@ -104,7 +49,7 @@ public class Movement : MonoBehaviour {
                     PlayerManager.TheirTurn();
                 }
 
-                if (GUI.Button(new Rect(Screen.width * (0.075f), Screen.height * (0.925f), Screen.width * (0.05f), Screen.height * (0.05f)),
+                if (GUI.Button(new Rect(Screen.width * (0.1f), Screen.height * (0.895f), Screen.width * (0.07f), Screen.height * (0.07f)),
                                "v"))
                 {
                     transform.Translate(0.0f, -1.0f, 0.0f);
@@ -115,25 +60,25 @@ public class Movement : MonoBehaviour {
         }
         else
         {
-            if (GUI.Button(new Rect(Screen.width * (0.075f), Screen.height * (0.825f), Screen.width * (0.05f), Screen.height * (0.05f)),
+            if (GUI.Button(new Rect(Screen.width * (0.1f), Screen.height * (0.805f), Screen.width * (0.07f), Screen.height * (0.07f)),
                                "^"))
             {
                 transform.Translate(0.0f, 1.0f, 0.0f);
             }
 
-            if (GUI.Button(new Rect(Screen.width * (0.025f), Screen.height * (0.875f), Screen.width * (0.05f), Screen.height * (0.05f)),
+            if (GUI.Button(new Rect(Screen.width * (0.025f), Screen.height * (0.855f), Screen.width * (0.07f), Screen.height * (0.07f)),
                            "<"))
             {
                 transform.Translate(-1.0f, 0.0f, 0.0f);
             }
 
-            if (GUI.Button(new Rect(Screen.width * (0.125f), Screen.height * (0.875f), Screen.width * (0.05f), Screen.height * (0.05f)),
+            if (GUI.Button(new Rect(Screen.width * (0.175f), Screen.height * (0.855f), Screen.width * (0.07f), Screen.height * (0.07f)),
                            ">"))
             {
                 transform.Translate(1.0f, 0.0f, 0.0f);
             }
 
-            if (GUI.Button(new Rect(Screen.width * (0.075f), Screen.height * (0.925f), Screen.width * (0.05f), Screen.height * (0.05f)),
+            if (GUI.Button(new Rect(Screen.width * (0.1f), Screen.height * (0.895f), Screen.width * (0.07f), Screen.height * (0.07f)),
                            "v"))
             {
                 transform.Translate(0.0f, -1.0f, 0.0f);
