@@ -11,3 +11,5 @@ SpiritOfAdventure/obj/
 *.unityproj
 *.psd
 /NetworkingTest/Library/ScriptAssemblies/CompilationCompleted.txt
+/NetworkingTest/Library
+/NetworkingTest/Obj
