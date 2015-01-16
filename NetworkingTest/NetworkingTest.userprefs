@@ -1,14 +1,9 @@
 ﻿<Properties>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\Movement.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\Breakable.cs">
     <Files>
-<<<<<<< HEAD
-=======
-      <File FileName="Assets\Scripts\Movement.cs" Line="134" Column="49" />
->>>>>>> cc8e3b8ddd4bb7f1860689f976f44c547e6b11d8
-      <File FileName="Assets\Scripts\Networker.cs" Line="1" Column="1" />
-      <File FileName="Assets\Scripts\Movement.cs" Line="143" Column="2" />
-      <File FileName="Assets\Scripts\PlayerSpawner.cs" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\PlayerSpawner.cs" Line="24" Column="10" />
+      <File FileName="Assets\Scripts\Breakable.cs" Line="31" Column="1" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>

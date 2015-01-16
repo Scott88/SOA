@@ -5,12 +5,10 @@ public class Breakable : MonoBehaviour {
 
     public bool isBreakable = true;
 
-    private int team;
+    private int team = -1;
 
     void Start()
     {
-        team = -1;
-
         GameManager manager = FindObjectOfType<GameManager>();
 
         manager.AddBreakable(this);
