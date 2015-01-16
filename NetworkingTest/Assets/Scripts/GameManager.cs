@@ -6,6 +6,8 @@ public class GameManager : MonoBehaviour {
     public Camera playerCamera;
     public TextMesh myDisplay, theirDisplay, turnDisplay;
 
+    public BlockInventory playerInventory;
+
     public int myTeam { get; set; }
 
     private bool myTurn = false;
@@ -48,30 +50,39 @@ public class GameManager : MonoBehaviour {
 
             if (breakable)
             {
-                if (breakable.GetTeam() != myTeam)
-                {
-                    if (breakable.Break())
-                    {
-                        myPoints += 5;
-                        myDisplay.text = "Your Points: " + myPoints.ToString();
-
-                        theirPoints -= 5;
-                        theirDisplay.text = "Their Points: " + theirPoints.ToString();
-
-                        networkView.RPC("BreakBlock", RPCMode.Others, breakable.networkView.viewID);
-
-                        breakables.Remove(breakable);
-                    }
-                    else
-                    {
-                        networkView.RPC("MyTurn", RPCMode.Others);
-                    }
-
-                    turnDisplay.text = "Their turn...";
-                    myTurn = false;
-                }
+                TryBreakBlock(breakable);
+                return;
             }
+
+            BlockInventory inventory = hit.collider.gameObject.GetComponent<BlockInventory>();
         }
+    }
+
+    void TryBreakBlock(Breakable breakable)
+    {
+        if (breakable.GetTeam() != myTeam)
+        {
+            if (breakable.Break())
+            {
+                myPoints += 5;
+                myDisplay.text = "Your Points: " + myPoints.ToString();
+
+                theirPoints -= 5;
+                theirDisplay.text = "Their Points: " + theirPoints.ToString();
+
+                networkView.RPC("BreakBlock", RPCMode.Others, breakable.networkView.viewID);
+
+                breakables.Remove(breakable);
+            }
+            else
+            {
+                networkView.RPC("MyTurn", RPCMode.Others);
+            }
+
+            turnDisplay.text = "Their turn...";
+            myTurn = false;
+        }
+
     }
 
     [RPC]
@@ -100,6 +111,18 @@ public class GameManager : MonoBehaviour {
 
         turnDisplay.text = "Your turn...";
         myTurn = true;
+    }
+
+    void SelectInventory()
+    {
+        playerInventory.Select();
+    }
+
+    void PlaceBlock(Vector3 position)
+    {
+        position.z = 0;
+
+        
     }
 
     void OnGUI()
