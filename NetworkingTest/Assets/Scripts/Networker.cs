@@ -5,29 +5,11 @@ public class Networker : MonoBehaviour {
 
     public TextMesh debugMessage;
 
-    private static bool created = false;
+    public LevelLoader loader;
 
     private bool showOptions = true;
 
-    private bool readyToStart = false;
-
-    private int levelPrefix = 0;
-
-    void Awake()
-    {
-        if (!created)
-        {
-            DontDestroyOnLoad(this);
-            networkView.group = 1;
-
-            created = true;
-        }
-        else
-        {
-            showOptions = true;
-            DestroyImmediate(gameObject);
-        }
-    }
+    private bool readyToStart = false;  
 
 	// Use this for initialization
 	void Start ()
@@ -46,7 +28,7 @@ public class Networker : MonoBehaviour {
                                "Host Server"))
                 {
                     debugMessage.text = "Creating a Server...";
-                    Network.InitializeServer(3, 25311, !Network.HavePublicAddress());
+                    Network.InitializeServer(1, 25311, !Network.HavePublicAddress());
 
                     if (!PlayerPrefs.HasKey("Points"))
                     {
@@ -68,27 +50,10 @@ public class Networker : MonoBehaviour {
                 if (GUI.Button(new Rect(Screen.width * (0.375f), Screen.height * (0.4f), Screen.width * (1f / 4f), Screen.height * (1f / 6f)),
                                "Load Game"))
                 {
-                    MasterServer.UnregisterHost();
-                    networkView.RPC("LoadNetworkedLevel", RPCMode.AllBuffered);
+                    loader.LoadLevel();
                 }
             }
         }
-    }
-
-    [RPC]
-    void LoadNetworkedLevel()
-    {
-        Network.SetSendingEnabled(0, false);
-        Network.isMessageQueueRunning = false;
-
-        Network.SetLevelPrefix(++levelPrefix);
-        Application.LoadLevel("game");
-
-        Network.isMessageQueueRunning = true;
-        Network.SetSendingEnabled(0, true);
-
-        debugMessage.text = "";
-        showOptions = false;
     }
 
     void OnServerInitialized()
@@ -139,12 +104,15 @@ public class Networker : MonoBehaviour {
 
             for (int j = 0; j < hostList.Length; j++)
             {
-                int hostPoints = int.Parse(hostList[j].comment);
-
-                if (Mathf.Abs(myPoints - closestPoints) > Mathf.Abs(myPoints - hostPoints))
+                if (hostList[j].connectedPlayers == 1)
                 {
-                    closestPoints = hostPoints;
-                    closestServer = j;
+                    int hostPoints = int.Parse(hostList[j].comment);
+
+                    if (Mathf.Abs(myPoints - closestPoints) > Mathf.Abs(myPoints - hostPoints))
+                    {
+                        closestPoints = hostPoints;
+                        closestServer = j;
+                    }
                 }
             }
 

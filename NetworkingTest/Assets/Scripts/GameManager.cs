@@ -3,6 +3,8 @@ using System.Collections;
 
 public class GameManager : MonoBehaviour {
 
+    public TileManager tileManager;
+
     public Camera playerCamera;
     public TextMesh myDisplay, theirDisplay, turnDisplay;
 
@@ -145,6 +147,8 @@ public class GameManager : MonoBehaviour {
 
     void PlaceBlock(Vector3 position)
     {
+        position.x = Mathf.Floor(position.x) + 0.5f;
+        position.y = Mathf.Floor(position.y) + 0.5f;
         position.z = 0;
 
         GameObject block = Network.Instantiate(spawnedBlock, position, new Quaternion(), 0) as GameObject;
@@ -173,8 +177,6 @@ public class GameManager : MonoBehaviour {
             {
                 PlayerPrefs.SetInt("Points", myPoints);
             }
-
-            FindObjectOfType<Networker>().Reset();
 
             Network.Disconnect();
             Application.LoadLevel("menu");
@@ -209,8 +211,6 @@ public class GameManager : MonoBehaviour {
         playerInventory.Deselect(false);
         playerInventory.Save();
 
-        FindObjectOfType<Networker>().Reset();
-
         Application.LoadLevel("menu");
     }
 
@@ -227,8 +227,6 @@ public class GameManager : MonoBehaviour {
 
         playerInventory.Deselect(false);
         playerInventory.Save();
-
-        FindObjectOfType<Networker>().Reset();
 
         Network.Disconnect();
         Application.LoadLevel("menu");
