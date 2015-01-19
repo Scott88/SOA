@@ -30,6 +30,30 @@ public class GameManager : MonoBehaviour {
         myTeam = -1;
     }
 
+    public void InitGame()
+    {
+        networkView.RPC("InitializeGame", RPCMode.All);
+    }
+
+    [RPC]
+    void InitializeGame()
+    {
+        if (PlayerPrefs.HasKey("Points"))
+        {
+            myPoints = PlayerPrefs.GetInt("Points");
+        }
+        else
+        {
+            myPoints = 15;
+            PlayerPrefs.SetInt("Points", myPoints);
+        }
+
+        myDisplay.text = "Your score: " + myPoints.ToString();
+        networkView.RPC("SetEnemyPoints", RPCMode.OthersBuffered, myPoints);
+
+        turnDisplay.text = "Their turn...";
+    }
+
     public void AddBreakable(Breakable b)
     {
         breakables.Add(b);
@@ -169,9 +193,9 @@ public class GameManager : MonoBehaviour {
         if (GUI.Button(new Rect(Screen.width * (0.8f), Screen.height * (0.8f), Screen.width * (0.18f), Screen.height * (0.18f)),
                            "Disconnect"))
         {
-            if (myPoints < 15)
+            if (myPoints < 0)
             {
-                PlayerPrefs.SetInt("Points", 15);
+                PlayerPrefs.SetInt("Points", 0);
             }
             else
             {
@@ -199,9 +223,9 @@ public class GameManager : MonoBehaviour {
 
     void OnDisconnectedFromServer(NetworkDisconnection info)
     {
-        if (myPoints < 15)
+        if (myPoints < 0)
         {
-            PlayerPrefs.SetInt("Points", 15);
+            PlayerPrefs.SetInt("Points", 0);
         }
         else
         {
@@ -216,9 +240,9 @@ public class GameManager : MonoBehaviour {
 
 	void OnPlayerDisconnected()
     {
-        if (myPoints < 15)
+        if (myPoints < 0)
         {
-            PlayerPrefs.SetInt("Points", 15);
+            PlayerPrefs.SetInt("Points", 0);
         }
         else
         {
@@ -232,27 +256,5 @@ public class GameManager : MonoBehaviour {
         Application.LoadLevel("menu");
     }
 
-    public void InitGame()
-    {
-        networkView.RPC("InitializeGame", RPCMode.All);
-    }
-
-    [RPC]
-    void InitializeGame()
-    {
-        if (PlayerPrefs.HasKey("Points"))
-        {
-            myPoints = PlayerPrefs.GetInt("Points");
-        }
-        else
-        {
-            myPoints = 15;
-            PlayerPrefs.SetInt("Points", myPoints);
-        }
-
-        myDisplay.text = "Your score: " + myPoints.ToString();
-        networkView.RPC("SetEnemyPoints", RPCMode.OthersBuffered, myPoints);
-
-        turnDisplay.text = "Their turn...";
-    }
+    
 }

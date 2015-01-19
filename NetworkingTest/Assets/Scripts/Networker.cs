@@ -5,15 +5,15 @@ public class Networker : MonoBehaviour {
 
     public TextMesh debugMessage;
 
-    public LevelLoader loader;
-
-    private bool showOptions = true;
+    public bool showOptions { get; set; }
 
     private bool readyToStart = false;  
 
 	// Use this for initialization
 	void Start ()
     {
+        showOptions = true;
+
 		MasterServer.ipAddress = "10.10.10.181";
 		MasterServer.port = 23466;
 	}
@@ -30,12 +30,14 @@ public class Networker : MonoBehaviour {
                     debugMessage.text = "Creating a Server...";
                     Network.InitializeServer(1, 25311, !Network.HavePublicAddress());
 
-                    if (!PlayerPrefs.HasKey("Points"))
+                    if (!PlayerPrefs.HasKey("Blocks"))
                     {
-                        PlayerPrefs.SetInt("Points", 15);  
+                        PlayerPrefs.SetInt("Blocks", 3);
                     }
 
-                    MasterServer.RegisterHost("TestingTheTestOfTests", "SpiritOfTestventure", PlayerPrefs.GetInt("Points").ToString());
+                    int myPoints = PlayerPrefs.GetInt("Blocks") * 5;
+
+                    MasterServer.RegisterHost("TestingTheTestOfTests", "SpiritOfTestventure", myPoints.ToString());
                 }
 
                 if (GUI.Button(new Rect(Screen.width * (0.625f), Screen.height * (0.4f), Screen.width * (1f / 4f), Screen.height * (1f / 6f)),
@@ -50,7 +52,7 @@ public class Networker : MonoBehaviour {
                 if (GUI.Button(new Rect(Screen.width * (0.375f), Screen.height * (0.4f), Screen.width * (1f / 4f), Screen.height * (1f / 6f)),
                                "Load Game"))
                 {
-                    loader.LoadLevel();
+                    FindObjectOfType<LevelLoader>().LoadLevel();
                 }
             }
         }
@@ -93,12 +95,12 @@ public class Networker : MonoBehaviour {
         {
             HostData[] hostList = MasterServer.PollHostList();
 
-            if (!PlayerPrefs.HasKey("Points"))
+            if (!PlayerPrefs.HasKey("Blocks"))
             {
-                PlayerPrefs.SetInt("Points", 15);
+                PlayerPrefs.SetInt("Blocks", 3);
             }
 
-            int myPoints = PlayerPrefs.GetInt("Points");
+            int myPoints = PlayerPrefs.GetInt("Blocks") * 5;
             int closestServer = -1;
             int closestPoints = -100;
 
@@ -116,16 +118,15 @@ public class Networker : MonoBehaviour {
                 }
             }
 
-            debugMessage.text = "Connecting to server with " + hostList[closestServer].comment + " points...";
-            Network.Connect(hostList[closestServer]);
+            if (closestServer == -1)
+            {
+                debugMessage.text = "No valid server to connect to!";
+            }
+            else
+            {
+                debugMessage.text = "Connecting to server with " + hostList[closestServer].comment + " points...";
+                Network.Connect(hostList[closestServer]);
+            }
         }
-    }
-
-    public void Reset()
-    {
-        showOptions = true;
-        readyToStart = false;
-
-        debugMessage.text = "";
     }
 }
