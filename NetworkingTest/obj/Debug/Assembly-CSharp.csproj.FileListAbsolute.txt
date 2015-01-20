@@ -12,3 +12,13 @@ C:\Users\Nicholas\Documents\Unity Projects\NetworkingTest\obj\Debug\Assembly-CSh
 C:\Users\Nicholas\Documents\Unity Projects\NetworkingTest\obj\Debug\Assembly-CSharp.pdb
 C:\SpiritOfAdventure\SOA\NetworkingTest\obj\Debug\Assembly-CSharp.csprojResolveAssemblyReference.cache
 C:\SpiritOfAdventure\SOA\NetworkingTest\obj\Debug\Assembly-CSharp.dll
+C:\SpiritOfAdventure\SOA\NetworkingTest\Temp\bin\Debug\Assembly-CSharp.dll
+C:\SpiritOfAdventure\SOA\NetworkingTest\Temp\bin\Debug\Assembly-CSharp.pdb
+C:\SpiritOfAdventure\SOA\NetworkingTest\Temp\bin\Debug\UnityEditor.dll
+C:\SpiritOfAdventure\SOA\NetworkingTest\Temp\bin\Debug\UnityEngine.dll
+C:\SpiritOfAdventure\SOA\NetworkingTest\Temp\bin\Debug\UnityEngine.UI.dll
+C:\SpiritOfAdventure\SOA\NetworkingTest\Temp\bin\Debug\Mono.Cecil.dll
+C:\SpiritOfAdventure\SOA\NetworkingTest\Temp\bin\Debug\nunit.framework.dll
+C:\SpiritOfAdventure\SOA\NetworkingTest\Temp\bin\Debug\Unity.DataContract.dll
+C:\SpiritOfAdventure\SOA\NetworkingTest\Temp\bin\Debug\ICSharpCode.NRefactory.dll
+C:\SpiritOfAdventure\SOA\NetworkingTest\obj\Debug\Assembly-CSharp.pdb

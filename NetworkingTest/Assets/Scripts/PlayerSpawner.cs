@@ -3,41 +3,71 @@ using System.Collections;
 
 public class PlayerSpawner : MonoBehaviour {
 
-    public GameObject playerPrefab;
+    public GameObject breakableCluster;
 
     public float spawnXShift;
 
     public Vector3 spawnPosition;
 
-    private Movement[] players;
-    int playerCount = 0;
+    private float timer = 2.0f;
+    private bool created = false;
+
+    //private Movement[] players;
+    //int playerCount = 0;
 
 	// Use this for initialization
 	void Start ()
-    {
-        if (Network.isServer)
+    {     
+        if (Network.peerType == NetworkPeerType.Disconnected)
         {
-            players = new Movement[2];
-
-            Spawn(spawnPosition);
-            spawnPosition.x += spawnXShift;
-
-            for (int j = 0; j < Network.connections.Length; j++)
-            {
-                networkView.RPC("Spawn", Network.connections[j], spawnPosition);
-                spawnPosition.x += spawnXShift;
-            }
-        }
-        else if (Network.peerType == NetworkPeerType.Disconnected)
-        {
-            GameObject.Instantiate(playerPrefab, spawnPosition, new Quaternion());
+            GameObject.Instantiate(breakableCluster, spawnPosition, new Quaternion());
         }
 	}
 
-    [RPC]
-    private void Spawn(Vector3 position)
+    void Update()
     {
-        Network.Instantiate(playerPrefab, position, new Quaternion(), 0);
+        if (Network.isServer)
+        {
+            if (timer > 0.0f)
+            {
+                timer -= Time.deltaTime;
+            }
+            else if (!created)
+            {
+                bool serverFirst = Random.value > 0.5f;
+
+                FindObjectOfType<GameManager>().InitGame();
+
+                Spawn(spawnPosition, serverFirst, 0);
+                spawnPosition.x += spawnXShift;
+
+                networkView.RPC("Spawn", RPCMode.OthersBuffered, spawnPosition, !serverFirst, 1);
+                spawnPosition.x += spawnXShift;          
+
+                created = true;
+            }
+        }
+    }
+
+    [RPC]
+    private void Spawn(Vector3 position, bool isFirst, int team)
+    {
+        GameObject cluster = Network.Instantiate(breakableCluster, position, new Quaternion(), 0) as GameObject;
+
+        Breakable[] breakables = cluster.GetComponentsInChildren<Breakable>();
+
+        GameManager manager = FindObjectOfType<GameManager>();
+        manager.myTeam = team;
+
+        for (int j = 0; j < breakables.Length; j++)
+        {
+            breakables[j].SetTeam(team);
+        }
+
+        if (isFirst)
+        {        
+            manager.MyTurn();
+        }
     }
 
     //public void AddPlayer(Movement player)
