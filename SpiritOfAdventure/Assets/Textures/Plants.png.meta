@@ -50,7 +50,7 @@ TextureImporter:
   grayScaleToAlpha: 0
   generateCubemap: 0
   seamlessCubemap: 0
-  textureFormat: 4
+  textureFormat: -3
   maxTextureSize: 1024
   textureSettings:
     filterMode: 0
@@ -68,16 +68,16 @@ TextureImporter:
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spritePixelsToUnits: 100
   alphaIsTransparency: 1
-  textureType: 5
+  textureType: 8
   buildTargetSettings:
   - buildTarget: iPhone
     maxTextureSize: 1024
-    textureFormat: 13
+    textureFormat: -2
     compressionQuality: 50
   - buildTarget: Android
     maxTextureSize: 1024
-    textureFormat: 31
-    compressionQuality: 50
+    textureFormat: -1
+    compressionQuality: 100
   spriteSheet:
     sprites:
     - name: Plants_0
