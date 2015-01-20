@@ -3,24 +3,26 @@ using System.Collections;
 
 public class PlayerSpawner : MonoBehaviour {
 
-    public GameObject breakableCluster;
+    public GameObject block;
+    public GameObject winBlock;
 
-    public float spawnXShift;
+    private TileManager tileManager;
 
-    public Vector3 spawnPosition;
+    private Vector3 spawnPosition;
 
     private float timer = 2.0f;
     private bool created = false;
 
-    //private Movement[] players;
-    //int playerCount = 0;
-
 	// Use this for initialization
 	void Start ()
-    {     
+    {
+        spawnPosition = new Vector3(-3.5f, 0.5f);
+
+        tileManager = FindObjectOfType<TileManager>();
+        
         if (Network.peerType == NetworkPeerType.Disconnected)
         {
-            GameObject.Instantiate(breakableCluster, spawnPosition, new Quaternion());
+            GameObject.Instantiate(block, spawnPosition, new Quaternion());
         }
 	}
 
@@ -39,10 +41,9 @@ public class PlayerSpawner : MonoBehaviour {
                 FindObjectOfType<GameManager>().InitGame();
 
                 Spawn(spawnPosition, serverFirst, 0);
-                spawnPosition.x += spawnXShift;
+                spawnPosition.x += 5f;
 
-                networkView.RPC("Spawn", RPCMode.OthersBuffered, spawnPosition, !serverFirst, 1);
-                spawnPosition.x += spawnXShift;          
+                networkView.RPC("Spawn", RPCMode.OthersBuffered, spawnPosition, !serverFirst, 1);      
 
                 created = true;
             }
@@ -52,50 +53,57 @@ public class PlayerSpawner : MonoBehaviour {
     [RPC]
     private void Spawn(Vector3 position, bool isFirst, int team)
     {
-        GameObject cluster = Network.Instantiate(breakableCluster, position, new Quaternion(), 0) as GameObject;
+        Vector3 blockPosition = position;
+        GameObject b = Network.Instantiate(block, blockPosition + Vector3.up, new Quaternion(), 0) as GameObject;
+        tileManager.OccupyTile(blockPosition + Vector3.up);
+        b.GetComponent<Breakable>().SetTeam(team);
 
-        Breakable[] breakables = cluster.GetComponentsInChildren<Breakable>();
+        blockPosition = position;
+        b = Network.Instantiate(block, blockPosition + Vector3.right, new Quaternion(), 0) as GameObject;
+        tileManager.OccupyTile(blockPosition + Vector3.right);
+        b.GetComponent<Breakable>().SetTeam(team);
+
+        blockPosition = position;
+        b = Network.Instantiate(block, blockPosition + Vector3.left, new Quaternion(), 0) as GameObject;
+        tileManager.OccupyTile(blockPosition + Vector3.left);
+        b.GetComponent<Breakable>().SetTeam(team);
+
+        blockPosition = position;
+        b = Network.Instantiate(block, blockPosition + Vector3.down, new Quaternion(), 0) as GameObject;
+        tileManager.OccupyTile(blockPosition + Vector3.down);
+        b.GetComponent<Breakable>().SetTeam(team);
+
+        blockPosition = position;
+        b = Network.Instantiate(block, blockPosition + Vector3.up + Vector3.left, new Quaternion(), 0) as GameObject;
+        tileManager.OccupyTile(blockPosition + Vector3.up + Vector3.left);
+        b.GetComponent<Breakable>().SetTeam(team);
+
+        blockPosition = position;
+        b = Network.Instantiate(block, blockPosition + Vector3.up + Vector3.right, new Quaternion(), 0) as GameObject;
+        tileManager.OccupyTile(blockPosition + Vector3.up + Vector3.right);
+        b.GetComponent<Breakable>().SetTeam(team);
+
+        blockPosition = position;
+        b = Network.Instantiate(block, blockPosition + Vector3.down + Vector3.left, new Quaternion(), 0) as GameObject;
+        tileManager.OccupyTile(blockPosition + Vector3.down + Vector3.left);
+        b.GetComponent<Breakable>().SetTeam(team);
+
+        blockPosition = position;
+        b = Network.Instantiate(block, blockPosition + Vector3.down + Vector3.right, new Quaternion(), 0) as GameObject;
+        tileManager.OccupyTile(blockPosition + Vector3.down + Vector3.right);
+        b.GetComponent<Breakable>().SetTeam(team);
+
+        blockPosition = position;
+        b = Network.Instantiate(winBlock, blockPosition, new Quaternion(), 0) as GameObject;
+        tileManager.OccupyTile(blockPosition);
+        b.GetComponent<WinButton>().SetTeam(team);
 
         GameManager manager = FindObjectOfType<GameManager>();
         manager.myTeam = team;
-
-        for (int j = 0; j < breakables.Length; j++)
-        {
-            breakables[j].SetTeam(team);
-        }
 
         if (isFirst)
         {        
             manager.MyTurn();
         }
-    }
-
-    //public void AddPlayer(Movement player)
-    //{
-    //    players[playerCount++] = player;
-
-    //    if (playerCount == 2)
-    //    {
-    //        int goesFirst;
-
-    //        if (Random.value > 0.5f)
-    //        {
-    //            goesFirst = 1;
-    //        }
-    //        else
-    //        {
-    //            goesFirst = 0;
-    //        }
-
-    //        players[goesFirst].myTurn = true;
-    //    }
-    //}
-
-    void OnDrawGizmosSelected()
-    {
-        Gizmos.color = Color.red;
-        Gizmos.DrawWireCube(spawnPosition, new Vector3(0.5f, 0.5f, 0.5f));
-        Gizmos.color = Color.blue;
-        Gizmos.DrawWireCube(new Vector3(spawnPosition.x + spawnXShift, spawnPosition.y, spawnPosition.z), new Vector3(0.5f, 0.5f, 0.5f));
     }
 }

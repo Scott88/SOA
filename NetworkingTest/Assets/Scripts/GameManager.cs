@@ -11,6 +11,9 @@ public class GameManager : MonoBehaviour {
     public BlockInventory playerInventory;
 
     public GameObject spawnedBlock;
+    public GameObject spawnIndicator;
+
+    public TextMesh winText;
 
     public int myTeam { get; set; }
 
@@ -19,6 +22,9 @@ public class GameManager : MonoBehaviour {
     private ArrayList breakables;
 
     private int myPoints, theirPoints;
+
+    private float leaveTimer = 3.0f;
+    private bool gameOver = false;
 
 	void Awake()
 	{
@@ -61,9 +67,30 @@ public class GameManager : MonoBehaviour {
 
     void Update()
     {
-        if (Input.GetMouseButtonDown(0))
+        if (!gameOver)
         {
-            GetClickedOn();
+            if (Input.GetMouseButtonDown(0))
+            {
+                GetClickedOn();
+            }
+            else if (Input.GetMouseButton(0))
+            {
+                GetHeldOn();
+            }
+
+            if (Input.GetMouseButtonUp(0))
+            {
+                GetReleasedOn();
+            }
+        }
+        else
+        {
+            leaveTimer -= Time.deltaTime;
+
+            if (leaveTimer <= 0.0f)
+            {
+                Network.Disconnect();
+            }
         }
     }
 
@@ -71,6 +98,55 @@ public class GameManager : MonoBehaviour {
     {
         Ray clickRay = playerCamera.ScreenPointToRay(Input.mousePosition);
         RaycastHit hit;
+
+        if (Physics.Raycast(clickRay, out hit))
+        {
+            BlockInventory inventory = hit.collider.gameObject.GetComponent<BlockInventory>();
+
+            if (inventory)
+            {
+                if (playerInventory.IsSelected())
+                {
+                    DeselectInventory();
+                }
+                else
+                {
+                    SelectInventory();
+                }
+
+                return;
+            }
+        }
+    }
+
+    void GetHeldOn()
+    {
+        if (playerInventory.IsSelected())
+        {
+            if (!spawnIndicator.activeSelf)
+            {
+                spawnIndicator.SetActive(true);
+            }
+
+            Vector3 position = playerCamera.ScreenToWorldPoint(Input.mousePosition);
+
+            position.x = Mathf.Floor(position.x) + 0.5f;
+            position.y = Mathf.Floor(position.y) + 0.5f;
+            position.z = 0;
+
+            spawnIndicator.transform.position = position;
+        }
+    }
+
+    void GetReleasedOn()
+    {
+        Ray clickRay = playerCamera.ScreenPointToRay(Input.mousePosition);
+        RaycastHit hit;
+
+        if (playerInventory.IsSelected())
+        {
+            spawnIndicator.SetActive(false);
+        }
 
         if (Physics.Raycast(clickRay, out hit))
         {
@@ -86,17 +162,13 @@ public class GameManager : MonoBehaviour {
                 return;
             }
 
-            BlockInventory inventory = hit.collider.gameObject.GetComponent<BlockInventory>();
+            WinButton win = hit.collider.gameObject.GetComponent<WinButton>();
 
-            if (inventory)
+            if (win)
             {
-                if (playerInventory.IsSelected())
+                if (!playerInventory.IsSelected() && myTurn)
                 {
-                    DeselectInventory();
-                }
-                else
-                {
-                    SelectInventory();
+                    networkView.RPC("WinScreen", RPCMode.All, win.GetTeam());
                 }
 
                 return;
@@ -121,6 +193,7 @@ public class GameManager : MonoBehaviour {
                 theirPoints -= 5;
                 theirDisplay.text = "Their Points: " + theirPoints.ToString();
 
+                tileManager.FreeTile(breakable.transform.position);
                 networkView.RPC("BreakBlock", RPCMode.Others, breakable.networkView.viewID);
 
                 breakables.Remove(breakable);
@@ -186,6 +259,21 @@ public class GameManager : MonoBehaviour {
     void DeselectInventory()
     {
         playerInventory.Deselect(false);
+    }
+
+    [RPC]
+    void WinScreen(int winningTeam)
+    {
+        if (winningTeam != myTeam)
+        {
+            winText.text = "YOU WIN!";
+        }
+        else
+        {
+            winText.text = "You lose...";
+        }
+
+        gameOver = true;
     }
 
     void OnGUI()

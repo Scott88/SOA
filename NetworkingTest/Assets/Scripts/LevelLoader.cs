@@ -24,16 +24,17 @@ public class LevelLoader : MonoBehaviour {
 
     public void LoadLevel()
     {
-        networkView.RPC("LoadNetworkedLevel", RPCMode.AllBuffered);
+        networkView.RPC("LoadNetworkedLevel", RPCMode.AllBuffered, ++levelPrefix);
     }
 
     [RPC]
-    void LoadNetworkedLevel()
+    void LoadNetworkedLevel(int prefix)
     {
+        levelPrefix = prefix;
         Network.SetSendingEnabled(0, false);
         Network.isMessageQueueRunning = false;
 
-        Network.SetLevelPrefix(++levelPrefix);
+        Network.SetLevelPrefix(prefix);
         Application.LoadLevel("game");
 
         Network.isMessageQueueRunning = true;
