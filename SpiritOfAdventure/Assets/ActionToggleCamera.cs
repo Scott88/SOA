@@ -15,12 +15,6 @@ public class ActionToggleCamera  : SOAAction
 
 	
 	}
-	
-	// Update is called once per frame
-	void Update ()
-	{
-	
-	}
 
 	protected override void Activate()
 	{
