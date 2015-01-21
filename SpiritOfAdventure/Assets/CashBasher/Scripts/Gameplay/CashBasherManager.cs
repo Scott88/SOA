@@ -104,11 +104,17 @@ public class CashBasherManager : MonoBehaviour
     {
         currentPhase = phase;
 
-        state.End();
+        if (state != null)
+        {
+            state.End();
+        }
 
         state = s;
 
-        state.Prepare();
+        if (state != null)
+        {
+            state.Prepare();
+        }
     }
 
     [RPC]
@@ -116,7 +122,11 @@ public class CashBasherManager : MonoBehaviour
     {
         currentPhase = (GamePhase)(phase);
 
-        state.End();
+
+        if (state != null)
+        {
+            state.End();
+        }
 
         switch (currentPhase)
         {
@@ -128,7 +138,10 @@ public class CashBasherManager : MonoBehaviour
                 break;
         }
 
-        state.Prepare();
+        if (state != null)
+        {
+            state.Prepare();
+        }
     }
 
     
