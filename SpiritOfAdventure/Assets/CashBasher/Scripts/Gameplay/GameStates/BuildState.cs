@@ -13,12 +13,18 @@ public class BuildState : GameState
 
     private GameObject spawnIndicator;
 
+    private Vector3 lastTouchPos;
+
+    private bool cameraFocusLeft;
+
     public BuildState(CashBasherManager gameManager, int team, TileSet yourSet, GameObject indicator)
     {
         manager = gameManager;
         myTeam = team;
         tileSet = yourSet;
         spawnIndicator = indicator;
+
+        cameraFocusLeft = myTeam == 0;
     }
 
     public void Prepare()
@@ -49,6 +55,9 @@ public class BuildState : GameState
                 return;
             }
         }
+
+        lastTouchPos = manager.playerCamera.ScreenToWorldPoint(Input.mousePosition);
+        manager.cameraMan.enabled = false;
     }
 
     public void GetHeldOn()
@@ -72,6 +81,23 @@ public class BuildState : GameState
 
             spawnIndicator.transform.position = position;
         }
+        else
+        {
+            Vector3 nextPos = manager.playerCamera.ScreenToWorldPoint(Input.mousePosition);
+
+            Vector3 translation = new Vector3(lastTouchPos.x - nextPos.x, 0f);
+
+            if (cameraFocusLeft && translation.x + manager.playerCamera.transform.position.x < -10f)
+            {
+                translation.x = -10f - manager.playerCamera.transform.position.x;
+            }
+            else if (!cameraFocusLeft && translation.x + manager.playerCamera.transform.position.x > 10f)
+            {
+                translation.x = 10f - manager.playerCamera.transform.position.x;
+            }
+
+            manager.playerCamera.transform.Translate(translation);
+        }
     }
 
     public void GetReleasedOn()
@@ -79,28 +105,40 @@ public class BuildState : GameState
         if (selectedInventory)
         {
             spawnIndicator.SetActive(false);
-        }
 
-        Ray clickRay = manager.playerCamera.ScreenPointToRay(Input.mousePosition);
-        RaycastHit hit;
+            Ray clickRay = manager.playerCamera.ScreenPointToRay(Input.mousePosition);
+            RaycastHit hit;
 
-        if (Physics.Raycast(clickRay, out hit))
-        {
-            Breakable breakable = hit.collider.gameObject.GetComponent<Breakable>();
-
-            if (breakable)
+            if (Physics.Raycast(clickRay, out hit))
             {
-                return;
-            }
-        }
+                Breakable breakable = hit.collider.gameObject.GetComponent<Breakable>();
 
-        if (selectedInventory)
-        {
+                if (breakable)
+                {
+                    return;
+                }
+            }
+
             Vector3 position = manager.playerCamera.ScreenToWorldPoint(Input.mousePosition);
 
             if (tileSet.CanPlace(position))
             {
                 PlaceBlock(manager.playerCamera.ScreenToWorldPoint(Input.mousePosition), selectedInventory);
+            }
+        }
+        else
+        {
+            manager.cameraMan.enabled = true;
+
+            if (cameraFocusLeft && manager.playerCamera.transform.position.x > -5f)
+            {
+                manager.cameraMan.FollowPosition(new Vector3(10f, 0f, 0f));
+                cameraFocusLeft = false;
+            }
+            else if (!cameraFocusLeft && manager.playerCamera.transform.position.x < 5f)
+            {
+                manager.cameraMan.FollowPosition(new Vector3(-10f, 0f, 0f));
+                cameraFocusLeft = true;
             }
         }
     }
