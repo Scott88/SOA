@@ -73,13 +73,18 @@ public class CashBasherManager : MonoBehaviour
                 {
                     //SwitchToState(buildState, GamePhase.GP_BUILD);
 
-                    networkView.RPC("NetSwitchToState", RPCMode.All, (int)GamePhase.GP_BUILD);
+                    networkView.RPC("SwitchToState", RPCMode.All, (int)GamePhase.GP_BUILD);
                 }
             }
         }
         if (currentPhase == GamePhase.GP_BUILD)
         {
             buildTimer -= Time.deltaTime;
+
+            if (buildTimer <= 0f)
+            {
+                SwitchToState((int)GamePhase.GP_STARTING);
+            }
         }
 
         if (state != null)
@@ -100,28 +105,10 @@ public class CashBasherManager : MonoBehaviour
         }
     }
 
-    void SwitchToState(GameState s, GamePhase phase)
-    {
-        currentPhase = phase;
-
-        if (state != null)
-        {
-            state.End();
-        }
-
-        state = s;
-
-        if (state != null)
-        {
-            state.Prepare();
-        }
-    }
-
     [RPC]
-    void NetSwitchToState(int phase)
+    void SwitchToState(int phase)
     {
         currentPhase = (GamePhase)(phase);
-
 
         if (state != null)
         {
