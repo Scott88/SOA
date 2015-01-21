@@ -5,19 +5,10 @@ public class TileSet : MonoBehaviour {
 
     public Vector3 minCoord, maxCoord;
 
-    public int team;
-
-    public bool CanPlace(Vector3 position, int t)
+    public bool CanPlace(Vector3 position)
     {
-        if (t != team)
-        { 
-            return false;
-        }
-        else
-        {
-            return minCoord.x < position.x && minCoord.y < position.y &&
-                   maxCoord.x > position.x && maxCoord.y > position.y;
-        }
+        return minCoord.x < position.x && minCoord.y < position.y &&
+               maxCoord.x > position.x && maxCoord.y > position.y;
     }
 
     void OnDrawGizmosSelected()

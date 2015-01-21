@@ -4,8 +4,8 @@ using System.Collections;
 public class NetLevelHandshake : MonoBehaviour {
 
 	// Use this for initialization
-    void Start()
+    void Awake()
     {
-        FindObjectOfType<NetworkedLevelLoader>().EnableSending();
+        FindObjectOfType<NetworkedLevelLoader>().Ready();
     }
 }

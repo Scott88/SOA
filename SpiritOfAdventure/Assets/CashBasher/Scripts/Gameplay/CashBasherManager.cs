@@ -3,6 +3,9 @@ using System.Collections;
 
 public class CashBasherManager : MonoBehaviour
 {
+    public float startTimer = 2.0f;
+    public float buildTimer = 30.0f;
+
     public Camera playerCamera, guiCamera;
 
     public CameraMan cameraMan;
@@ -11,14 +14,30 @@ public class CashBasherManager : MonoBehaviour
 
     public GameObject spawnIndicator;
 
-    private int myTeam;
+    public int myTeam;
+
+    private GameState state = null;
+    private GamePhase currentPhase = GamePhase.GP_STARTING;
 
     private ArrayList blocks;
 
-    private BlockInventory selectedInventory;
+    private NetworkedLevelLoader loader;
+
+    private BuildState buildState;
+
+    enum GamePhase
+    {
+        GP_STARTING = 0,
+        GP_BUILD = 1,
+        GP_YOUR_TURN = 2,
+        GP_THEIR_TURN = 3,
+        GP_OVER = 4
+    }
 
     void Start()
     {
+        loader = FindObjectOfType<NetworkedLevelLoader>();
+
         blocks = new ArrayList();
 
         if (Network.isServer)
@@ -33,6 +52,8 @@ public class CashBasherManager : MonoBehaviour
         }
         
         cameraMan.ZoomTo(4f);
+
+        buildState = new BuildState(this, myTeam, myTeam == 0 ? serverSet : clientSet, spawnIndicator);
     }
 
     public void AddBlock(Breakable b)
@@ -42,142 +63,72 @@ public class CashBasherManager : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetMouseButtonDown(0))
+        if (currentPhase == GamePhase.GP_STARTING)
         {
-            GetClickedOn();
-        }
-        else if (Input.GetMouseButton(0))
-        {
-            GetHeldOn();
-        }
+            startTimer -= Time.deltaTime;
 
-        if (Input.GetMouseButtonUp(0))
-        {
-            GetReleasedOn();
-        }
-    }
-
-    void GetClickedOn()
-    {
-        Ray clickRay = guiCamera.ScreenPointToRay(Input.mousePosition);
-        RaycastHit hit;
-
-        if (Physics.Raycast(clickRay, out hit))
-        {
-            BlockInventory inventory = hit.collider.gameObject.GetComponent<BlockInventory>();
-
-            if (inventory)
+            if (startTimer <= 0f)
             {
-                if (inventory.IsSelected())
+                if (loader.IsReady())
                 {
-                    DeselectInventory(inventory);
+                    //SwitchToState(buildState, GamePhase.GP_BUILD);
+
+                    networkView.RPC("NetSwitchToState", RPCMode.All, (int)GamePhase.GP_BUILD);
                 }
-                else
-                {
-                    SelectInventory(inventory);
-                }
-
-                return;
             }
         }
-    }
-
-    void GetHeldOn()
-    {
-        if (selectedInventory)
+        if (currentPhase == GamePhase.GP_BUILD)
         {
-            Vector3 position = playerCamera.ScreenToWorldPoint(Input.mousePosition);
-
-            if (serverSet.CanPlace(position, myTeam) || clientSet.CanPlace(position, myTeam))
-            {
-                spawnIndicator.SetActive(true);
-            }
-            else
-            {
-                spawnIndicator.SetActive(false);
-            }
-
-            position.x = Mathf.Floor(position.x) + 0.5f;
-            position.y = Mathf.Floor(position.y) + 0.5f;
-            position.z = 0;
-
-            spawnIndicator.transform.position = position;
+            buildTimer -= Time.deltaTime;
         }
-    }
 
-    void GetReleasedOn()
-    {
-        if (selectedInventory)
+        if (state != null)
         {
-            spawnIndicator.SetActive(false);
-        }
-
-        Ray clickRay = playerCamera.ScreenPointToRay(Input.mousePosition);
-        RaycastHit hit;
-
-        if (Physics.Raycast(clickRay, out hit))
-        {
-            Breakable breakable = hit.collider.gameObject.GetComponent<Breakable>();
-
-            if (breakable)
+            if (Input.GetMouseButtonDown(0))
             {
-                //if (!playerInventory.IsSelected() && myTurn)
-                //{
-                //    TryBreakBlock(breakable);
-                //}
-
-                return;
+                state.GetClickedOn();
+            }
+            else if (Input.GetMouseButton(0))
+            {
+                state.GetHeldOn();
             }
 
-            //WinButton win = hit.collider.gameObject.GetComponent<WinButton>();
-
-            //if (win)
-            //{
-            //    if (!playerInventory.IsSelected() && myTurn)
-            //    {
-            //        networkView.RPC("WinScreen", RPCMode.All, win.GetTeam());
-            //    }
-
-            //    return;
-            //}
-        }
-
-        if (selectedInventory)
-        {
-            Vector3 position = playerCamera.ScreenToWorldPoint(Input.mousePosition);
-
-            if (serverSet.CanPlace(position, myTeam) || clientSet.CanPlace(position, myTeam))
+            if (Input.GetMouseButtonUp(0))
             {
-                PlaceBlock(playerCamera.ScreenToWorldPoint(Input.mousePosition), selectedInventory);
+                state.GetReleasedOn();
             }
         }
     }
 
-    void SelectInventory(BlockInventory inventory)
+    void SwitchToState(GameState s, GamePhase phase)
     {
-        selectedInventory = inventory;
-        inventory.Select();
+        currentPhase = phase;
+
+        state.End();
+
+        state = s;
+
+        state.Prepare();
     }
 
-    void PlaceBlock(Vector3 position, BlockInventory inventory)
+    [RPC]
+    void NetSwitchToState(int phase)
     {
-        position.x = Mathf.Floor(position.x) + 0.5f;
-        position.y = Mathf.Floor(position.y) + 0.5f;
-        position.z = 0;
+        currentPhase = (GamePhase)(phase);
 
-        GameObject block = Network.Instantiate(inventory.GetBlock(), position, new Quaternion(), 0) as GameObject;
+        state.End();
 
-        Breakable b = block.GetComponent<Breakable>();
-        b.SetTeam(myTeam);
+        switch (currentPhase)
+        {
+            case GamePhase.GP_STARTING:
+                state = null;
+                break;
+            case GamePhase.GP_BUILD:
+                state = buildState;
+                break;
+        }
 
-        inventory.Deselect(true);
-        selectedInventory = null;
-    }
-
-    void DeselectInventory(BlockInventory inventory)
-    {
-        inventory.Deselect(false);
-        selectedInventory = null;
+        state.Prepare();
     }
 
     

@@ -8,6 +8,8 @@ public class NetworkedLevelLoader : MonoBehaviour {
 
     private int levelPrefix = 0;
 
+    bool loaded, otherLoaded;
+
     void Awake()
     {
         if (!created)
@@ -35,13 +37,31 @@ public class NetworkedLevelLoader : MonoBehaviour {
         Network.SetSendingEnabled(0, false);
         Network.isMessageQueueRunning = false;
 
+        loaded = false;
+        otherLoaded = false;
+
         Network.SetLevelPrefix(prefix);
         LevelQueue.LoadLevel(levelName);
     }
 
-    public void EnableSending()
+    public void Ready()
     {
         Network.isMessageQueueRunning = true;
         Network.SetSendingEnabled(0, true);
+
+        loaded = true;
+
+        networkView.RPC("OtherReady", RPCMode.Others);
+    }
+
+    [RPC]
+    void OtherReady()
+    {
+        otherLoaded = true;
+    }
+
+    public bool IsReady()
+    {
+        return loaded && otherLoaded;
     }
 }

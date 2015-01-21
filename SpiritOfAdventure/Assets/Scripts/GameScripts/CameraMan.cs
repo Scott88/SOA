@@ -9,7 +9,7 @@ public class CameraMan : MonoBehaviour
 
 	private GameObject targetObject = null;
 	private Vector3 targetPosition = new Vector3();
-	private bool followingObject;
+	private bool followingObject = false;
 	private Vector3 currentVelocity = new Vector3();
 
     private float targetZoom = 0f;
@@ -22,12 +22,6 @@ public class CameraMan : MonoBehaviour
 	private float shakeDecay;
 
 	private Vector3 shakeOffset;
-
-	void Start()
-	{
-		targetObject = FindObjectOfType<Player>().gameObject;
-		followingObject = true;
-	}
 
 	public void FollowObject(GameObject target)
 	{
