@@ -16,6 +16,7 @@ public class BuildState : GameState
     private Vector3 lastTouchPos;
 
     private bool cameraFocusLeft;
+    private bool cameraGrabbed;
 
     public BuildState(CashBasherManager gameManager, int team, TileSet yourSet, GameObject indicator)
     {
@@ -52,10 +53,13 @@ public class BuildState : GameState
                     SelectInventory(inventory);
                 }
 
+                cameraGrabbed = false;
+
                 return;
             }
         }
 
+        cameraGrabbed = true;
         lastTouchPos = manager.playerCamera.ScreenToWorldPoint(Input.mousePosition);
         manager.cameraMan.enabled = false;
     }
@@ -81,7 +85,7 @@ public class BuildState : GameState
 
             spawnIndicator.transform.position = position;
         }
-        else
+        else if(cameraGrabbed)
         {
             Vector3 nextPos = manager.playerCamera.ScreenToWorldPoint(Input.mousePosition);
 
@@ -126,7 +130,7 @@ public class BuildState : GameState
                 PlaceBlock(manager.playerCamera.ScreenToWorldPoint(Input.mousePosition), selectedInventory);
             }
         }
-        else
+        else if (cameraGrabbed)
         {
             manager.cameraMan.enabled = true;
 
