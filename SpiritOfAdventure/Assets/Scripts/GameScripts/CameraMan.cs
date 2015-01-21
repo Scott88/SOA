@@ -12,6 +12,9 @@ public class CameraMan : MonoBehaviour
 	private bool followingObject;
 	private Vector3 currentVelocity = new Vector3();
 
+    private float targetZoom = 0f;
+    private float zoomVel = 0f;
+
 	public bool useManualLead { get; set; }
 	private Vector3 manualDirection;
 
@@ -42,6 +45,11 @@ public class CameraMan : MonoBehaviour
 		targetPosition = target;
 		followingObject = false;
 	}
+
+    public void ZoomTo(float zoom)
+    {
+        targetZoom = zoom;
+    }
 
 	void FixedUpdate()
 	{
@@ -94,6 +102,11 @@ public class CameraMan : MonoBehaviour
 		GetShake();
 
 		transform.position += shakeOffset;
+
+        if (camera.orthographicSize != targetZoom && targetZoom != 0)
+        {
+            camera.orthographicSize = Mathf.SmoothDamp(camera.orthographicSize, targetZoom, ref zoomVel, 4f);
+        }
 	}
 
 	public void ShakeCamera(float intensity, float decayRate)
