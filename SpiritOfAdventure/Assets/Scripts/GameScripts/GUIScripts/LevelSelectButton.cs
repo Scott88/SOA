@@ -18,31 +18,24 @@ public class LevelSelectButton : MonoBehaviour
 	{
 		focus = FindObjectOfType<MenuFocus>() as MenuFocus;
 
-		requirementsMet = false;
+		requirementsMet = true;
 
-		if (unlockRequirements.Length == 0)
+		if (unlockRequirements.Length > 0)
 		{
-			requirementsMet = true;
-		}
-		else
-		{
-			for (int j = 0; j < unlockRequirements.Length && !requirementsMet; j++)
+			for (int j = 0; j < unlockRequirements.Length && requirementsMet; j++)
 			{
-				if (PlayerPrefs.HasKey(unlockRequirements[j]))
+				if (SaveFile.Instance().GetStars(unlockRequirements[j]) == 0)
 				{
-					requirementsMet = true;
+					requirementsMet = false;
 				}
 			}
 		}
 
 		HideStars();
 
-		if (PlayerPrefs.HasKey(sceneToLoad))
-		{
-			starCount = PlayerPrefs.GetInt(sceneToLoad);
+        starCount = SaveFile.Instance().GetStars(sceneToLoad);
 
-			ShowStars();
-		}
+        ShowStars();
 	}
 
 	void OnGUI()

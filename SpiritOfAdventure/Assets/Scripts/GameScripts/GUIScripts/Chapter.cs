@@ -29,19 +29,15 @@ public class Chapter : FocusPoint
 
 		if (nextChapter)
 		{
-			requirementsMet = false;
+			requirementsMet = true;
 
-			if (nextChapter.unlockRequirements.Length == 0)
+			if (nextChapter.unlockRequirements.Length > 0)
 			{
-				requirementsMet = true;
-			}
-			else
-			{
-				for (int j = 0; j < nextChapter.unlockRequirements.Length && !requirementsMet; j++)
+				for (int j = 0; j < nextChapter.unlockRequirements.Length && requirementsMet; j++)
 				{
-					if (PlayerPrefs.HasKey(nextChapter.unlockRequirements[j]))
+					if (SaveFile.Instance().GetStars(nextChapter.unlockRequirements[j]) == 0)
 					{
-						requirementsMet = true;
+						requirementsMet = false;
 					}
 				}
 			}

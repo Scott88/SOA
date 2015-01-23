@@ -22,6 +22,11 @@ public class FollowPlayer : MonoBehaviour
 		targetVolume = audio.volume;
 	}
 
+	public void SetPlayer(GameObject p)
+	{
+        player = p;
+	}
+
 	public void Follow()
 	{
 		followingPlayer = true;

@@ -5,18 +5,24 @@ public class IntroScreen : MonoBehaviour
 {
 	public float fadeInTime, displayTime, fadeOutTime;
 
+    public Vector3 translateTo, scaleTo;
+
+    public TextMesh obbText;
+
+    private Vector3 translateVel, scaleVel;
+
 	private Color alphaController;
 
 	void Start()
 	{
+		translateVel = new Vector3 ();
+		scaleVel = new Vector3 ();
 		alphaController = renderer.material.color;
 		alphaController.a = 0;
 		renderer.material.color = alphaController;
 		StartCoroutine(Go());
 		Time.timeScale = 1;
 	}
-
-
 
 	IEnumerator Go()
 	{
@@ -30,10 +36,50 @@ public class IntroScreen : MonoBehaviour
 			yield return 0;
 		}
 
-		timer = displayTime;
+#if !UNITY_EDITOR
 
-		while (timer > 0f)
-		{
+        if (!OBBReady())
+        {
+            if (CheckExpPath())
+            {
+
+                while (Mathf.Abs(transform.localScale.x - scaleTo.x) > 0.0001f)
+                {
+                    transform.position = Vector3.SmoothDamp(transform.position, translateTo, ref translateVel, 0.2f);
+                    transform.localScale = Vector3.SmoothDamp(transform.localScale, scaleTo, ref scaleVel, 0.2f);
+                    yield return 0;
+                }
+
+                timer = 2.0f;
+                
+                obbText.text = "Downloading game content...";
+
+                while(timer > 0.0f)
+                {
+                    timer -= Time.deltaTime;
+                    yield return 0;
+                }       
+                
+                GetOBB();
+
+                while (!OBBReady())
+                {
+                    yield return 0;
+                }
+            }
+            else
+            {
+                yield break;
+            }
+        }
+
+#endif
+
+
+        timer = displayTime;
+
+        while (timer > 0f)
+        {
 			timer -= Time.deltaTime;
 			yield return 0;
 		}
@@ -51,4 +97,37 @@ public class IntroScreen : MonoBehaviour
 		Application.LoadLevel("CutScene");
 	}
 
+    bool CheckExpPath()
+    {
+        if (!GooglePlayDownloader.RunningOnAndroid())
+        {
+            return true;
+        }
+
+        string expPath = GooglePlayDownloader.GetExpansionFilePath();
+
+        if (expPath == null)
+        {
+            obbText.text = "Not enough room for full game";
+            return false;
+        }
+
+        return true;
+    }
+
+    void GetOBB()
+    {
+        string mainPath = GooglePlayDownloader.GetMainOBBPath(GooglePlayDownloader.GetExpansionFilePath());
+
+        if (mainPath == null)
+        {
+            obbText.text = "Downloading game...";
+            GooglePlayDownloader.FetchOBB();
+        }
+    }
+
+    bool OBBReady()
+    {
+        return !GooglePlayDownloader.RunningOnAndroid() || GooglePlayDownloader.GetMainOBBPath(GooglePlayDownloader.GetExpansionFilePath()) != null;
+    }
 }

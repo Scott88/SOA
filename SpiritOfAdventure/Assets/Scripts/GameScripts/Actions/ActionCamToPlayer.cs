@@ -12,11 +12,11 @@ public class ActionCamToPlayer : SOAAction
 	void Awake()
 	{
 		cameraMan = FindObjectOfType<CameraMan>() as CameraMan;
-		player = FindObjectOfType<Player>().gameObject;
 	}
 
 	protected override void Activate()
 	{
+		player = FindObjectOfType<Player>().gameObject;
 		cameraMan.FollowObject(player);
 		cameraMan.leadingDistance = 8f;
 		cameraMan.timeToReachTarget = 1f;

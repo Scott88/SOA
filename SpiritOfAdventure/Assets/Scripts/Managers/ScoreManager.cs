@@ -167,9 +167,9 @@ public class ScoreManager : MonoBehaviour
 
 		if (animatingScore)
 		{
-			if (PlayerPrefs.GetInt(Application.loadedLevelName) < starCount)
+			if (SaveFile.Instance().GetStars(Application.loadedLevelName) < starCount)
 			{
-				PlayerPrefs.SetInt(Application.loadedLevelName, starCount);
+				SaveFile.Instance().SetLevelStars(Application.loadedLevelName, starCount);
 			}
 
 			animatingScore = false;
@@ -249,9 +249,9 @@ public class ScoreManager : MonoBehaviour
 			starCount = 3;
 		}
 
-		if (PlayerPrefs.GetInt(Application.loadedLevelName) < starCount)
+		if (SaveFile.Instance().GetStars(Application.loadedLevelName) < starCount)
 		{
-			PlayerPrefs.SetInt(Application.loadedLevelName, starCount);
+			SaveFile.Instance().SetLevelStars(Application.loadedLevelName, starCount);
 		}
 	}
 }

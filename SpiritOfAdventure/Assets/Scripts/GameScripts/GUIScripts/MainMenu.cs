@@ -11,6 +11,8 @@ public class MainMenu : FocusPoint
 
 	void Start()
 	{
+        SaveFile.Instance();
+
 		focus = FindObjectOfType<MenuFocus>() as MenuFocus;
 
 		if (Screen.width >= (1080)) 
@@ -60,12 +62,12 @@ public class MainMenu : FocusPoint
 				//PlayerPrefs.DeleteAll();
 			}
 
-            if (GUI.Button(new Rect(Screen.width * (0.53f), Screen.height * (0.32f), Screen.width * (0.25f), Screen.height * (1f / 7f)), "DESTRUCTORNATOR"))
-            {
+            //if (GUI.Button(new Rect(Screen.width * (0.53f), Screen.height * (0.32f), Screen.width * (0.25f), Screen.height * (1f / 7f)), "DESTRUCTORNATOR"))
+            //{
 
-                focus.PlayButtonSound();
-                Application.LoadLevel("MiniGameMenu");
-            }
+            //    focus.PlayButtonSound();
+            //    Application.LoadLevel("MiniGameMenu");
+            //}
 
 	}
 }
