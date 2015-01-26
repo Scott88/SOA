@@ -140,6 +140,10 @@ public class CashBasherManager : MonoBehaviour
     [RPC]
     void PlaceTreasure(int x, int y)
     {
+        if (Network.isClient)
+        {
+            x = 7 - x;
+        }
 
     }
 

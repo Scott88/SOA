@@ -54,7 +54,7 @@ public class GameManager : MonoBehaviour
 
         int currentPath = SaveFile.Instance().GetPath(Application.loadedLevelName);
 
-        GameObject player = null;
+        Player player = FindObjectOfType<Player>() as Player;
 
         bool playerSpawned = false;
 
@@ -62,19 +62,19 @@ public class GameManager : MonoBehaviour
         {
             if (spawns[j].pathNumber == currentPath)
             {
-                player = GameObject.Instantiate(playerPrefab, spawns[j].transform.position, new Quaternion()) as GameObject;
+                player.transform.position = spawns[j].transform.position;
                 playerSpawned = true;
             }
         }
 
         if (!playerSpawned)
         {
-            player = GameObject.Instantiate(playerPrefab, spawns[0].transform.position, new Quaternion()) as GameObject;
+            player.transform.position = spawns[0].transform.position;
         }
 
         CameraMan cameraMan = FindObjectOfType<CameraMan>() as CameraMan;
 
-        cameraMan.FollowObject(player);
+        cameraMan.FollowObject(player.gameObject);
 
 		//We instantiate each of our spirits from the game manager.
 		GameObject greenSpiritObject = (GameObject)Instantiate(greenSpiritPref, player.transform.position, transform.rotation);
@@ -92,9 +92,9 @@ public class GameManager : MonoBehaviour
 		blueSpirit = blueSpiritObject.GetComponent<Spirit>();
 		blueSpirit.SetManager(this);
 
-        greenSpiritObject.GetComponent<FollowPlayer>().SetPlayer(player);
-        redSpiritObject.GetComponent<FollowPlayer>().SetPlayer(player);
-        blueSpiritObject.GetComponent<FollowPlayer>().SetPlayer(player);
+        greenSpiritObject.GetComponent<FollowPlayer>().SetPlayer(player.gameObject);
+        redSpiritObject.GetComponent<FollowPlayer>().SetPlayer(player.gameObject);
+        blueSpiritObject.GetComponent<FollowPlayer>().SetPlayer(player.gameObject);
 
 		//To be completely honest, I'm not 100% sure why I'm spawning the spirits from the gameManager when they would still work
 		// being in the scene. It might still be a holdover from one of the old ways spirits worked, but this way, that at least
