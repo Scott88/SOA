@@ -12,12 +12,19 @@ public class CashBasherManager : MonoBehaviour
 
     public TileSet serverSet, clientSet;
 
+    public TextMesh gameText;
+
+    public GameObject treasure;
+    public GameObject treasureSupport;
+
     public GameObject spawnIndicator;
 
     public int myTeam;
 
     private GameState state = null;
     private GamePhase currentPhase = GamePhase.GP_STARTING;
+
+    private bool opponentIsReady = false;
 
     private ArrayList blocks;
 
@@ -29,9 +36,10 @@ public class CashBasherManager : MonoBehaviour
     {
         GP_STARTING = 0,
         GP_BUILD = 1,
-        GP_YOUR_TURN = 2,
-        GP_THEIR_TURN = 3,
-        GP_OVER = 4
+        GP_WAITING = 2,
+        GP_YOUR_TURN = 3,
+        GP_THEIR_TURN = 4,
+        GP_OVER = 5
     }
 
     void Start()
@@ -51,7 +59,7 @@ public class CashBasherManager : MonoBehaviour
             cameraMan.FollowPosition(new Vector3(10f, 0f, 0f)); 
         }
         
-        cameraMan.ZoomTo(4f);
+        //cameraMan.ZoomTo(4f);
 
         buildState = new BuildState(this, myTeam, myTeam == 0 ? serverSet : clientSet, spawnIndicator);
     }
@@ -69,21 +77,37 @@ public class CashBasherManager : MonoBehaviour
 
             if (startTimer <= 0f)
             {
-                if (loader.IsReady())
+                if (Network.isServer && loader.IsReady())
                 {
-                    //SwitchToState(buildState, GamePhase.GP_BUILD);
+                    
 
                     networkView.RPC("SwitchToState", RPCMode.All, (int)GamePhase.GP_BUILD);
                 }
             }
         }
+
         if (currentPhase == GamePhase.GP_BUILD)
         {
-            buildTimer -= Time.deltaTime;
-
-            if (buildTimer <= 0f)
+            if (buildTimer > 0f)
             {
-                SwitchToState((int)GamePhase.GP_STARTING);
+                buildTimer -= Time.deltaTime;
+            }
+            else
+            {
+                if (Network.isClient)
+                {
+                    networkView.RPC("OpponentReady", RPCMode.Server);
+                }
+
+                SwitchToState((int)GamePhase.GP_WAITING);
+            }
+        }
+
+        if (currentPhase == GamePhase.GP_WAITING)
+        {
+            if (Network.isServer && opponentIsReady)
+            {
+
             }
         }
 
@@ -105,6 +129,20 @@ public class CashBasherManager : MonoBehaviour
         }
     }
 
+    void RandomizeTreasure()
+    {
+        int x = Random.Range(0, 9);
+        int y = Random.Range(0, 7);
+
+        networkView.RPC("PlaceTreasure", RPCMode.All, x, y);
+    }
+
+    [RPC]
+    void PlaceTreasure(int x, int y)
+    {
+
+    }
+
     [RPC]
     void SwitchToState(int phase)
     {
@@ -123,6 +161,9 @@ public class CashBasherManager : MonoBehaviour
             case GamePhase.GP_BUILD:
                 state = buildState;
                 break;
+            case GamePhase.GP_WAITING:
+                state = null;
+                break;
         }
 
         if (state != null)
@@ -131,5 +172,9 @@ public class CashBasherManager : MonoBehaviour
         }
     }
 
-    
+    [RPC]
+    void OpponentReady()
+    {
+        opponentIsReady = true;
+    }
 }

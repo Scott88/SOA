@@ -9,12 +9,6 @@ public class GameWin : MonoBehaviour
 	public Camera[] camerasToTurnOff;
 	public bool canContinue = true;
 
-	public bool pathA = false;
-
-	public bool pathB = false;
-
-	public bool pathC = false;
-
     public int nextLevelPath;
     public string nextLevelName;
 

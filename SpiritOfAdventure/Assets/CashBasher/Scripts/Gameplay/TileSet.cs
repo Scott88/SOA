@@ -11,6 +11,11 @@ public class TileSet : MonoBehaviour {
                maxCoord.x > position.x && maxCoord.y > position.y;
     }
 
+    public Vector3 GetPositionFromCoords(int x, int y)
+    {
+        return new Vector3(minCoord.x + (float)x + 0.5f, minCoord.y + (float)y + 0.5f);
+    }
+
     void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.green;

@@ -13,13 +13,20 @@ public class IntroScreen : MonoBehaviour
 
 	private Color alphaController;
 
+    private Vector3 startTranslation, startScale;
+
 	void Start()
 	{
 		translateVel = new Vector3 ();
 		scaleVel = new Vector3 ();
+
 		alphaController = renderer.material.color;
 		alphaController.a = 0;
 		renderer.material.color = alphaController;
+
+        startTranslation = transform.position;
+        startScale = transform.localScale;
+
 		StartCoroutine(Go());
 		Time.timeScale = 1;
 	}
@@ -35,6 +42,14 @@ public class IntroScreen : MonoBehaviour
 			renderer.material.color = alphaController;
 			yield return 0;
 		}
+
+        timer = displayTime;
+
+        while (timer > 0f)
+        {
+            timer -= Time.deltaTime;
+            yield return 0;
+        }
 
 #if !UNITY_EDITOR
 
@@ -59,11 +74,20 @@ public class IntroScreen : MonoBehaviour
                     timer -= Time.deltaTime;
                     yield return 0;
                 }       
-                
+  
                 GetOBB();
 
                 while (!OBBReady())
                 {
+                    yield return 0;
+                }
+
+                obbText.text = "";
+
+                while (Mathf.Abs(transform.localScale.x - startScale.x) > 0.0001f)
+                {
+                    transform.position = Vector3.SmoothDamp(transform.position, startTranslation, ref translateVel, 0.2f);
+                    transform.localScale = Vector3.SmoothDamp(transform.localScale, startScale, ref scaleVel, 0.2f);
                     yield return 0;
                 }
             }
@@ -73,16 +97,7 @@ public class IntroScreen : MonoBehaviour
             }
         }
 
-#endif
-
-
-        timer = displayTime;
-
-        while (timer > 0f)
-        {
-			timer -= Time.deltaTime;
-			yield return 0;
-		}
+#endif           
 
 		timer = fadeOutTime;
 
@@ -121,7 +136,6 @@ public class IntroScreen : MonoBehaviour
 
         if (mainPath == null)
         {
-            obbText.text = "Downloading game...";
             GooglePlayDownloader.FetchOBB();
         }
     }
