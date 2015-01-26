@@ -24,14 +24,7 @@ public class Player : MonoBehaviour
 	{
 		animator = GetComponent<Animator>();
 
-		if (PlayerPrefs.HasKey ("costume"))
-		{
-			animator.SetInteger ("costume", PlayerPrefs.GetInt ("costume"));
-		}
-		else 
-		{
-			animator.SetInteger ("costume", 0);
-		}
+        animator.SetInteger("costume", SaveFile.Instance().GetCurrentCostume());		
 
 		Proceed ();
 	}

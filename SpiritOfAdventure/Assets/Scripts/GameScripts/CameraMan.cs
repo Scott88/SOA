@@ -9,8 +9,11 @@ public class CameraMan : MonoBehaviour
 
 	private GameObject targetObject = null;
 	private Vector3 targetPosition = new Vector3();
-	private bool followingObject;
+	private bool followingObject = false;
 	private Vector3 currentVelocity = new Vector3();
+
+    private float targetZoom = 0f;
+    private float zoomVel = 0f;
 
 	public bool useManualLead { get; set; }
 	private Vector3 manualDirection;
@@ -19,12 +22,6 @@ public class CameraMan : MonoBehaviour
 	private float shakeDecay;
 
 	private Vector3 shakeOffset;
-
-	void Start()
-	{
-		targetObject = FindObjectOfType<Player>().gameObject;
-		followingObject = true;
-	}
 
 	public void FollowObject(GameObject target)
 	{
@@ -42,6 +39,11 @@ public class CameraMan : MonoBehaviour
 		targetPosition = target;
 		followingObject = false;
 	}
+
+    public void ZoomTo(float zoom)
+    {
+        targetZoom = zoom;
+    }
 
 	void FixedUpdate()
 	{
@@ -94,6 +96,11 @@ public class CameraMan : MonoBehaviour
 		GetShake();
 
 		transform.position += shakeOffset;
+
+        if (camera.orthographicSize != targetZoom && targetZoom != 0)
+        {
+            camera.orthographicSize = Mathf.SmoothDamp(camera.orthographicSize, targetZoom, ref zoomVel, 4f);
+        }
 	}
 
 	public void ShakeCamera(float intensity, float decayRate)

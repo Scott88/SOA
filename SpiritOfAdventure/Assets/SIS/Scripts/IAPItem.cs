@@ -327,24 +327,24 @@ namespace SIS
 				//tell our ShopManager to change the database entry
 				ShopManager.SetToSelected(this);
 				
-				switch (productId) 
-				{
-				case "default":
-					PlayerPrefs.SetInt("costume", 0);
-					break;
-				case "test_cos1.":
-					PlayerPrefs.SetInt("costume", 1);
-					break;
-				case "test_cos2.":
-					PlayerPrefs.SetInt("costume", 2);
-					break;
-				case "test_cos3.":
-					PlayerPrefs.SetInt("costume", 3);
-					break;
-				default:
-					PlayerPrefs.SetInt("costume", 0);
-					break;
-				}
+				switch (productId)
+                {
+                    case "default":
+                        SaveFile.Instance().SetCurrentCostume(0);
+                        break;
+                    case "test_cos1.":
+                        SaveFile.Instance().SetCurrentCostume(1);
+                        break;
+                    case "test_cos2.":
+                        SaveFile.Instance().SetCurrentCostume(2);
+                        break;
+                    case "test_cos3.":
+                        SaveFile.Instance().SetCurrentCostume(3);
+                        break;
+                    default:
+                        SaveFile.Instance().SetCurrentCostume(0);
+                        break;
+                }
 				
 				//if we have a deselect button or a 'selected' gameobject, show them
 				//and hide the select button for ignoring further selections              

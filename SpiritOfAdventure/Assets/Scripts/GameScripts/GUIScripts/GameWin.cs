@@ -9,14 +9,8 @@ public class GameWin : MonoBehaviour
 	public Camera[] camerasToTurnOff;
 	public bool canContinue = true;
 
-	public bool pathA = false;
-	private int pa = 0;
-
-	public bool pathB = false;
-	private int pb = 0;
-
-	public bool pathC = false;
-	private int pc = 0;
+    public int nextLevelPath;
+    public string nextLevelName;
 
 	public Vector3 winScreenPosition;
 	public float targetZoom;
@@ -71,21 +65,23 @@ public class GameWin : MonoBehaviour
 		timer.gameObject.SetActive(false);
 		Player.VictoryCheer();
 
-		if (pathA == true) 
-		{
-			PlayerPrefs.SetInt("pa",1);
-		}
+        //if (pathA == true) 
+        //{
+        //    PlayerPrefs.SetInt("pa",1);
+        //}
 
-		if (pathB == true) 
-		{
-			PlayerPrefs.SetInt("pb",2);
-			PlayerPrefs.DeleteKey("pa");
-		}
+        //if (pathB == true) 
+        //{
+        //    PlayerPrefs.SetInt("pb",2);
+        //    PlayerPrefs.DeleteKey("pa");
+        //}
 
-		if (pathC == true) 
-		{
-			PlayerPrefs.SetInt("pc",3);
-		}
+        //if (pathC == true) 
+        //{
+        //    PlayerPrefs.SetInt("pc",3);
+        //}
+
+        SaveFile.Instance().SetLevelPath(nextLevelName, nextLevelPath);
 	}
 
 	void Update()
@@ -158,7 +154,14 @@ public class GameWin : MonoBehaviour
 						}
 						else
 						{
-							LevelQueue.LoadLevel(Application.loadedLevel + 1);
+                            if (nextLevelName == "")
+                            {
+                                LevelQueue.LoadLevel(Application.loadedLevel + 1);
+                            }
+                            else
+                            {
+                                LevelQueue.LoadLevel(nextLevelName);
+                            }
 						}
 					}
 				}

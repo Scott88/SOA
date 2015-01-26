@@ -10,6 +10,8 @@ using System.Collections;
 
 public class GameManager : MonoBehaviour
 {
+    public GameObject playerPrefab;
+
 	public GameObject greenSpiritPref, redSpiritPref, blueSpiritPref;
 	public Vector2 spiritSpawnOffset;
 	public SpiritType currentSpirit { get; set; }
@@ -36,7 +38,6 @@ public class GameManager : MonoBehaviour
 
 		//We load in each of the object references so that requests for them can funnel in through
 		// the manager instead of having everyone trying to get everything.
-		Player player = FindObjectOfType(typeof(Player)) as Player;
 		effectManager = FindObjectOfType(typeof(EffectManager)) as EffectManager;
 		hintManager = FindObjectOfType(typeof(HintManager)) as HintManager;
 		scoreManager = FindObjectOfType(typeof(ScoreManager)) as ScoreManager;
@@ -49,23 +50,51 @@ public class GameManager : MonoBehaviour
 		blueGUI = GameObject.Find("SpiritGUICamera/GUIContainer/Blue Spirit Button").GetComponent<SpiritGUI>();
 		spiritGUICamera = GameObject.Find("SpiritGUICamera").GetComponent<Camera>();
 
-		Vector3 spawnPoint = player.transform.position + (Vector3)spiritSpawnOffset;
+        PlayerSpawn[] spawns = FindObjectsOfType<PlayerSpawn>() as PlayerSpawn[];
+
+        int currentPath = SaveFile.Instance().GetPath(Application.loadedLevelName);
+
+        GameObject player = null;
+
+        bool playerSpawned = false;
+
+        for (int j = 0; j < spawns.Length && !playerSpawned; j++)
+        {
+            if (spawns[j].pathNumber == currentPath)
+            {
+                player = GameObject.Instantiate(playerPrefab, spawns[j].transform.position, new Quaternion()) as GameObject;
+                playerSpawned = true;
+            }
+        }
+
+        if (!playerSpawned)
+        {
+            player = GameObject.Instantiate(playerPrefab, spawns[0].transform.position, new Quaternion()) as GameObject;
+        }
+
+        CameraMan cameraMan = FindObjectOfType<CameraMan>() as CameraMan;
+
+        cameraMan.FollowObject(player);
 
 		//We instantiate each of our spirits from the game manager.
-		GameObject greenSpiritObject = (GameObject)Instantiate(greenSpiritPref, spawnPoint, transform.rotation);
+		GameObject greenSpiritObject = (GameObject)Instantiate(greenSpiritPref, player.transform.position, transform.rotation);
 
 		greenSpirit = greenSpiritObject.GetComponent<Spirit>();
 		greenSpirit.SetManager(this);
 
-		GameObject redSpiritObject = (GameObject)Instantiate(redSpiritPref, spawnPoint, transform.rotation);
+        GameObject redSpiritObject = (GameObject)Instantiate(redSpiritPref, player.transform.position, transform.rotation);
 
 		redSpirit = redSpiritObject.GetComponent<Spirit>();
 		redSpirit.SetManager(this);
 
-		GameObject blueSpiritObject = (GameObject)Instantiate(blueSpiritPref, spawnPoint, transform.rotation);
+        GameObject blueSpiritObject = (GameObject)Instantiate(blueSpiritPref, player.transform.position, transform.rotation);
 
 		blueSpirit = blueSpiritObject.GetComponent<Spirit>();
 		blueSpirit.SetManager(this);
+
+        greenSpiritObject.GetComponent<FollowPlayer>().SetPlayer(player);
+        redSpiritObject.GetComponent<FollowPlayer>().SetPlayer(player);
+        blueSpiritObject.GetComponent<FollowPlayer>().SetPlayer(player);
 
 		//To be completely honest, I'm not 100% sure why I'm spawning the spirits from the gameManager when they would still work
 		// being in the scene. It might still be a holdover from one of the old ways spirits worked, but this way, that at least
