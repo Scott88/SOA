@@ -79,7 +79,7 @@ public class CashBasherManager : MonoBehaviour
             {
                 if (Network.isServer && loader.IsReady())
                 {
-                    
+                    RandomizeTreasure();
 
                     networkView.RPC("SwitchToState", RPCMode.All, (int)GamePhase.GP_BUILD);
                 }
@@ -140,11 +140,25 @@ public class CashBasherManager : MonoBehaviour
     [RPC]
     void PlaceTreasure(int x, int y)
     {
+        Vector3 treasurePosition;
+
         if (Network.isClient)
         {
             x = 7 - x;
+            treasurePosition = clientSet.GetPositionFromCoords(x, y);
+        }
+        else
+        {
+            treasurePosition = serverSet.GetPositionFromCoords(x, y);
         }
 
+        Network.Instantiate(treasure, treasurePosition, new Quaternion(), 0);
+
+        for (int j = y - 1; y >= 0; y--)
+        {
+            treasurePosition.y -= 1f;
+            Network.Instantiate(treasureSupport, treasurePosition, new Quaternion(), 0);
+        }
     }
 
     [RPC]
