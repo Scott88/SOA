@@ -154,7 +154,7 @@ public class CashBasherManager : MonoBehaviour
 
         Network.Instantiate(treasure, treasurePosition, new Quaternion(), 0);
 
-        for (int j = y - 1; y >= 0; y--)
+        for (int j = y - 1; j >= 0; j--)
         {
             treasurePosition.y -= 1f;
             Network.Instantiate(treasureSupport, treasurePosition, new Quaternion(), 0);
