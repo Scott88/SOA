@@ -1,6 +1,23 @@
 ﻿<Properties>
+<<<<<<< HEAD
   <MonoDevelop.Ide.Workspace />
   <MonoDevelop.Ide.Workbench />
+=======
+<<<<<<< HEAD
+  <MonoDevelop.Ide.Workspace />
+  <MonoDevelop.Ide.Workbench ActiveDocument="..\SpiritOfAdventure\Assets\Plugins\Android\AndroidManifest.xml">
+    <Files>
+      <File FileName="..\SpiritOfAdventure\Assets\Plugins\Android\AndroidManifest.xml" Line="7" Column="28" />
+=======
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\Breakable.cs">
+    <Files>
+      <File FileName="Assets\Scripts\PlayerSpawner.cs" Line="24" Column="10" />
+      <File FileName="Assets\Scripts\Breakable.cs" Line="31" Column="1" />
+>>>>>>> 8ec7225adf53c4c7c8da76f582c994a3557329d3
+    </Files>
+  </MonoDevelop.Ide.Workbench>
+>>>>>>> 88dd7f043fc9809aa145f8f8f0ed2b4fa9d7b281
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore />
   </MonoDevelop.Ide.DebuggingService.Breakpoints>

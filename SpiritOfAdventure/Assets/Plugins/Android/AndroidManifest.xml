@@ -2,9 +2,17 @@
 <manifest
     xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.unity3d.player"
+<<<<<<< HEAD
+	  android:installLocation="preferExternal"
+	  android:theme="@android:style/Theme.NoTitleBar"
+    android:versionCode="52"
+    android:versionName="0.9.7.2">
+
+=======
 	android:installLocation="preferExternal"
     android:versionCode="1"
     android:versionName="1.0">
+>>>>>>> cd2e0159d562cf21b44395aeebc4ca94ec79a2da
     <supports-screens
         android:smallScreens="true"
         android:normalScreens="true"
