@@ -228,7 +228,7 @@ public class NetworkedCannon : MonoBehaviour
         {
             if (currentState == CannonState.CS_ROTATING)
             {
-                networkView.RPC("PointCannonAt", RPCMode.All, cannonPivot.transform.localRotation);
+                networkView.RPC("PointCannonAt", RPCMode.All, markerPivot.transform.localRotation);
             }
             else if (currentState == CannonState.CS_VELOCITY)
             {
@@ -245,7 +245,9 @@ public class NetworkedCannon : MonoBehaviour
         timer = 0f;
         currentState = CannonState.CS_ROTATE_CANNON;
 
-        startRotation = direction;
+        startRotation = cannonPivot.transform.localRotation;
+
+        markerPivot.transform.localRotation = direction;
     }
 
     [RPC]
