@@ -10,7 +10,7 @@ using System.Collections;
 
 public class GameManager : MonoBehaviour
 {
-    public GameObject playerPrefab;
+    
 
 	public GameObject greenSpiritPref, redSpiritPref, blueSpiritPref;
 	public Vector2 spiritSpawnOffset;
