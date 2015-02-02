@@ -44,6 +44,7 @@ public class CashBasherManager : MonoBehaviour
 
     private BuildState buildState;
     private StartState startState;
+    private YourTurnState yourTurnState;
 
     void Awake()
     {
@@ -78,6 +79,7 @@ public class CashBasherManager : MonoBehaviour
 
         buildState = new BuildState(this, myTeam, myTeam == 0 ? serverSet : clientSet, spawnIndicator, buildTimer);
         startState = new StartState(this, startTimer, loader);
+        yourTurnState = new YourTurnState(this, myTeam == 0 ? serverCannon : clientCannon, cameraMan);
     }
 
     public void AddBlock(Breakable b)
@@ -99,6 +101,11 @@ public class CashBasherManager : MonoBehaviour
         int y = Random.Range(0, 7);
 
         networkView.RPC("PlaceTreasure", RPCMode.All, x, y);
+    }
+
+    public void SetCannonBall(GameObject ball)
+    {
+        yourTurnState.SetCannonBall(ball);
     }
 
     [RPC]
