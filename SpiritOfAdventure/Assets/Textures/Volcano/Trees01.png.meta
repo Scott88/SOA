@@ -1,0 +1,161 @@
+fileFormatVersion: 2
+guid: cace60fecdfef7d4e904f3da183332b9
+TextureImporter:
+  fileIDToRecycleName:
+    21300000: Trees01_0
+    21300002: Trees01_1
+    21300004: Trees01_2
+    21300006: Trees01_3
+    21300008: Trees01_4
+    21300010: Trees01_5
+    21300012: Trees01_6
+    21300014: Trees01_7
+    21300016: Trees01_8
+    21300018: Trees01_9
+  serializedVersion: 2
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 1
+    linearTexture: 0
+    correctGamma: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: .25
+    normalMapFilter: 0
+  isReadable: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 0
+  seamlessCubemap: 0
+  textureFormat: -1
+  maxTextureSize: 1024
+  textureSettings:
+    filterMode: 0
+    aniso: 16
+    mipBias: -1
+    wrapMode: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: .5, y: .5}
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spritePixelsToUnits: 100
+  alphaIsTransparency: 1
+  textureType: 8
+  buildTargetSettings:
+  - buildTarget: Android
+    maxTextureSize: 1024
+    textureFormat: -3
+    compressionQuality: 50
+  spriteSheet:
+    sprites:
+    - name: Trees01_0
+      rect:
+        serializedVersion: 2
+        x: 8
+        y: 872
+        width: 105
+        height: 146
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Trees01_1
+      rect:
+        serializedVersion: 2
+        x: 200
+        y: 530
+        width: 267
+        height: 437
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Trees01_2
+      rect:
+        serializedVersion: 2
+        x: 491
+        y: 530
+        width: 284
+        height: 434
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Trees01_3
+      rect:
+        serializedVersion: 2
+        x: 783
+        y: 530
+        width: 232
+        height: 367
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Trees01_4
+      rect:
+        serializedVersion: 2
+        x: 8
+        y: 701
+        width: 105
+        height: 146
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Trees01_5
+      rect:
+        serializedVersion: 2
+        x: 10
+        y: 530
+        width: 105
+        height: 146
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Trees01_6
+      rect:
+        serializedVersion: 2
+        x: 1
+        y: 335
+        width: 82
+        height: 82
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Trees01_7
+      rect:
+        serializedVersion: 2
+        x: 120
+        y: 4
+        width: 267
+        height: 437
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Trees01_8
+      rect:
+        serializedVersion: 2
+        x: 405
+        y: 4
+        width: 334
+        height: 510
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Trees01_9
+      rect:
+        serializedVersion: 2
+        x: 749
+        y: 4
+        width: 272
+        height: 431
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+  spritePackingTag: 
+  userData: 
