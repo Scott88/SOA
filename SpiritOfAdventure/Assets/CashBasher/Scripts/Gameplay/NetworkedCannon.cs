@@ -117,7 +117,7 @@ public class NetworkedCannon : MonoBehaviour
 
             cannonPivot.transform.localRotation = Quaternion.Slerp(startRotation, markerPivot.transform.localRotation, timer * 2);
 
-            if (timer >= 0.5f)
+            if (timer >= 0.5f && myCannon)
             {
                 timer = 0f;
 
@@ -158,7 +158,7 @@ public class NetworkedCannon : MonoBehaviour
             else
             {
                 cannonPos.x = 0f;
-                Activate();
+                currentState = CannonState.CS_IDLE;
             }
 
             Vector3 rotation = new Vector3(0f, 0f, -cannonPos.x * Mathf.Rad2Deg);
@@ -298,13 +298,14 @@ public class NetworkedCannon : MonoBehaviour
         cannonSmoke.transform.localPosition = smokePos;
         ballSpawnPoint.transform.localPosition = spawnPos;
 
-        if (networkView.isMine)
+        if (myCannon)
         {
-            GameObject ball = Network.Instantiate(cannonBall, ballSpawnPoint.transform.position, new Quaternion(), 0) as GameObject;
+            NetworkedCannonBall ball = Network.Instantiate(cannonBall, ballSpawnPoint.transform.position, new Quaternion(), 0) as NetworkedCannonBall;
 
             ball.rigidbody2D.velocity = finalVel;
+            ball.networkView.RPC("SetVelocity", RPCMode.Others, finalVel);
 
-            manager.SetCannonBall(ball);
+            manager.SetCannonBall(ball.gameObject);
         }
 
         currentState = CannonState.CS_FIRED;
