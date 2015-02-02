@@ -5,9 +5,7 @@ public interface GameState
 {
     void Prepare();
 
-    void GetClickedOn();
-    void GetHeldOn();
-    void GetReleasedOn();
+    void Update();
 
     void End();
 }

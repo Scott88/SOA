@@ -1,6 +1,16 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+enum GamePhase
+{
+    GP_STARTING = 0,
+    GP_BUILD = 1,
+    GP_WAITING = 2,
+    GP_YOUR_TURN = 3,
+    GP_THEIR_TURN = 4,
+    GP_OVER = 5
+}
+
 public class CashBasherManager : MonoBehaviour
 {
     public float startTimer = 2.0f;
@@ -12,6 +22,8 @@ public class CashBasherManager : MonoBehaviour
 
     public TileSet serverSet, clientSet;
 
+    public NetworkedCannon serverCannon, clientCannon;
+
     public TextMesh gameText;
 
     public GameObject treasure;
@@ -21,25 +33,31 @@ public class CashBasherManager : MonoBehaviour
 
     public int myTeam;
 
+    public bool opponentIsReady { get; set; }
+
     private GameState state = null;
     private GamePhase currentPhase = GamePhase.GP_STARTING;
-
-    private bool opponentIsReady = false;
 
     private ArrayList blocks;
 
     private NetworkedLevelLoader loader;
 
+    private StartState startState;
     private BuildState buildState;
+    private WaitingState waitingState;
+    private YourTurnState yourTurnState;
+    private TheirTurnState theirTurnState;
 
-    enum GamePhase
+    void Awake()
     {
-        GP_STARTING = 0,
-        GP_BUILD = 1,
-        GP_WAITING = 2,
-        GP_YOUR_TURN = 3,
-        GP_THEIR_TURN = 4,
-        GP_OVER = 5
+        if (Network.isServer)
+        {
+            myTeam = 0;
+        }
+        else if (Network.isClient)
+        {
+            myTeam = 1;
+        }
     }
 
     void Start()
@@ -61,7 +79,13 @@ public class CashBasherManager : MonoBehaviour
         
         //cameraMan.ZoomTo(4f);
 
-        buildState = new BuildState(this, myTeam, myTeam == 0 ? serverSet : clientSet, spawnIndicator);
+        startState = new StartState(this, startTimer, loader);
+        buildState = new BuildState(this, myTeam, myTeam == 0 ? serverSet : clientSet, spawnIndicator, buildTimer);
+        waitingState = new WaitingState(this);
+        yourTurnState = new YourTurnState(this, myTeam == 0 ? serverCannon : clientCannon, cameraMan);
+        theirTurnState = new TheirTurnState(this, cameraMan);
+
+		state = startState;
     }
 
     public void AddBlock(Breakable b)
@@ -71,65 +95,13 @@ public class CashBasherManager : MonoBehaviour
 
     void Update()
     {
-        if (currentPhase == GamePhase.GP_STARTING)
-        {
-            startTimer -= Time.deltaTime;
-
-            if (startTimer <= 0f)
-            {
-                if (Network.isServer && loader.IsReady())
-                {
-                    
-
-                    networkView.RPC("SwitchToState", RPCMode.All, (int)GamePhase.GP_BUILD);
-                }
-            }
-        }
-
-        if (currentPhase == GamePhase.GP_BUILD)
-        {
-            if (buildTimer > 0f)
-            {
-                buildTimer -= Time.deltaTime;
-            }
-            else
-            {
-                if (Network.isClient)
-                {
-                    networkView.RPC("OpponentReady", RPCMode.Server);
-                }
-
-                SwitchToState((int)GamePhase.GP_WAITING);
-            }
-        }
-
-        if (currentPhase == GamePhase.GP_WAITING)
-        {
-            if (Network.isServer && opponentIsReady)
-            {
-
-            }
-        }
-
         if (state != null)
         {
-            if (Input.GetMouseButtonDown(0))
-            {
-                state.GetClickedOn();
-            }
-            else if (Input.GetMouseButton(0))
-            {
-                state.GetHeldOn();
-            }
-
-            if (Input.GetMouseButtonUp(0))
-            {
-                state.GetReleasedOn();
-            }
+            state.Update();
         }
     }
 
-    void RandomizeTreasure()
+    public void RandomizeTreasure()
     {
         int x = Random.Range(0, 9);
         int y = Random.Range(0, 7);
@@ -137,18 +109,37 @@ public class CashBasherManager : MonoBehaviour
         networkView.RPC("PlaceTreasure", RPCMode.All, x, y);
     }
 
-    [RPC]
-    void PlaceTreasure(int x, int y)
+    public void SetCannonBall(GameObject ball)
     {
-        if (Network.isClient)
-        {
-            x = 7 - x;
-        }
-
+        yourTurnState.SetCannonBall(ball);
     }
 
     [RPC]
-    void SwitchToState(int phase)
+    void PlaceTreasure(int x, int y)
+    {
+        Vector3 treasurePosition;
+
+        if (Network.isClient)
+        {
+            x = 7 - x;
+            treasurePosition = clientSet.GetPositionFromCoords(x, y);
+        }
+        else
+        {
+            treasurePosition = serverSet.GetPositionFromCoords(x, y);
+        }
+
+        Network.Instantiate(treasure, treasurePosition, new Quaternion(), 0);
+
+        for (int j = y - 1; j >= 0; j--)
+        {
+            treasurePosition.y -= 1f;
+            Network.Instantiate(treasureSupport, treasurePosition, new Quaternion(), 0);
+        }
+    }
+
+    [RPC]
+    public void SwitchToState(int phase)
     {
         currentPhase = (GamePhase)(phase);
 
@@ -160,13 +151,19 @@ public class CashBasherManager : MonoBehaviour
         switch (currentPhase)
         {
             case GamePhase.GP_STARTING:
-                state = null;
+                state = startState;
                 break;
             case GamePhase.GP_BUILD:
                 state = buildState;
                 break;
             case GamePhase.GP_WAITING:
-                state = null;
+                state = waitingState;
+                break;
+            case GamePhase.GP_YOUR_TURN:
+                state = yourTurnState;
+                break;
+            case GamePhase.GP_THEIR_TURN:
+                state = theirTurnState;
                 break;
         }
 
@@ -180,5 +177,16 @@ public class CashBasherManager : MonoBehaviour
     void OpponentReady()
     {
         opponentIsReady = true;
+    }
+
+    void OnDisconnectedFromServer(NetworkDisconnection info)
+    {
+        Application.LoadLevel("MiniGameMenu");
+    }
+
+    void OnPlayerDisconnected()
+    {
+        Network.Disconnect();
+        Application.LoadLevel("MiniGameMenu");
     }
 }

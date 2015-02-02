@@ -18,7 +18,9 @@ public class BuildState : GameState
     private bool cameraFocusLeft;
     private bool cameraGrabbed;
 
-    public BuildState(CashBasherManager gameManager, int team, TileSet yourSet, GameObject indicator)
+    private float buildTimer;
+
+    public BuildState(CashBasherManager gameManager, int team, TileSet yourSet, GameObject indicator, float timer)
     {
         manager = gameManager;
         myTeam = team;
@@ -26,11 +28,44 @@ public class BuildState : GameState
         spawnIndicator = indicator;
 
         cameraFocusLeft = myTeam == 0;
+
+        buildTimer = timer;
     }
 
     public void Prepare()
     {
 
+    }
+
+    public void Update()
+    {
+        if (buildTimer > 0f)
+        {
+            buildTimer -= Time.deltaTime;
+        }
+        else
+        {
+            if (Network.isClient)
+            {
+                manager.networkView.RPC("OpponentReady", RPCMode.Server);
+            }
+
+            manager.SwitchToState((int)GamePhase.GP_WAITING);
+        }
+
+        if (Input.GetMouseButtonDown(0))
+        {
+            GetClickedOn();
+        }
+        else if (Input.GetMouseButton(0))
+        {
+            GetHeldOn();
+        }
+
+        if (Input.GetMouseButtonUp(0))
+        {
+            GetReleasedOn();
+        }
     }
 
     public void GetClickedOn()
