@@ -4,14 +4,23 @@ using System.Collections;
 [RequireComponent(typeof(NetworkView))]
 public class Breakable : MonoBehaviour {
 
-    public int health;
-    public float minimumSpeed;
+    public int health = 1;
+    public float minimumSpeed = 3f;
 
     private int team = -1;
 
     void Start()
     {
         FindObjectOfType<CashBasherManager>().AddBlock(this);
+
+        if (health == 1)
+        {
+            collider2D.isTrigger = true;
+        }
+        else
+        {
+            collider2D.isTrigger = false;
+        }
     }
 
     void OnCollisionEnter2D(Collision2D coll)
@@ -27,12 +36,7 @@ public class Breakable : MonoBehaviour {
 
             if (coll.relativeVelocity.magnitude > minimumSpeed)
             {
-                health--;
-            }
-
-            if (health == 0)
-            {
-                Break();
+                networkView.RPC("Damage", RPCMode.All);
             }
         }
     }
@@ -50,20 +54,24 @@ public class Breakable : MonoBehaviour {
 
             if (coll.rigidbody2D.velocity.magnitude > minimumSpeed)
             {
-                health--;
-            }
-
-            if (health == 0)
-            {
-                Break();
+                networkView.RPC("Damage", RPCMode.All);
             }
         }
     }
 
     [RPC]
-    public void Break()
+    public void Damage()
     {
-        Destroy(gameObject);          
+        health--;
+
+        if (health == 1)
+        {
+            collider2D.isTrigger = true;
+        }
+        else if (health == 0)
+        {
+            Destroy(gameObject);
+        }
     }
 
     public void SetTeam(int t)

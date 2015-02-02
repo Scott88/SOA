@@ -22,7 +22,7 @@ public class BlockInventory : MonoBehaviour
         }
         else
         {
-            blockCount = 4;
+            blockCount = 10;
             PlayerPrefs.SetInt(blockName, blockCount);
         }
 
