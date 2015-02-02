@@ -258,5 +258,10 @@ public class ScoreManager : MonoBehaviour
 		{
 			SaveFile.Instance().SetLevelStars(Application.loadedLevelName, starCount);
 		}
+
+        if (SaveFile.Instance().GetScore(Application.loadedLevelName) < GetActualFinalScore())
+        {
+            SaveFile.Instance().SetLevelScore(Application.loadedLevelName, GetActualFinalScore());
+        }
 	}
 }
