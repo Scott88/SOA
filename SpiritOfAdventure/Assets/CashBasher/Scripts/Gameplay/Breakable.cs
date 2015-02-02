@@ -4,7 +4,8 @@ using System.Collections;
 [RequireComponent(typeof(NetworkView))]
 public class Breakable : MonoBehaviour {
 
-    public bool isBreakable = true;
+    public int health;
+    public float minimumSpeed;
 
     private int team = -1;
 
@@ -13,14 +14,56 @@ public class Breakable : MonoBehaviour {
         FindObjectOfType<CashBasherManager>().AddBlock(this);
     }
 
-    public bool Break()
+    void OnCollisionEnter2D(Collision2D coll)
     {
-        if (isBreakable)
+        if (coll.collider.tag == "CannonBall")
         {
-            Destroy(gameObject);
-        }
+            NetworkedCannonBall ball = coll.gameObject.GetComponent<NetworkedCannonBall>() as NetworkedCannonBall;
 
-        return isBreakable;       
+            if (!ball.networkView.isMine)
+            {
+                return;
+            }
+
+            if (coll.relativeVelocity.magnitude > minimumSpeed)
+            {
+                health--;
+            }
+
+            if (health == 0)
+            {
+                Break();
+            }
+        }
+    }
+
+    void OnTriggerEnter2D(Collider2D coll)
+    {
+        if (coll.tag == "CannonBall")
+        {
+            NetworkedCannonBall ball = coll.GetComponent<NetworkedCannonBall>() as NetworkedCannonBall;
+
+            if (!ball.networkView.isMine)
+            {
+                return;
+            }
+
+            if (coll.rigidbody2D.velocity.magnitude > minimumSpeed)
+            {
+                health--;
+            }
+
+            if (health == 0)
+            {
+                Break();
+            }
+        }
+    }
+
+    [RPC]
+    public void Break()
+    {
+        Destroy(gameObject);          
     }
 
     public void SetTeam(int t)
