@@ -300,7 +300,7 @@ public class NetworkedCannon : MonoBehaviour
 
         if (myCannon)
         {
-            NetworkedCannonBall ball = Network.Instantiate(cannonBall, ballSpawnPoint.transform.position, new Quaternion(), 0) as NetworkedCannonBall;
+			GameObject ball = Network.Instantiate(cannonBall, ballSpawnPoint.transform.position, new Quaternion(), 0) as GameObject;
 
             ball.rigidbody2D.velocity = finalVel;
             ball.networkView.RPC("SetVelocity", RPCMode.Others, finalVel);

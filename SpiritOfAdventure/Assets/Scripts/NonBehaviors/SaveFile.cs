@@ -6,9 +6,16 @@ public class SaveFile
 {
     public class LevelState
     {
-        public string name;
-        public int stars;
-        public int path;
+        public string name = "";
+        public int stars = 0;
+        public int path = 0;
+        public int score = 0;
+
+        public LevelState() { }
+        public LevelState(string levelName)
+        {
+            name = levelName;
+        }
     }
 
     private ArrayList levelStates;
@@ -110,6 +117,11 @@ public class SaveFile
             state.stars = int.Parse(nextLevel.GetAttribute("stars"));
             state.path = int.Parse(nextLevel.GetAttribute("path"));
 
+            if (nextLevel.GetAttribute("score") != "")
+            {
+                state.score = int.Parse(nextLevel.GetAttribute("score"));
+            }
+
             levelStates.Add(state);
 
             nextLevel = (XmlElement)nextLevel.NextSibling;
@@ -158,6 +170,11 @@ public class SaveFile
 
             level.Attributes.Append(levelPath);
 
+            XmlAttribute levelScore = doc.CreateAttribute("score");
+            levelScore.Value = state.score.ToString();
+
+            level.Attributes.Append(levelScore);
+
             levels.AppendChild(level);
         }
 
@@ -166,42 +183,17 @@ public class SaveFile
 
     public void SetLevelStars(string levelName, int stars)
     {
-        LevelState state = GetLevelState(levelName);
-
-        if (state == null)
-        {
-            state = new LevelState();
-
-            state.name = levelName;
-            state.stars = stars;
-            state.path = 0;
-
-            levelStates.Add(state);
-        }
-        else
-        {
-            state.stars = stars;
-        }
+        GetLevelState(levelName).stars = stars;
     }
 
     public void SetLevelPath(string levelName, int path)
     {
-        LevelState state = GetLevelState(levelName);
+        GetLevelState(levelName).path = path;
+    }
 
-        if (state == null)
-        {
-            state = new LevelState();
-
-            state.name = levelName;
-            state.stars = 0;
-            state.path = path;
-
-            levelStates.Add(state);
-        }
-        else
-        {
-            state.path = path;
-        }
+    public void SetLevelScore(string levelName, int score)
+    {
+        GetLevelState(levelName).score = score;
     }
 
     public void SetCurrentCostume(int id)
@@ -211,38 +203,17 @@ public class SaveFile
 
     public int GetStars(string levelName)
     {
-        LevelState state = GetLevelState(levelName);
-
-        if (state == null)
-        {
-            state = new LevelState();
-
-            state.name = levelName;
-            state.stars = 0;
-            state.path = 0;
-
-            levelStates.Add(state);
-        }
-
-        return state.stars;
+        return GetLevelState(levelName).stars;
     }
 
     public int GetPath(string levelName)
     {
-        LevelState state = GetLevelState(levelName);
+        return GetLevelState(levelName).path;
+    }
 
-        if (state == null)
-        {
-            state = new LevelState();
-
-            state.name = levelName;
-            state.stars = 0;
-            state.path = 0;
-
-            levelStates.Add(state);
-        }
-
-        return state.path;
+    public int GetScore(string levelName)
+    {
+        return GetLevelState(levelName).score;
     }
 
     public int GetCurrentCostume()
@@ -262,7 +233,11 @@ public class SaveFile
             }
         }
 
-        return null;
+        LevelState newState = new LevelState(levelName);
+
+        levelStates.Add(newState);
+
+        return newState;
     }
     
 }

@@ -6,6 +6,7 @@ public class LevelSelectButton : MonoBehaviour
 	public GUISkin skin;
 	public GameObject bronzeStar, silverStar, goldStar;
 	public Vector2 topLeftCorner, size;
+    public Vector2 scoreTopLeft, scoreSize;
 	public string levelTitle;
 	public string[] unlockRequirements;
 	public string sceneToLoad = "NullLevel";
@@ -54,6 +55,9 @@ public class LevelSelectButton : MonoBehaviour
 				LevelQueue.LoadLevel(sceneToLoad);
 			}
 		}
+
+        GUI.Label(new Rect(Screen.width * (scoreTopLeft.x), Screen.height * (scoreTopLeft.y),
+                                Screen.width * (scoreSize.x), Screen.height * (scoreSize.y)), SaveFile.Instance().GetScore(sceneToLoad).ToString());
 	}
 
 	void OnDisable()
@@ -135,6 +139,25 @@ public class LevelSelectButton : MonoBehaviour
 		Gizmos.DrawLine(topRight, bottomRight);
 		Gizmos.DrawLine(bottomRight, bottomLeft);
 		Gizmos.DrawLine(bottomLeft, topLeft);
+
+        Gizmos.color = Color.cyan;
+
+        topLeft.x = length * scoreTopLeft.x;
+        topLeft.y = height - height * scoreTopLeft.y;
+
+        topRight.x = length * scoreTopLeft.x + length * scoreSize.x;
+        topRight.y = topLeft.y;
+
+        bottomLeft.x = topLeft.x;
+        bottomLeft.y = height - (height * scoreTopLeft.y + height * scoreSize.y);
+
+        bottomRight.x = topRight.x;
+        bottomRight.y = bottomLeft.y;
+
+        Gizmos.DrawLine(topLeft, topRight);
+        Gizmos.DrawLine(topRight, bottomRight);
+        Gizmos.DrawLine(bottomRight, bottomLeft);
+        Gizmos.DrawLine(bottomLeft, topLeft);
 
 		//Distant and very confusing memories.
 
