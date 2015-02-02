@@ -42,9 +42,11 @@ public class CashBasherManager : MonoBehaviour
 
     private NetworkedLevelLoader loader;
 
-    private BuildState buildState;
     private StartState startState;
+    private BuildState buildState;
+    private WaitingState waitingState;
     private YourTurnState yourTurnState;
+    private TheirTurnState theirTurnState;
 
     void Awake()
     {
@@ -77,9 +79,13 @@ public class CashBasherManager : MonoBehaviour
         
         //cameraMan.ZoomTo(4f);
 
-        buildState = new BuildState(this, myTeam, myTeam == 0 ? serverSet : clientSet, spawnIndicator, buildTimer);
         startState = new StartState(this, startTimer, loader);
+        buildState = new BuildState(this, myTeam, myTeam == 0 ? serverSet : clientSet, spawnIndicator, buildTimer);
+        waitingState = new WaitingState(this);
         yourTurnState = new YourTurnState(this, myTeam == 0 ? serverCannon : clientCannon, cameraMan);
+        theirTurnState = new TheirTurnState(this, cameraMan);
+
+		state = startState;
     }
 
     public void AddBlock(Breakable b)
@@ -151,7 +157,13 @@ public class CashBasherManager : MonoBehaviour
                 state = buildState;
                 break;
             case GamePhase.GP_WAITING:
-                state = null;
+                state = waitingState;
+                break;
+            case GamePhase.GP_YOUR_TURN:
+                state = yourTurnState;
+                break;
+            case GamePhase.GP_THEIR_TURN:
+                state = theirTurnState;
                 break;
         }
 
