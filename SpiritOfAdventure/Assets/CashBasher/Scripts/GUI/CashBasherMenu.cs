@@ -15,7 +15,7 @@ public class CashBasherMenu : MonoBehaviour
         if (GUI.Button(new Rect(Screen.width * (0.375f), Screen.height * (0.1f), Screen.width * (0.25f), Screen.height * (0.166f)),
                                "Back"))
         {
-            Application.LoadLevel("MiniGameMenu");
+            Application.LoadLevel("MainMenu");
         }
 
         if (Network.peerType == NetworkPeerType.Disconnected)

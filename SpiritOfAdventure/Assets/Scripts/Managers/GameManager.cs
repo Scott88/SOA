@@ -27,6 +27,10 @@ public class GameManager : MonoBehaviour
 	private bool spiritGUIClicked;
 	private MonsterSpawner activeSpawner = null;
 	private Collider2D clickedOn;
+
+    private bool cannonIsActive;
+
+    private float guiCameraZoomSpeed;
 	
 
 	void Start()
@@ -119,48 +123,57 @@ public class GameManager : MonoBehaviour
 			Time.timeScale = 1f;
 		}
 
-		if (Input.GetMouseButtonDown(0))
-		{
-			GetClickedOn();
-		}
-		else if(Input.GetMouseButton(0))
-		{
-			GetHeldOn();
-		}
+        if (!cannonIsActive)
+        {
+            spiritGUICamera.orthographicSize = Mathf.SmoothDamp(spiritGUICamera.orthographicSize, 5f, ref guiCameraZoomSpeed, 1f);
+
+            if (Input.GetMouseButtonDown(0))
+            {
+                GetClickedOn();
+            }
+            else if (Input.GetMouseButton(0))
+            {
+                GetHeldOn();
+            }
 
 
-		//If left mouse was pushed this frame
-		if(Input.GetMouseButtonUp(0))
-		{
-			//We get the object that was clicked on, if any.
-			GetReleasedOn();
+            //If left mouse was pushed this frame
+            if (Input.GetMouseButtonUp(0))
+            {
+                //We get the object that was clicked on, if any.
+                GetReleasedOn();
 
-			//If a spirit is currently selected, but literally nothing was clicked on, then we send the spirit to the
-			// position of the mouse click to fizzle.
-			if(currentSpirit != SpiritType.ST_NULL && !spiritGUIClicked)
-			{
-				if(currentSpirit == SpiritType.ST_GREEN)
-				{
-					SpiritFailed(greenGUI, greenSpirit);
-				}
-				if(currentSpirit == SpiritType.ST_RED)
-				{
-					SpiritFailed(redGUI, redSpirit);
-				}
-				if(currentSpirit == SpiritType.ST_BLUE)
-				{
-					SpiritFailed(blueGUI, blueSpirit);
-				}
+                //If a spirit is currently selected, but literally nothing was clicked on, then we send the spirit to the
+                // position of the mouse click to fizzle.
+                if (currentSpirit != SpiritType.ST_NULL && !spiritGUIClicked)
+                {
+                    if (currentSpirit == SpiritType.ST_GREEN)
+                    {
+                        SpiritFailed(greenGUI, greenSpirit);
+                    }
+                    if (currentSpirit == SpiritType.ST_RED)
+                    {
+                        SpiritFailed(redGUI, redSpirit);
+                    }
+                    if (currentSpirit == SpiritType.ST_BLUE)
+                    {
+                        SpiritFailed(blueGUI, blueSpirit);
+                    }
 
-				currentSpirit = SpiritType.ST_NULL;
-			}
-			//else, we just assume we clicked on the spiritGUI this frame and then acknowledge that we're done
-			// caring about the fact that we clicked on it.
-			else
-			{
-				spiritGUIClicked = false;
-			}
-		}
+                    currentSpirit = SpiritType.ST_NULL;
+                }
+                //else, we just assume we clicked on the spiritGUI this frame and then acknowledge that we're done
+                // caring about the fact that we clicked on it.
+                else
+                {
+                    spiritGUIClicked = false;
+                }
+            }
+        }
+        else
+        {
+            spiritGUICamera.orthographicSize = Mathf.SmoothDamp(spiritGUICamera.orthographicSize, 3f, ref guiCameraZoomSpeed, 1f);
+        }
 	}
 
 	//Convenience method that resets some of the static variables in the game for the start of a new level.
@@ -462,4 +475,9 @@ public class GameManager : MonoBehaviour
 	{
 		activeSpawner.SpawnMonster(timeRemaining);
 	}
+
+    public void SetCannonActive(bool active)
+    {
+        cannonIsActive = active;
+    }
 }

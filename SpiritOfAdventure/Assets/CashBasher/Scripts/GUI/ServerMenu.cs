@@ -9,8 +9,6 @@ public class ServerMenu : MonoBehaviour
 
     public GameObject minigameMenu;
 
-    public NetworkedLevelLoader levelLoader;
-
     private bool readyToStart = false;
     private bool serverFailed = false;
 
@@ -33,7 +31,7 @@ public class ServerMenu : MonoBehaviour
 
             if (startTimer <= 0.0f)
             {
-                levelLoader.LoadLevel("MiniGame");
+                FindObjectOfType<NetworkedLevelLoader>().LoadLevel("MiniGame");
             }
 
             display.text = "Player found! Game starts in : " + startTimer.ToString("g");

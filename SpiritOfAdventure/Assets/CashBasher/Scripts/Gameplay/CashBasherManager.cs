@@ -1,6 +1,16 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+enum GamePhase
+{
+    GP_STARTING = 0,
+    GP_BUILD = 1,
+    GP_WAITING = 2,
+    GP_YOUR_TURN = 3,
+    GP_THEIR_TURN = 4,
+    GP_OVER = 5
+}
+
 public class CashBasherManager : MonoBehaviour
 {
     public float startTimer = 2.0f;
@@ -12,6 +22,8 @@ public class CashBasherManager : MonoBehaviour
 
     public TileSet serverSet, clientSet;
 
+    public NetworkedCannon serverCannon, clientCannon;
+
     public TextMesh gameText;
 
     public GameObject treasure;
@@ -21,25 +33,28 @@ public class CashBasherManager : MonoBehaviour
 
     public int myTeam;
 
+    public bool opponentIsReady { get; set; }
+
     private GameState state = null;
     private GamePhase currentPhase = GamePhase.GP_STARTING;
-
-    private bool opponentIsReady = false;
 
     private ArrayList blocks;
 
     private NetworkedLevelLoader loader;
 
     private BuildState buildState;
+    private StartState startState;
 
-    enum GamePhase
+    void Awake()
     {
-        GP_STARTING = 0,
-        GP_BUILD = 1,
-        GP_WAITING = 2,
-        GP_YOUR_TURN = 3,
-        GP_THEIR_TURN = 4,
-        GP_OVER = 5
+        if (Network.isServer)
+        {
+            myTeam = 0;
+        }
+        else if (Network.isClient)
+        {
+            myTeam = 1;
+        }
     }
 
     void Start()
@@ -61,7 +76,8 @@ public class CashBasherManager : MonoBehaviour
         
         //cameraMan.ZoomTo(4f);
 
-        buildState = new BuildState(this, myTeam, myTeam == 0 ? serverSet : clientSet, spawnIndicator);
+        buildState = new BuildState(this, myTeam, myTeam == 0 ? serverSet : clientSet, spawnIndicator, buildTimer);
+        startState = new StartState(this, startTimer, loader);
     }
 
     public void AddBlock(Breakable b)
@@ -71,65 +87,13 @@ public class CashBasherManager : MonoBehaviour
 
     void Update()
     {
-        if (currentPhase == GamePhase.GP_STARTING)
-        {
-            startTimer -= Time.deltaTime;
-
-            if (startTimer <= 0f)
-            {
-                if (Network.isServer && loader.IsReady())
-                {
-                    RandomizeTreasure();
-
-                    networkView.RPC("SwitchToState", RPCMode.All, (int)GamePhase.GP_BUILD);
-                }
-            }
-        }
-
-        if (currentPhase == GamePhase.GP_BUILD)
-        {
-            if (buildTimer > 0f)
-            {
-                buildTimer -= Time.deltaTime;
-            }
-            else
-            {
-                if (Network.isClient)
-                {
-                    networkView.RPC("OpponentReady", RPCMode.Server);
-                }
-
-                SwitchToState((int)GamePhase.GP_WAITING);
-            }
-        }
-
-        if (currentPhase == GamePhase.GP_WAITING)
-        {
-            if (Network.isServer && opponentIsReady)
-            {
-
-            }
-        }
-
         if (state != null)
         {
-            if (Input.GetMouseButtonDown(0))
-            {
-                state.GetClickedOn();
-            }
-            else if (Input.GetMouseButton(0))
-            {
-                state.GetHeldOn();
-            }
-
-            if (Input.GetMouseButtonUp(0))
-            {
-                state.GetReleasedOn();
-            }
+            state.Update();
         }
     }
 
-    void RandomizeTreasure()
+    public void RandomizeTreasure()
     {
         int x = Random.Range(0, 9);
         int y = Random.Range(0, 7);
@@ -162,7 +126,7 @@ public class CashBasherManager : MonoBehaviour
     }
 
     [RPC]
-    void SwitchToState(int phase)
+    public void SwitchToState(int phase)
     {
         currentPhase = (GamePhase)(phase);
 
@@ -174,7 +138,7 @@ public class CashBasherManager : MonoBehaviour
         switch (currentPhase)
         {
             case GamePhase.GP_STARTING:
-                state = null;
+                state = startState;
                 break;
             case GamePhase.GP_BUILD:
                 state = buildState;
@@ -194,5 +158,16 @@ public class CashBasherManager : MonoBehaviour
     void OpponentReady()
     {
         opponentIsReady = true;
+    }
+
+    void OnDisconnectedFromServer(NetworkDisconnection info)
+    {
+        Application.LoadLevel("MiniGameMenu");
+    }
+
+    void OnPlayerDisconnected()
+    {
+        Network.Disconnect();
+        Application.LoadLevel("MiniGameMenu");
     }
 }
