@@ -25,10 +25,17 @@ public class NetworkedCannonBall : MonoBehaviour
         if (health == 0)
         {
             if (networkView.isMine)
-            {
-                manager.ReadyNextTurn();
+            {        
                 Network.Destroy(gameObject);
             }
+        }
+    }
+
+    void OnDestroy()
+    {
+        if (networkView.isMine)
+        {
+            manager.ReadyNextTurn();
         }
     }
 }

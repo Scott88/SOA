@@ -305,7 +305,7 @@ public class NetworkedCannon : MonoBehaviour
             ball.rigidbody2D.velocity = finalVel;
             ball.networkView.RPC("SetVelocity", RPCMode.Others, finalVel);
 
-            manager.SetCannonBall(ball.gameObject);
+            //manager.SetCannonBall(ball.gameObject);
         }
 
         currentState = CannonState.CS_FIRED;
