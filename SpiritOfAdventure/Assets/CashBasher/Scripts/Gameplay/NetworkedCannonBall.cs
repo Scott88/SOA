@@ -5,6 +5,13 @@ public class NetworkedCannonBall : MonoBehaviour
 {
     public int health;
 
+    private CashBasherManager manager;
+
+    void Start()
+    {
+        manager = FindObjectOfType<CashBasherManager>() as CashBasherManager;
+    }
+
     [RPC]
     public void SetVelocity(Vector3 velocity)
     {
@@ -17,7 +24,11 @@ public class NetworkedCannonBall : MonoBehaviour
 
         if (health == 0)
         {
-            Destroy(gameObject);
+            if (networkView.isMine)
+            {
+                manager.ReadyNextTurn();
+                Network.Destroy(gameObject);
+            }
         }
     }
 }

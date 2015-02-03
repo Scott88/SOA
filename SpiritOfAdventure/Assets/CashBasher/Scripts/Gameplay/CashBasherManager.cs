@@ -109,9 +109,9 @@ public class CashBasherManager : MonoBehaviour
         networkView.RPC("PlaceTreasure", RPCMode.All, x, y);
     }
 
-    public void SetCannonBall(GameObject ball)
+    public void ReadyNextTurn()
     {
-        yourTurnState.SetCannonBall(ball);
+        yourTurnState.ReadyNextTurn();
     }
 
     [RPC]

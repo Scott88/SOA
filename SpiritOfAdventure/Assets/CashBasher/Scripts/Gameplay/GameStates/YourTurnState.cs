@@ -7,9 +7,7 @@ public class YourTurnState : GameState
     NetworkedCannon yourCannon;
     CameraMan cameraMan;
 
-    GameObject cannonBall = null;
-    bool ballRecieved = false;
-
+    bool nextTurn = false;
     float timer = 1.0f;
 
     public YourTurnState(CashBasherManager m, NetworkedCannon c, CameraMan cm)
@@ -33,25 +31,21 @@ public class YourTurnState : GameState
         yourCannon.Activate();
     }
 
-    public void SetCannonBall(GameObject ball)
+    public void ReadyNextTurn()
     {
-        cannonBall = ball;
-        ballRecieved = true;
+        nextTurn = true;
     }
 
     public void Update()
     {
-        if (ballRecieved)
+        if (nextTurn)
         {
-            if (cannonBall == null)
-            {
-                timer -= Time.deltaTime;
+            timer -= Time.deltaTime;
 
-                if (timer <= 0.0f)
-                {
-                    manager.networkView.RPC("SwitchToState", RPCMode.Others, (int)GamePhase.GP_YOUR_TURN);
-                    manager.SwitchToState((int)GamePhase.GP_THEIR_TURN);
-                }
+            if (timer <= 0.0f)
+            {
+                manager.networkView.RPC("SwitchToState", RPCMode.Others, (int)GamePhase.GP_YOUR_TURN);
+                manager.SwitchToState((int)GamePhase.GP_THEIR_TURN);
             }
         }
     }
@@ -59,6 +53,8 @@ public class YourTurnState : GameState
     public void End()
     {
         yourCannon.Deactivate();
-        ballRecieved = false;
+
+        nextTurn = false;
+        timer = 1.0f;
     }
 }
