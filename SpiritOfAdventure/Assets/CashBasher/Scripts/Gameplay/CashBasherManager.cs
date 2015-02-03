@@ -29,8 +29,6 @@ public class CashBasherManager : MonoBehaviour
     public GameObject treasure;
     public GameObject treasureSupport;
 
-    public GameObject spawnIndicator;
-
     public int myTeam { get; set; }
 
     public bool opponentIsReady { get; set; }
@@ -76,7 +74,7 @@ public class CashBasherManager : MonoBehaviour
         //cameraMan.ZoomTo(4f);
 
         startState = new StartState(this, startTimer, loader);
-        buildState = new BuildState(this, myTeam, myTeam == 0 ? serverSet : clientSet, spawnIndicator, buildTimer);
+        buildState = new BuildState(this, myTeam, myTeam == 0 ? serverSet : clientSet, buildTimer);
         waitingState = new WaitingState(this);
         yourTurnState = new YourTurnState(this, myTeam == 0 ? serverCannon : clientCannon, cameraMan);
         theirTurnState = new TheirTurnState(this, cameraMan);

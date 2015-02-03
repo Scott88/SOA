@@ -9,6 +9,8 @@ public class BlockInventory : MonoBehaviour
     public TextMesh blockCounter;
     public GameObject selectionIndicator;
 
+    public GameObject spawnIndicator;
+
     private int blockCount;
 
     private bool selected = false;
