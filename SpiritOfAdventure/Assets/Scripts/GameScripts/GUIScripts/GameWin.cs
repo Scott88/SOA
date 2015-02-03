@@ -148,10 +148,6 @@ public class GameWin : MonoBehaviour
 						gameManager.effectManager.PlayButtonSound();
 						GameManager.ResetGame();
 
-#if UNITY_EDITOR
-						SaveFile.Instance().SaveToXML();
-#endif
-
 
 						if (Application.loadedLevel + 1 >= Application.levelCount)
 						{
@@ -173,10 +169,6 @@ public class GameWin : MonoBehaviour
 
 				if (GUI.Button(new Rect(Screen.width * (1f / 1.9f), Screen.height * (0.84f), Screen.width * (1f / 6f), Screen.height * (1f / 8f)), "Level Select"))
 				{
-					#if UNITY_EDITOR
-					SaveFile.Instance().SaveToXML();
-					#endif
-
 					gameManager.effectManager.PlayButtonSound();
 					Application.LoadLevel("MainMenu");
 					Time.timeScale = 1;

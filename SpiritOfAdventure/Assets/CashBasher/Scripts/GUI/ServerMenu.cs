@@ -34,7 +34,7 @@ public class ServerMenu : MonoBehaviour
                 FindObjectOfType<NetworkedLevelLoader>().LoadLevel("MiniGame");
             }
 
-            display.text = "Player found!\n Game starts in:\n " + startTimer.ToString("0.#");
+            display.text = "Player found!\nGame starts in:\n" + startTimer.ToString("0.#");
         }
     }
 

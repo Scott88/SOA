@@ -184,21 +184,25 @@ public class SaveFile
     public void SetLevelStars(string levelName, int stars)
     {
         GetLevelState(levelName).stars = stars;
+        SaveToXML();
     }
 
     public void SetLevelPath(string levelName, int path)
     {
         GetLevelState(levelName).path = path;
+        SaveToXML();
     }
 
     public void SetLevelScore(string levelName, int score)
     {
         GetLevelState(levelName).score = score;
+        SaveToXML();
     }
 
     public void SetCurrentCostume(int id)
     {
         costumeID = id;
+        SaveToXML();
     }
 
     public int GetStars(string levelName)

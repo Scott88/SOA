@@ -10,6 +10,8 @@ public class NetworkedCannonBall : MonoBehaviour
     void Start()
     {
         manager = FindObjectOfType<CashBasherManager>() as CashBasherManager;
+
+        manager.cameraMan.FollowObject(gameObject);
     }
 
     [RPC]

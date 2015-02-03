@@ -142,12 +142,10 @@ public class CashBasherManager : MonoBehaviour
         switch (currentPhase)
         {
             case GamePhase.GP_STARTING:
-                state = startState;
-                gameText.text = "Starting game...";
+                state = startState;              
                 break;
             case GamePhase.GP_BUILD:
-                state = buildState;
-                gameText.text = "Build your base!";
+                state = buildState;              
                 break;
             case GamePhase.GP_WAITING:
                 state = waitingState;

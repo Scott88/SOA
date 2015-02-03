@@ -42,6 +42,8 @@ public class BuildState : GameState
         if (buildTimer > 0f)
         {
             buildTimer -= Time.deltaTime;
+
+            manager.gameText.text = "Time remaining: " + buildTimer.ToString("0");
         }
         else
         {
@@ -185,7 +187,11 @@ public class BuildState : GameState
     public void End()
     {
         spawnIndicator.SetActive(false);
-        selectedInventory.Deselect(false);
+
+        if (selectedInventory)
+        {
+            DeselectInventory(selectedInventory);
+        }
     }
 
     void SelectInventory(BlockInventory inventory)

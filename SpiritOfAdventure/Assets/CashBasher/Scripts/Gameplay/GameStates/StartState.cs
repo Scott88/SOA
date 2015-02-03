@@ -18,7 +18,7 @@ public class StartState : GameState
 
     public void Prepare()
     {
-        
+        manager.gameText.text = "Get ready to build...!";
     }
 
     public void Update()
