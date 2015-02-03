@@ -184,7 +184,8 @@ public class BuildState : GameState
 
     public void End()
     {
-
+        spawnIndicator.SetActive(false);
+        selectedInventory.Deselect(false);
     }
 
     void SelectInventory(BlockInventory inventory)

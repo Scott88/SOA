@@ -75,7 +75,7 @@ public class ClientMenu : MonoBehaviour
             }
             else
             {
-                display.text = "Found a server! Connecting now...";
+                display.text = "Found a server!\n Connecting now...";
                 Network.Connect(hostList[closestServer]);
             }
         }
@@ -83,7 +83,7 @@ public class ClientMenu : MonoBehaviour
 
     void OnConnectedToServer()
     {
-        display.text = "Connected! Waiting for the game to start...";
+        display.text = "Connected!\n Waiting for the\n game to start...";
     }
 
     void OnFailedToConnect(NetworkConnectionError info)

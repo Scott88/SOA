@@ -31,7 +31,7 @@ public class CashBasherManager : MonoBehaviour
 
     public GameObject spawnIndicator;
 
-    public int myTeam;
+    public int myTeam { get; set; }
 
     public bool opponentIsReady { get; set; }
 
@@ -81,7 +81,7 @@ public class CashBasherManager : MonoBehaviour
         yourTurnState = new YourTurnState(this, myTeam == 0 ? serverCannon : clientCannon, cameraMan);
         theirTurnState = new TheirTurnState(this, cameraMan);
 
-		state = startState;
+        SwitchToState((int)GamePhase.GP_STARTING);
     }
 
     void Update()
@@ -143,18 +143,23 @@ public class CashBasherManager : MonoBehaviour
         {
             case GamePhase.GP_STARTING:
                 state = startState;
+                gameText.text = "Starting game...";
                 break;
             case GamePhase.GP_BUILD:
                 state = buildState;
+                gameText.text = "Build your base!";
                 break;
             case GamePhase.GP_WAITING:
                 state = waitingState;
+                gameText.text = "Waiting for your friend...";
                 break;
             case GamePhase.GP_YOUR_TURN:
                 state = yourTurnState;
+                gameText.text = "Your turn!";
                 break;
             case GamePhase.GP_THEIR_TURN:
                 state = theirTurnState;
+                gameText.text = "Their turn...";
                 break;
         }
 
