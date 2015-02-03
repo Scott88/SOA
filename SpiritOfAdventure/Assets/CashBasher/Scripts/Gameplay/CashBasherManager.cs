@@ -38,8 +38,6 @@ public class CashBasherManager : MonoBehaviour
     private GameState state = null;
     private GamePhase currentPhase = GamePhase.GP_STARTING;
 
-    private ArrayList blocks;
-
     private NetworkedLevelLoader loader;
 
     private StartState startState;
@@ -64,8 +62,6 @@ public class CashBasherManager : MonoBehaviour
     {
         loader = FindObjectOfType<NetworkedLevelLoader>();
 
-        blocks = new ArrayList();
-
         if (Network.isServer)
         {
             myTeam = 0;
@@ -86,11 +82,6 @@ public class CashBasherManager : MonoBehaviour
         theirTurnState = new TheirTurnState(this, cameraMan);
 
 		state = startState;
-    }
-
-    public void AddBlock(Breakable b)
-    {
-        blocks.Add(b);
     }
 
     void Update()

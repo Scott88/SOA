@@ -18,9 +18,25 @@ public class NetworkedCannonBall : MonoBehaviour
         rigidbody2D.velocity = velocity;
     }
 
-    public void Damage()
+    [RPC]
+    public void Damage(Vector3 blockPos, float speedDamper)
     {
         health--;
+
+        Vector3 direction = blockPos - transform.position;
+
+        Vector2 velocity = rigidbody2D.velocity;
+
+        if (Mathf.Abs(direction.x) >= Mathf.Abs(direction.y))
+        {
+            velocity.x *= speedDamper;
+        }
+        else
+        {
+            velocity.y *= speedDamper;
+        }
+
+        rigidbody2D.velocity = velocity;
 
         if (health == 0)
         {

@@ -7,12 +7,12 @@ public class Breakable : MonoBehaviour {
     public int health = 1;
     public float minimumSpeed = 3f;
 
+    public float speedDamper = 0.8f;
+
     private int team = -1;
 
     void Start()
     {
-        FindObjectOfType<CashBasherManager>().AddBlock(this);
-
         if (health == 1)
         {
             collider2D.isTrigger = true;
@@ -36,6 +36,7 @@ public class Breakable : MonoBehaviour {
 
             if (coll.relativeVelocity.magnitude > minimumSpeed)
             {
+                ball.networkView.RPC("Damage", RPCMode.All, transform.position, speedDamper);
                 networkView.RPC("Damage", RPCMode.All);
             }
         }
@@ -54,6 +55,7 @@ public class Breakable : MonoBehaviour {
 
             if (coll.rigidbody2D.velocity.magnitude > minimumSpeed)
             {
+                ball.networkView.RPC("Damage", RPCMode.All, transform.position, speedDamper);
                 networkView.RPC("Damage", RPCMode.All);
             }
         }

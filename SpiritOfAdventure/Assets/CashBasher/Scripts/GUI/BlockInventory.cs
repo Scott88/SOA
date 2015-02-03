@@ -18,7 +18,8 @@ public class BlockInventory : MonoBehaviour
     {
         if (PlayerPrefs.HasKey(blockName))
         {
-            blockCount = PlayerPrefs.GetInt(blockName);
+            //blockCount = PlayerPrefs.GetInt(blockName);
+            blockCount = 10;
         }
         else
         {
