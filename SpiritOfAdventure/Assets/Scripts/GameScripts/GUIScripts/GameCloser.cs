@@ -26,4 +26,9 @@ public class GameCloser : MonoBehaviour
 			Application.Quit();
 		}
 	}
+
+	void OnApplicationQuit()
+    {
+        SaveFile.Instance().SaveToXML();
+    }
 }
