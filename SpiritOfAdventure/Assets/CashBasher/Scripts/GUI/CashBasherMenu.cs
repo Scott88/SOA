@@ -12,7 +12,7 @@ public class CashBasherMenu : MonoBehaviour
     {
         GUI.skin = mySkin;
 
-        if (GUI.Button(new Rect(Screen.width * (0.375f), Screen.height * (0.1f), Screen.width * (0.25f), Screen.height * (0.166f)),
+        if (GUI.Button(new Rect(Screen.width * (0.85f), Screen.height * (0.05f), Screen.width * (0.12f), Screen.height * (0.1f)),
                                "Back"))
         {
             Application.LoadLevel("MainMenu");
@@ -20,7 +20,7 @@ public class CashBasherMenu : MonoBehaviour
 
         if (Network.peerType == NetworkPeerType.Disconnected)
         {
-            if (GUI.Button(new Rect(Screen.width * (0.125f), Screen.height * (0.4f), Screen.width * (1f / 4f), Screen.height * (1f / 6f)),
+            if (GUI.Button(new Rect(Screen.width * (0.85f), Screen.height * (0.7f), Screen.width * (0.12f), Screen.height * (0.1f)),
                            "Start Your Own Game"))
             {
                 gameObject.SetActive(false);
@@ -28,7 +28,7 @@ public class CashBasherMenu : MonoBehaviour
                 serverMenu.CreateServer();
             }
 
-            if (GUI.Button(new Rect(Screen.width * (0.625f), Screen.height * (0.4f), Screen.width * (1f / 4f), Screen.height * (1f / 6f)),
+            if (GUI.Button(new Rect(Screen.width * (0.85f), Screen.height * (0.85f), Screen.width * (0.12f), Screen.height * (0.1f)),
                            "Look For A Game"))
             {
                 gameObject.SetActive(false);

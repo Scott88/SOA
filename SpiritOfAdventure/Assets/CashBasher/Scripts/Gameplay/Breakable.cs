@@ -1,15 +1,22 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-[RequireComponent(typeof(NetworkView))]
-public class Breakable : MonoBehaviour {
+public enum BlockType
+{
+    BT_WOOD,
+    BT_STONE,
+    BT_METAL
+}
 
+[RequireComponent(typeof(NetworkView))]
+public class Breakable : MonoBehaviour
+{
     public int health = 1;
     public float minimumSpeed = 3f;
 
     public float speedDamper = 0.8f;
 
-    private int team = -1;
+    public BlockType type;
 
     void Start()
     {
@@ -74,21 +81,5 @@ public class Breakable : MonoBehaviour {
         {
             Destroy(gameObject);
         }
-    }
-
-    public void SetTeam(int t)
-    {
-        networkView.RPC("NetSetTeam", RPCMode.All, t);
-    }
-
-    [RPC]
-    void NetSetTeam(int t)
-    {
-        team = t;
-    }
-
-    public int GetTeam()
-    {
-        return team;
     }
 }

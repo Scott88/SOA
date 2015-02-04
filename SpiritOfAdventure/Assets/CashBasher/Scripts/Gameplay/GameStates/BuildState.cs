@@ -205,9 +205,6 @@ public class BuildState : GameState
 
         GameObject block = Network.Instantiate(inventory.GetBlock(), position, new Quaternion(), 0) as GameObject;
 
-        Breakable b = block.GetComponent<Breakable>();
-        b.SetTeam(myTeam);
-
         inventory.Deselect(true);
         selectedInventory = null;
     }

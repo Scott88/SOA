@@ -36,7 +36,7 @@ public class ClientMenu : MonoBehaviour
     public void SearchForServers()
     {
         display.text = "Looking for servers...";
-        MasterServer.RequestHostList("CashBasher");
+        MasterServer.RequestHostList("SorryUnityIWillGiveYouBackYourServerWhenTheBlizzardClears");
     }
 
     void OnMasterServerEvent(MasterServerEvent msEvent)

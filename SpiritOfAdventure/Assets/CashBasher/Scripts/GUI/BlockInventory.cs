@@ -32,6 +32,11 @@ public class BlockInventory : MonoBehaviour
         blockCounter.text = "x" + blockCount.ToString();
     }
 
+    public bool Empty()
+    {
+        return blockCount == 0;
+    }
+
     public GameObject GetBlock()
     {
         return block;
@@ -54,13 +59,18 @@ public class BlockInventory : MonoBehaviour
         {
             if (!blockPlaced)
             {
-                blockCount++;
-                blockCounter.text = "x" + blockCount.ToString();
+                ReturnBlock();
             }
 
             selected = false;
             selectionIndicator.SetActive(false);
         }
+    }
+
+    public void ReturnBlock()
+    {
+        blockCount++;
+        blockCounter.text = "x" + blockCount.ToString();
     }
 
     public bool IsSelected()
