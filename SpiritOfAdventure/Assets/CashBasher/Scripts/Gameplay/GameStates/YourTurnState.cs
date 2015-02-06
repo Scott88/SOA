@@ -21,12 +21,14 @@ public class YourTurnState : GameState
     {
         if (Network.isServer)
         {
-            cameraMan.FollowPosition(new Vector3(-10f, 0f, 0f));
+            cameraMan.FollowPosition(new Vector3(4.5f, 1f, 0f));
         }
         else
         {
-            cameraMan.FollowPosition(new Vector3(10f, 0f, 0f));
+            cameraMan.FollowPosition(new Vector3(-4.5f, 1f, 0f));
         }
+
+        cameraMan.ZoomTo(7f);
 
         yourCannon.Activate();
     }
