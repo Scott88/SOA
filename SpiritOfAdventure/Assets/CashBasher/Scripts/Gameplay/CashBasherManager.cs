@@ -184,4 +184,14 @@ public class CashBasherManager : MonoBehaviour
         Network.Disconnect();
         Application.LoadLevel("MiniGameMenu");
     }
+
+    void OnApplicationQuit()
+    {
+        SaveFile.Instance().SaveToXML();
+    }
+
+    void OnApplicationPause()
+    {
+        SaveFile.Instance().SaveToXML();
+    }
 }

@@ -79,19 +79,12 @@ public class Breakable : MonoBehaviour
 
         if (health == 0)
         {
+            SaveFile.Instance().ModifyBlockInventory(type, -1);
             Destroy(gameObject);
         }
 
         Color color = renderer.material.color;
         color.a = (float)health / (float)startingHealth;
         renderer.material.color = color;
-    }
-
-    void OnDestroy()
-    {
-        if (networkView.isMine)
-        {
-            SaveFile.Instance().ModifyBlockInventory(type, -1);
-        }
     }
 }
