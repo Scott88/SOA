@@ -19,18 +19,6 @@ public class Breakable : MonoBehaviour
 
     public BlockType type;
 
-    void Start()
-    {
-        if (health == 1)
-        {
-            collider2D.isTrigger = true;
-        }
-        else
-        {
-            collider2D.isTrigger = false;
-        }
-    }
-
     void OnCollisionEnter2D(Collision2D coll)
     {
         if (coll.collider.tag == "CannonBall")
@@ -44,41 +32,41 @@ public class Breakable : MonoBehaviour
 
             if (coll.relativeVelocity.magnitude > minimumSpeed)
             {
-                ball.networkView.RPC("Damage", RPCMode.All, transform.position, speedDamper);
-                networkView.RPC("Damage", RPCMode.All);
+                if (Damage())
+                {
+                    ball.DamageAndSlow(coll.relativeVelocity, transform.position, speedDamper);
+                }
+                else
+                {
+                    ball.Damage();
+                }     
             }
         }
     }
 
-    void OnTriggerEnter2D(Collider2D coll)
-    {
-        if (coll.tag == "CannonBall")
-        {
-            NetworkedCannonBall ball = coll.GetComponent<NetworkedCannonBall>() as NetworkedCannonBall;
-
-            if (!ball.networkView.isMine)
-            {
-                return;
-            }
-
-            if (coll.rigidbody2D.velocity.magnitude > minimumSpeed)
-            {
-                ball.networkView.RPC("Damage", RPCMode.All, transform.position, speedDamper);
-                networkView.RPC("Damage", RPCMode.All);
-            }
-        }
-    }
-
-    [RPC]
-    public void Damage()
+    public bool Damage()
     {
         health--;
 
-        if (health == 1)
+        if (health == 0)
         {
-            collider2D.isTrigger = true;
+            Destroy(gameObject);
+            networkView.RPC("NetDamage", RPCMode.Others);
+
+            return true;
         }
-        else if (health == 0)
+
+        networkView.RPC("NetDamage", RPCMode.Others);
+
+        return false;
+    }
+
+    [RPC]
+    public void NetDamage()
+    {
+        health--;
+
+        if (health == 0)
         {
             Destroy(gameObject);
         }

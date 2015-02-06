@@ -19,8 +19,8 @@ public class ServerMenu : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-        //MasterServer.ipAddress = "10.10.10.181";
-        //MasterServer.port = 23466;
+        MasterServer.ipAddress = "192.168.2.16";
+        MasterServer.port = 23466;
 
         gameObject.SetActive(false);
     }

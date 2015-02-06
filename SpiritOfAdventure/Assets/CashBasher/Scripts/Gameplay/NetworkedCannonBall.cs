@@ -20,10 +20,68 @@ public class NetworkedCannonBall : MonoBehaviour
         rigidbody2D.velocity = velocity;
     }
 
-    [RPC]
-    public void Damage(Vector3 blockPos, float speedDamper)
+    public void Damage()
     {
         health--;
+
+        if (health == 0)
+        {
+            Destroy(gameObject);
+        }
+
+        networkView.RPC("NetDamage", RPCMode.Others);
+    }
+
+    public void NetDamage()
+    {
+        health--;
+
+        if (health == 0)
+        {
+            Destroy(gameObject);
+        }
+    }
+
+    public void DamageAndSlow(Vector3 startSpeed, Vector3 blockPos, float speedDamper)
+    {
+        health--;
+
+        if (health == 0)
+        {
+            networkView.RPC("NetDamageAndSlow", RPCMode.Others, startSpeed, blockPos, speedDamper);
+            Destroy(gameObject);
+
+            return;
+        }
+
+        Vector3 direction = blockPos - transform.position;
+
+        Vector2 velocity = startSpeed;
+
+        if (Mathf.Abs(direction.x) >= Mathf.Abs(direction.y))
+        {
+            velocity.x *= speedDamper;
+        }
+        else
+        {
+            velocity.y *= speedDamper;
+        }
+
+        rigidbody2D.velocity = velocity;
+
+        networkView.RPC("NetDamageAndSlow", RPCMode.Others, startSpeed, blockPos, speedDamper);
+    }
+
+    [RPC]
+    public void NetDamageAndSlow(Vector3 blockPos, float speedDamper)
+    {
+        health--;
+
+        if (health == 0)
+        {
+            Destroy(gameObject);
+            return;
+        }
 
         Vector3 direction = blockPos - transform.position;
 
@@ -39,11 +97,6 @@ public class NetworkedCannonBall : MonoBehaviour
         }
 
         rigidbody2D.velocity = velocity;
-
-        if (health == 0)
-        {
-            Destroy(gameObject);
-        }
     }
 
     void OnDestroy()
