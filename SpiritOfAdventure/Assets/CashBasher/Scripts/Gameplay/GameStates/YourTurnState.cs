@@ -67,7 +67,15 @@ public class YourTurnState : GameState
                     cannon.Press();
                     return;
                 }
+            }
 
+            rayOrigin = (Vector2)(manager.guiCamera.ScreenToWorldPoint(Input.mousePosition));
+            rayDirection = new Vector2();
+
+            hit2d = Physics2D.Raycast(rayOrigin, rayDirection);
+
+            if (hit2d)
+            {
                 CashBasherSpiritGUI spiritGUI = hit2d.collider.GetComponent<CashBasherSpiritGUI>();
 
                 if (spiritGUI)
