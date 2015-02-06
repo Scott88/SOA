@@ -34,7 +34,7 @@ public class Breakable : MonoBehaviour
             {
                 if (Damage())
                 {
-                    ball.DamageAndSlow(coll.relativeVelocity, transform.position, speedDamper);
+                    ball.DamageAndSlow(-coll.relativeVelocity, transform.position, speedDamper);
                 }
                 else
                 {
