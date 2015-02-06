@@ -24,5 +24,7 @@ public class CashBasherSpiritGUI : MonoBehaviour
     {
         count--;
         display.text = "x" + count;
+
+        SaveFile.Instance().ModifySpiritInventory(type, -1);
     }
 }

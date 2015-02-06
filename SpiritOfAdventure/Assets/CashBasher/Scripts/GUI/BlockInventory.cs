@@ -11,30 +11,16 @@ public class BlockInventory : MonoBehaviour
 
     public GameObject spawnIndicator;
 
+    public BlockType type;
+
     private int blockCount;
 
     private bool selected = false;
 
     void Awake()
     {
-        if (PlayerPrefs.HasKey(blockName))
-        {
-            //blockCount = PlayerPrefs.GetInt(blockName);
-            blockCount = 10;
-        }
-        else
-        {
-            blockCount = 10;
-            PlayerPrefs.SetInt(blockName, blockCount);
-        }
-
+        blockCount = SaveFile.Instance().GetBlockInventory(type);
         blockCounter.text = "x" + blockCount.ToString();
-    }
-
-    // Use this for initialization
-    void Start()
-    {
-        
     }
 
     public bool Empty()

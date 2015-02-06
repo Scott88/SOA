@@ -16,17 +16,7 @@ public class SpiritInventory : MonoBehaviour
     // Use this for initialization
     void Awake()
     {
-        if (PlayerPrefs.HasKey(spiritName))
-        {
-            //blockCount = PlayerPrefs.GetInt(blockName);
-            spiritCount = 10;
-        }
-        else
-        {
-            spiritCount = 10;
-            PlayerPrefs.SetInt(spiritName, spiritCount);
-        }
-
+        spiritCount = SaveFile.Instance().GetSpiritInventory(type);
         spiritCounter.text = "x" + spiritCount.ToString();
     }
 

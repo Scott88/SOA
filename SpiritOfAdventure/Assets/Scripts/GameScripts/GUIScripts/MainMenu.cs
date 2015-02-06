@@ -62,6 +62,19 @@ public class MainMenu : FocusPoint
 				PlayerPrefs.DeleteAll();
 			}
 
+#if UNITY_EDITOR
+            if (GUI.Button(new Rect(Screen.width * (0.85f), Screen.height * (0.05f), Screen.width * (0.1f), Screen.height * (0.11f)), "$$$"))
+            {
+                SaveFile.Instance().ModifySpiritInventory(SpiritType.ST_GREEN, 10);
+                SaveFile.Instance().ModifySpiritInventory(SpiritType.ST_BLUE, 10);
+                SaveFile.Instance().ModifySpiritInventory(SpiritType.ST_RED, 10);
+
+                SaveFile.Instance().ModifyBlockInventory(BlockType.BT_WOOD, 10);
+                SaveFile.Instance().ModifyBlockInventory(BlockType.BT_STONE, 10);
+                SaveFile.Instance().ModifyBlockInventory(BlockType.BT_METAL, 10);
+            }
+#endif
+
             //if (GUI.Button(new Rect(Screen.width * (0.53f), Screen.height * (0.32f), Screen.width * (0.25f), Screen.height * (1f / 7f)), "DESTRUCTORNATOR"))
             //{
 
