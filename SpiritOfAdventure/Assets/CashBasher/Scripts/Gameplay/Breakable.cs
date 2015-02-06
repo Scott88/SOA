@@ -19,6 +19,13 @@ public class Breakable : MonoBehaviour
 
     public BlockType type;
 
+    private int startingHealth;
+
+    void Start()
+    {
+        startingHealth = health;
+    }
+
     void OnCollisionEnter2D(Collision2D coll)
     {
         if (coll.collider.tag == "CannonBall")
@@ -56,6 +63,10 @@ public class Breakable : MonoBehaviour
             return true;
         }
 
+        Color color = renderer.material.color;
+        color.a = (float)health / (float)startingHealth;
+        renderer.material.color = color;
+
         networkView.RPC("NetDamage", RPCMode.Others);
 
         return false;
@@ -70,5 +81,9 @@ public class Breakable : MonoBehaviour
         {
             Destroy(gameObject);
         }
+
+        Color color = renderer.material.color;
+        color.a = (float)health / (float)startingHealth;
+        renderer.material.color = color;
     }
 }

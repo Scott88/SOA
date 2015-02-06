@@ -32,6 +32,7 @@ public class NetworkedCannonBall : MonoBehaviour
         networkView.RPC("NetDamage", RPCMode.Others);
     }
 
+    [RPC]
     public void NetDamage()
     {
         health--;
