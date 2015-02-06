@@ -41,6 +41,10 @@ public class SaveFile
 
     private int greenSpirits, blueSpirits, redSpirits;
 
+    private int greenSpiritInv, blueSpiritInv, redSpiritInv;
+
+    private int woodBlockInv, stoneBlockInv, metalBlockInv;
+
     private static SaveFile instance;
 
     private XmlDocument saveFile;
@@ -176,6 +180,30 @@ public class SaveFile
             blueSpirits = int.Parse(spiritsNode.GetAttribute("blue"));
             redSpirits = int.Parse(spiritsNode.GetAttribute("red"));
         }
+
+        XmlElement spiritInvNode = saveNode["SpiritInventory"];
+
+        if (spiritInvNode != null)
+        {
+            greenSpiritInv = int.Parse(spiritInvNode.GetAttribute("green"));
+            blueSpiritInv = int.Parse(spiritInvNode.GetAttribute("blue"));
+            redSpiritInv = int.Parse(spiritInvNode.GetAttribute("red"));
+        }
+
+        XmlElement blockInvNode = saveNode["BlockInventory"];
+
+        if (blockInvNode != null)
+        {
+            woodBlockInv = int.Parse(blockInvNode.GetAttribute("wood"));
+            stoneBlockInv = int.Parse(blockInvNode.GetAttribute("stone"));
+            metalBlockInv = int.Parse(blockInvNode.GetAttribute("metal"));
+        }
+        else
+        {
+            woodBlockInv = 10;
+            stoneBlockInv = 10;
+            metalBlockInv = 10;
+        }
     }
 
     public void SaveToXML()
@@ -255,23 +283,65 @@ public class SaveFile
             tiles.AppendChild(tile);
         }
 
-        XmlElement spirits = doc.CreateElement("Spirits");
-        save.AppendChild(spirits);
+        {
+            XmlElement spirits = doc.CreateElement("Spirits");
+            save.AppendChild(spirits);
 
-        XmlAttribute spiritsRed = doc.CreateAttribute("red");
-        spiritsRed.Value = redSpirits.ToString();
+            XmlAttribute spiritsRed = doc.CreateAttribute("red");
+            spiritsRed.Value = redSpirits.ToString();
 
-        spirits.Attributes.Append(spiritsRed);
+            spirits.Attributes.Append(spiritsRed);
 
-        XmlAttribute spiritsGreen = doc.CreateAttribute("green");
-        spiritsGreen.Value = greenSpirits.ToString();
+            XmlAttribute spiritsGreen = doc.CreateAttribute("green");
+            spiritsGreen.Value = greenSpirits.ToString();
 
-        spirits.Attributes.Append(spiritsGreen);
+            spirits.Attributes.Append(spiritsGreen);
 
-        XmlAttribute spiritsBlue = doc.CreateAttribute("blue");
-        spiritsBlue.Value = blueSpirits.ToString();
+            XmlAttribute spiritsBlue = doc.CreateAttribute("blue");
+            spiritsBlue.Value = blueSpirits.ToString();
 
-        spirits.Attributes.Append(spiritsBlue); 
+            spirits.Attributes.Append(spiritsBlue);
+        }
+
+        {
+            XmlElement spiritInv = doc.CreateElement("SpiritInventory");
+            save.AppendChild(spiritInv);
+
+            XmlAttribute spiritInvRed = doc.CreateAttribute("red");
+            spiritInvRed.Value = redSpiritInv.ToString();
+
+            spiritInv.Attributes.Append(spiritInvRed);
+
+            XmlAttribute spiritInvGreen = doc.CreateAttribute("green");
+            spiritInvGreen.Value = greenSpiritInv.ToString();
+
+            spiritInv.Attributes.Append(spiritInvGreen);
+
+            XmlAttribute spiritInvBlue = doc.CreateAttribute("blue");
+            spiritInvBlue.Value = blueSpiritInv.ToString();
+
+            spiritInv.Attributes.Append(spiritInvBlue);
+        }
+
+        {
+            XmlElement blockInv = doc.CreateElement("BlockInventory");
+            save.AppendChild(blockInv);
+
+            XmlAttribute blockInvWood = doc.CreateAttribute("wood");
+            blockInvWood.Value = woodBlockInv.ToString();
+
+            blockInv.Attributes.Append(blockInvWood);
+
+            XmlAttribute blockInvStone = doc.CreateAttribute("stone");
+            blockInvStone.Value = stoneBlockInv.ToString();
+
+            blockInv.Attributes.Append(blockInvStone);
+
+            XmlAttribute blockInvMetal = doc.CreateAttribute("metal");
+            blockInvMetal.Value = metalBlockInv.ToString();
+
+            blockInv.Attributes.Append(blockInvMetal);
+        }
 
         doc.Save(Application.persistentDataPath + "/soa.xml");
     }
@@ -309,6 +379,68 @@ public class SaveFile
             case SpiritType.ST_RED:
                 redSpirits = count;
                 break;
+        }
+    }
+
+    public void ModifySpiritInventory(SpiritType type, int change)
+    {
+        switch (type)
+        {
+            case SpiritType.ST_GREEN:
+                greenSpiritInv += change;
+                break;
+            case SpiritType.ST_BLUE:
+                blueSpiritInv += change;
+                break;
+            case SpiritType.ST_RED:
+                redSpiritInv += change;
+                break;
+        }
+    }
+
+    public void ModifyBlockInventory(BlockType type, int change)
+    {
+        switch (type)
+        {
+            case BlockType.BT_WOOD:
+                woodBlockInv += change;
+                break;
+            case BlockType.BT_STONE:
+                stoneBlockInv += change;
+                break;
+            case BlockType.BT_METAL:
+                metalBlockInv += change;
+                break;
+        }
+    }
+
+    public int GetBlockInventory(BlockType type)
+    {
+        switch (type)
+        {
+            case BlockType.BT_WOOD:
+                return woodBlockInv;
+            case BlockType.BT_STONE:
+                return stoneBlockInv;
+            case BlockType.BT_METAL:
+                return metalBlockInv;
+            default:
+                return 0;
+        }
+    }
+
+    public int GetSpiritInventory(SpiritType type)
+    {
+        switch (type)
+        {
+            case SpiritType.ST_GREEN:
+                return greenSpiritInv;
+            case SpiritType.ST_BLUE:
+                return blueSpiritInv;
+            case SpiritType.ST_RED:
+                return redSpiritInv;
+            default:
+                return 0;
         }
     }
 

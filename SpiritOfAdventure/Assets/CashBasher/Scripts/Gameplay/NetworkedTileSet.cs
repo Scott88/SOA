@@ -4,8 +4,6 @@ using System.Collections.Generic;
 
 public class NetworkedTileSet : TileSet
 {
-    public BlockCounter woodCounter, stoneCounter, metalCounter;
-
     public GameObject woodBlock, stoneBlock, metalBlock;
 
     public void Load()
@@ -17,23 +15,16 @@ public class NetworkedTileSet : TileSet
             switch (tileList.Current.type)
             {
                 case BlockType.BT_WOOD:
-                    LoadBlock(tileList.Current.x, tileList.Current.y, woodBlock, woodCounter);
+                    LoadNetworkedBlock(tileList.Current.x, tileList.Current.y, woodBlock);
                     break;
                 case BlockType.BT_STONE:
-                    LoadBlock(tileList.Current.x, tileList.Current.y, stoneBlock, stoneCounter);
+                    LoadNetworkedBlock(tileList.Current.x, tileList.Current.y, stoneBlock);
                     break;
                 case BlockType.BT_METAL:
-                    LoadBlock(tileList.Current.x, tileList.Current.y, metalBlock, metalCounter);
+                    LoadNetworkedBlock(tileList.Current.x, tileList.Current.y, metalBlock);
                     break;
             }
         }
-    }
-
-    void LoadBlock(int x, int y, GameObject block, BlockCounter counter)
-    {
-        LoadNetworkedBlock(x, y, block);
-
-        counter.Add();       
     }
 
     public void LoadNetworkedBlock(int x, int y, GameObject block)

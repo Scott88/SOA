@@ -7,6 +7,8 @@ public class BlockCounter : MonoBehaviour
 
     private int blockCount = 0;
 
+    private int startBlockCount;
+
     public void Add()
     {
         blockCount++;
@@ -17,5 +19,10 @@ public class BlockCounter : MonoBehaviour
     {
         blockCount--;
         display.text = "x" + blockCount.ToString();
+    }
+
+    public void Finalize()
+    {
+        startBlockCount = blockCount;
     }
 }
