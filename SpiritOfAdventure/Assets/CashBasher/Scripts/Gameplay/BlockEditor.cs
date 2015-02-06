@@ -1,9 +1,10 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class BlockEditor : MonoBehaviour
 {
-    public TileSet tileSet;
+    public EditorTileSet tileSet;
 
     public Camera mainCamera;
 
@@ -18,6 +19,48 @@ public class BlockEditor : MonoBehaviour
     private BlockInventory selectedInventory;
 
     private bool blockBroken = false;
+
+    void Start()
+    {
+        IEnumerator<SaveFile.TileInfo> tileList = SaveFile.Instance().GetTileList();
+
+        while (tileList.MoveNext())
+        {
+            switch (tileList.Current.type)
+            {
+                case BlockType.BT_WOOD:
+                    TryLoad(tileList.Current.x, tileList.Current.y, woodInventory, woodCounter);
+                    break;
+                case BlockType.BT_STONE:
+                    TryLoad(tileList.Current.x, tileList.Current.y, stoneInventory, stoneCounter);
+                    break;
+                case BlockType.BT_METAL:
+                    TryLoad(tileList.Current.x, tileList.Current.y, metalInventory, metalCounter);
+                    break;
+            }
+        }
+
+        TryTransfer(SaveFile.Instance().GetSpiritCount(SpiritType.ST_GREEN), greenInventory, greenCounter);
+        TryTransfer(SaveFile.Instance().GetSpiritCount(SpiritType.ST_BLUE), blueInventory, blueCounter);
+        TryTransfer(SaveFile.Instance().GetSpiritCount(SpiritType.ST_RED), redInventory, redCounter);
+    }
+
+    void TryLoad(int x, int y, BlockInventory inventory, BlockCounter counter)
+    {
+        if (!inventory.Empty())
+        {
+            inventory.TakeBlock();
+
+            tileSet.LoadBlock(x, y, inventory.GetBlock());
+
+            counter.Add();
+        }
+    }
+
+    void TryTransfer(int count, SpiritInventory inventory, SpiritCounter counter)
+    {
+        counter.Add(inventory.RemoveSpirits(count));
+    }
     
     // Update is called once per frame
     void Update()
@@ -63,8 +106,6 @@ public class BlockEditor : MonoBehaviour
             }
         }
 
-        //We start with the spiritGUI as it has the highest priority so we raycast from the spiritGUI camera to the
-        // GUI objects.
         Vector2 rayOrigin = (Vector2)(mainCamera.ScreenToWorldPoint(Input.mousePosition));
         Vector2 rayDirection = new Vector2();
 
@@ -128,17 +169,12 @@ public class BlockEditor : MonoBehaviour
             if (tileSet.CanPlace(position) && breakable == null)
             {
                 selectedInventory.spawnIndicator.SetActive(true);
+                selectedInventory.spawnIndicator.transform.position = tileSet.CenterOn(position);
             }
             else
             {
                 selectedInventory.spawnIndicator.SetActive(false);
             }
-
-            position.x = Mathf.Floor(position.x) + 0.5f;
-            position.y = Mathf.Floor(position.y) + 0.5f;
-            position.z = 0;
-
-            selectedInventory.spawnIndicator.transform.position = position;
         }
     }
 
@@ -185,9 +221,15 @@ public class BlockEditor : MonoBehaviour
         inventory.Select();
     }
 
+    void DeselectInventory(BlockInventory inventory)
+    {
+        inventory.Deselect(false);
+        selectedInventory = null;
+    }
+
     void PlaceBlock(Vector3 position, BlockInventory inventory)
     {
-        BlockType type = tileSet.PlaceBlock(position, inventory.GetBlock());
+        BlockType type = tileSet.PlaceAndSaveBlock(position, inventory.GetBlock());
 
         switch (type)
         {
@@ -225,14 +267,7 @@ public class BlockEditor : MonoBehaviour
         }
 
         tileSet.RemoveBlock(block.gameObject);
-
         Destroy(block.gameObject);
-    }
-
-    void DeselectInventory(BlockInventory inventory)
-    {
-        inventory.Deselect(false);
-        selectedInventory = null;
     }
 
     void AddSpiritToPool(SpiritType type)

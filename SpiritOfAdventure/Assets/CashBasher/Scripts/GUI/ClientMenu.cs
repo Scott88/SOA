@@ -8,6 +8,8 @@ public class ClientMenu : MonoBehaviour
 
     public GameObject minigameMenu;
 
+    public Camera mainCamera;
+
     private bool clientFailed = false;
 
     void OnGUI()
@@ -17,6 +19,7 @@ public class ClientMenu : MonoBehaviour
         if (GUI.Button(new Rect(Screen.width * (0.8f), Screen.height * (0.8f), Screen.width * (0.18f), Screen.height * (0.18f)),
                            "Back"))
         {
+            mainCamera.transform.position = new Vector3(0f, 0f, -10f);
             gameObject.SetActive(false);
             minigameMenu.SetActive(true);
         }

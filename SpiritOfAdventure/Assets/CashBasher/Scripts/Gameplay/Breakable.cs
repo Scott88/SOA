@@ -3,6 +3,7 @@ using System.Collections;
 
 public enum BlockType
 {
+    BT_NULL,
     BT_WOOD,
     BT_STONE,
     BT_METAL

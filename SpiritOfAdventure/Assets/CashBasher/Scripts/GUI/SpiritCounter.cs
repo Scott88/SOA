@@ -12,12 +12,24 @@ public class SpiritCounter : MonoBehaviour {
     {
         spiritCount++;
         display.text = "x" + spiritCount.ToString();
+
+        SaveFile.Instance().SetSpiritCount(type, spiritCount);
+    }
+
+    public void Add(int count)
+    {
+        spiritCount += count;
+        display.text = "x" + spiritCount.ToString();
+
+        SaveFile.Instance().SetSpiritCount(type, spiritCount);
     }
 
     public void Remove()
     {
         spiritCount--;
         display.text = "x" + spiritCount.ToString();
+
+        SaveFile.Instance().SetSpiritCount(type, spiritCount);
     }
 
     public bool Empty()

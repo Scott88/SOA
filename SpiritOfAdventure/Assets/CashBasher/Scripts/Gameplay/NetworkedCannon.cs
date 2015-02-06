@@ -168,11 +168,6 @@ public class NetworkedCannon : MonoBehaviour
 
             cannonWrapper.transform.localPosition = cannonPos;
         }
-
-        if (currentState != CannonState.CS_IDLE && Input.GetMouseButtonDown(0))
-        {
-            GetClickedOn();
-        }
     }
 
     float GetAngle()
@@ -222,7 +217,7 @@ public class NetworkedCannon : MonoBehaviour
         powerIndicator.transform.localPosition = indPos;
     }
 
-    void GetClickedOn()
+    public void Press()
     {
         if (myCannon)
         {

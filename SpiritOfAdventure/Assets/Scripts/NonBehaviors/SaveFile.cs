@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 using System.Xml;
 
 public class SaveFile
@@ -18,9 +19,27 @@ public class SaveFile
         }
     }
 
-    private ArrayList levelStates;
+    public class TileInfo
+    {
+        public int x, y;
+
+        public BlockType type;
+
+        public override bool Equals(System.Object obj)
+        {
+            TileInfo other = obj as TileInfo;
+
+            return (x == other.x) && (y == other.y);
+        }
+    }
+
+    private List<LevelState> levelStates;
+
+    private List<TileInfo> tileSetInfo;
 
     private int costumeID;
+
+    private int greenSpirits, blueSpirits, redSpirits;
 
     private static SaveFile instance;
 
@@ -105,7 +124,7 @@ public class SaveFile
 
         costumeID = int.Parse(saveNode["Costume"].GetAttribute("id"));
 
-        levelStates = new ArrayList();
+        levelStates = new List<LevelState>();
 
         XmlElement nextLevel = saveNode["Levels"]["Level"];
 
@@ -125,6 +144,37 @@ public class SaveFile
             levelStates.Add(state);
 
             nextLevel = (XmlElement)nextLevel.NextSibling;
+        }
+
+        tileSetInfo = new List<TileInfo>();
+
+        XmlElement tileNode = saveNode["Tiles"];
+
+        if (tileNode != null)
+        {
+            XmlElement nextTile = tileNode["Tile"];
+
+            while (nextTile != null)
+            {
+                TileInfo info = new TileInfo();
+
+                info.x = int.Parse(nextTile.GetAttribute("x"));
+                info.y = int.Parse(nextTile.GetAttribute("y"));
+                info.type = (BlockType)System.Enum.Parse(typeof(BlockType), nextTile.GetAttribute("type"));
+
+                tileSetInfo.Add(info);
+
+                nextTile = (XmlElement)nextTile.NextSibling;
+            }
+        }
+
+        XmlElement spiritsNode = saveNode["Spirits"];
+
+        if (spiritsNode != null)
+        {
+            greenSpirits = int.Parse(spiritsNode.GetAttribute("green"));
+            blueSpirits = int.Parse(spiritsNode.GetAttribute("blue"));
+            redSpirits = int.Parse(spiritsNode.GetAttribute("red"));
         }
     }
 
@@ -149,7 +199,7 @@ public class SaveFile
 
         for (int j = 0; j < levelStates.Count; j++)
         {
-            LevelState state = (LevelState)levelStates[j];
+            LevelState state = levelStates[j];
 
             string sceneName = "Level0" + j;
 
@@ -178,31 +228,125 @@ public class SaveFile
             levels.AppendChild(level);
         }
 
+        XmlElement tiles = doc.CreateElement("Tiles");
+        save.AppendChild(tiles);
+
+        for (int j = 0; j < tileSetInfo.Count; j++)
+        {
+            TileInfo info = tileSetInfo[j];
+
+            XmlElement tile = doc.CreateElement("Tile");
+
+            XmlAttribute tileX = doc.CreateAttribute("x");
+            tileX.Value = info.x.ToString();
+
+            tile.Attributes.Append(tileX);
+
+            XmlAttribute tileY = doc.CreateAttribute("y");
+            tileY.Value = info.y.ToString();
+
+            tile.Attributes.Append(tileY);
+
+            XmlAttribute tileType = doc.CreateAttribute("type");
+            tileType.Value = info.type.ToString();
+
+            tile.Attributes.Append(tileType);
+
+            tiles.AppendChild(tile);
+        }
+
+        XmlElement spirits = doc.CreateElement("Spirits");
+        save.AppendChild(spirits);
+
+        XmlAttribute spiritsRed = doc.CreateAttribute("red");
+        spiritsRed.Value = redSpirits.ToString();
+
+        spirits.Attributes.Append(spiritsRed);
+
+        XmlAttribute spiritsGreen = doc.CreateAttribute("green");
+        spiritsGreen.Value = greenSpirits.ToString();
+
+        spirits.Attributes.Append(spiritsGreen);
+
+        XmlAttribute spiritsBlue = doc.CreateAttribute("blue");
+        spiritsBlue.Value = blueSpirits.ToString();
+
+        spirits.Attributes.Append(spiritsBlue); 
+
         doc.Save(Application.persistentDataPath + "/soa.xml");
     }
 
     public void SetLevelStars(string levelName, int stars)
     {
         GetLevelState(levelName).stars = stars;
-        SaveToXML();
     }
 
     public void SetLevelPath(string levelName, int path)
     {
         GetLevelState(levelName).path = path;
-        SaveToXML();
     }
 
     public void SetLevelScore(string levelName, int score)
     {
         GetLevelState(levelName).score = score;
-        SaveToXML();
     }
 
     public void SetCurrentCostume(int id)
     {
         costumeID = id;
-        SaveToXML();
+    }
+
+    public void SetSpiritCount(SpiritType type, int count)
+    {
+        switch (type)
+        {
+            case SpiritType.ST_GREEN:
+                greenSpirits = count;
+                break;
+            case SpiritType.ST_BLUE:
+                blueSpirits = count;
+                break;
+            case SpiritType.ST_RED:
+                redSpirits = count;
+                break;
+        }
+    }
+
+    public int GetSpiritCount(SpiritType type)
+    {
+        switch (type)
+        {
+            case SpiritType.ST_GREEN:
+                return greenSpirits;
+            case SpiritType.ST_BLUE:
+                return blueSpirits;
+            case SpiritType.ST_RED:
+                return redSpirits;
+            default:
+                return 0;
+        }
+    }
+
+    public void AddTile(Tile tile)
+    {
+        TileInfo info = new TileInfo();
+
+        info.x = tile.GetX();
+        info.y = tile.GetY();
+        info.type = tile.GetBlockType();
+
+        tileSetInfo.Add(info);
+    }
+
+    public void RemoveTile(Tile tile)
+    {
+        TileInfo dummy = new TileInfo();
+
+        dummy.x = tile.GetX();
+        dummy.y = tile.GetY();
+        dummy.type = tile.GetBlockType();
+
+        tileSetInfo.Remove(dummy);
     }
 
     public int GetStars(string levelName)
@@ -223,6 +367,16 @@ public class SaveFile
     public int GetCurrentCostume()
     {
         return costumeID;
+    }
+
+    public IEnumerator<TileInfo> GetTileList()
+    {
+        return tileSetInfo.GetEnumerator();
+    }
+
+    public void ClearTileList()
+    {
+        tileSetInfo.Clear();
     }
 
     LevelState GetLevelState(string levelName)

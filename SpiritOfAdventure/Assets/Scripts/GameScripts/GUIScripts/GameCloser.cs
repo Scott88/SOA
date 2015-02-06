@@ -22,12 +22,16 @@ public class GameCloser : MonoBehaviour
 	{
 		if (Input.GetKeyDown(KeyCode.Escape))
 		{
-            SaveFile.Instance().SaveToXML();
 			Application.Quit();
 		}
 	}
 
 	void OnApplicationQuit()
+    {
+        SaveFile.Instance().SaveToXML();
+    }
+
+    void OnApplicationPause()
     {
         SaveFile.Instance().SaveToXML();
     }

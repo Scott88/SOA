@@ -4,8 +4,8 @@ using System.Collections;
 enum GamePhase
 {
     GP_STARTING = 0,
-    GP_BUILD = 1,
-    GP_WAITING = 2,
+    //GP_BUILD = 1,
+    //GP_WAITING = 2,
     GP_YOUR_TURN = 3,
     GP_THEIR_TURN = 4,
     GP_OVER = 5
@@ -20,7 +20,7 @@ public class CashBasherManager : MonoBehaviour
 
     public CameraMan cameraMan;
 
-    public TileSet serverSet, clientSet;
+    public NetworkedTileSet serverSet, clientSet;
 
     public NetworkedCannon serverCannon, clientCannon;
 
@@ -39,8 +39,8 @@ public class CashBasherManager : MonoBehaviour
     private NetworkedLevelLoader loader;
 
     private StartState startState;
-    private BuildState buildState;
-    private WaitingState waitingState;
+    //private BuildState buildState;
+    //private WaitingState waitingState;
     private YourTurnState yourTurnState;
     private TheirTurnState theirTurnState;
 
@@ -74,8 +74,8 @@ public class CashBasherManager : MonoBehaviour
         //cameraMan.ZoomTo(4f);
 
         startState = new StartState(this, startTimer, loader);
-        buildState = new BuildState(this, myTeam, myTeam == 0 ? serverSet : clientSet, buildTimer);
-        waitingState = new WaitingState(this);
+        //buildState = new BuildState(this, myTeam, myTeam == 0 ? serverSet : clientSet, buildTimer);
+        //waitingState = new WaitingState(this);
         yourTurnState = new YourTurnState(this, myTeam == 0 ? serverCannon : clientCannon, cameraMan);
         theirTurnState = new TheirTurnState(this, cameraMan);
 
@@ -95,7 +95,7 @@ public class CashBasherManager : MonoBehaviour
         int x = Random.Range(0, 9);
         int y = Random.Range(0, 7);
 
-        networkView.RPC("PlaceTreasure", RPCMode.All, x, y);
+        networkView.RPC("PlaceTreasureAndLoad", RPCMode.All, x, y);
     }
 
     public void ReadyNextTurn()
@@ -104,26 +104,29 @@ public class CashBasherManager : MonoBehaviour
     }
 
     [RPC]
-    void PlaceTreasure(int x, int y)
+    void PlaceTreasureAndLoad(int x, int y)
     {
-        Vector3 treasurePosition;
-
         if (Network.isClient)
         {
-            x = 7 - x;
-            treasurePosition = clientSet.GetPositionFromCoords(x, y);
+            clientSet.LoadNetworkedBlock(x, y, treasure);
+
+            for (int j = y - 1; j >= 0; j--)
+            {
+                clientSet.LoadNetworkedBlock(x, j, treasureSupport);
+            }
+
+            clientSet.Load();
         }
         else
         {
-            treasurePosition = serverSet.GetPositionFromCoords(x, y);
-        }
+            serverSet.LoadNetworkedBlock(x, y, treasure);
 
-        Network.Instantiate(treasure, treasurePosition, new Quaternion(), 0);
+            for (int j = y - 1; j >= 0; j--)
+            {
+                serverSet.LoadNetworkedBlock(x, j, treasureSupport);
+            }
 
-        for (int j = y - 1; j >= 0; j--)
-        {
-            treasurePosition.y -= 1f;
-            Network.Instantiate(treasureSupport, treasurePosition, new Quaternion(), 0);
+            serverSet.Load();
         }
     }
 
@@ -142,13 +145,13 @@ public class CashBasherManager : MonoBehaviour
             case GamePhase.GP_STARTING:
                 state = startState;              
                 break;
-            case GamePhase.GP_BUILD:
-                state = buildState;              
-                break;
-            case GamePhase.GP_WAITING:
-                state = waitingState;
-                gameText.text = "Waiting for your friend...";
-                break;
+            //case GamePhase.GP_BUILD:
+                //state = buildState;              
+                //break;
+            //case GamePhase.GP_WAITING:
+                //state = waitingState;
+                //gameText.text = "Waiting for your friend...";
+                //break;
             case GamePhase.GP_YOUR_TURN:
                 state = yourTurnState;
                 gameText.text = "Your turn!";

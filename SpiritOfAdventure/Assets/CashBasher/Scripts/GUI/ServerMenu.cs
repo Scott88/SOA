@@ -9,6 +9,8 @@ public class ServerMenu : MonoBehaviour
 
     public GameObject minigameMenu;
 
+    public Camera mainCamera;
+
     private bool readyToStart = false;
     private bool serverFailed = false;
 
@@ -62,6 +64,8 @@ public class ServerMenu : MonoBehaviour
             if (GUI.Button(new Rect(Screen.width * (0.8f), Screen.height * (0.8f), Screen.width * (0.18f), Screen.height * (0.18f)),
                                "Back"))
             {
+                mainCamera.transform.position = new Vector3(0f, 0f, -10f);
+
                 if (Network.isServer)
                 {
                     Network.Disconnect();

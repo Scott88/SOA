@@ -49,7 +49,7 @@ public class BuildState : GameState
                 manager.networkView.RPC("OpponentReady", RPCMode.Server);
             }
 
-            manager.SwitchToState((int)GamePhase.GP_WAITING);
+            //manager.SwitchToState((int)GamePhase.GP_WAITING);
         }
 
         if (Input.GetMouseButtonDown(0))

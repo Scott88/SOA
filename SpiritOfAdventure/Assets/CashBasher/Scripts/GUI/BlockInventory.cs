@@ -15,8 +15,7 @@ public class BlockInventory : MonoBehaviour
 
     private bool selected = false;
 
-    // Use this for initialization
-    void Start()
+    void Awake()
     {
         if (PlayerPrefs.HasKey(blockName))
         {
@@ -30,6 +29,12 @@ public class BlockInventory : MonoBehaviour
         }
 
         blockCounter.text = "x" + blockCount.ToString();
+    }
+
+    // Use this for initialization
+    void Start()
+    {
+        
     }
 
     public bool Empty()
@@ -65,6 +70,12 @@ public class BlockInventory : MonoBehaviour
             selected = false;
             selectionIndicator.SetActive(false);
         }
+    }
+
+    public void TakeBlock()
+    {
+        blockCount--;
+        blockCounter.text = "x" + blockCount.ToString();
     }
 
     public void ReturnBlock()

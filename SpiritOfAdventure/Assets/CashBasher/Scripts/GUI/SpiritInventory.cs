@@ -14,7 +14,7 @@ public class SpiritInventory : MonoBehaviour
     private bool selected = false;
 
     // Use this for initialization
-    void Start()
+    void Awake()
     {
         if (PlayerPrefs.HasKey(spiritName))
         {
@@ -35,6 +35,23 @@ public class SpiritInventory : MonoBehaviour
         return spiritCount == 0;
     }
 
+    public int RemoveSpirits(int count)
+    {
+        if (count > spiritCount)
+        {
+            int total = spiritCount;
+            spiritCount = 0;
+            spiritCounter.text = "x" + spiritCount.ToString();
+            return total;
+        }
+        else
+        {
+            spiritCount -= count;
+            spiritCounter.text = "x" + spiritCount.ToString();
+            return count;
+        }   
+    }
+
     public void RemoveSpirit()
     {
         if (spiritCount > 0)
@@ -49,7 +66,6 @@ public class SpiritInventory : MonoBehaviour
         spiritCount++;
         spiritCounter.text = "x" + spiritCount.ToString();
     }
-
 
     public void Save()
     {

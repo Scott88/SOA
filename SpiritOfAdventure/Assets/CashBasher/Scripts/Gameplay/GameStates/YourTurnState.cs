@@ -48,6 +48,33 @@ public class YourTurnState : GameState
                 manager.SwitchToState((int)GamePhase.GP_THEIR_TURN);
             }
         }
+
+        if (Input.GetMouseButtonDown(0))
+        {
+            Vector2 rayOrigin = (Vector2)(manager.playerCamera.ScreenToWorldPoint(Input.mousePosition));
+            Vector2 rayDirection = new Vector2();
+
+            RaycastHit2D hit2d = Physics2D.Raycast(rayOrigin, rayDirection);
+
+            if (hit2d)
+            {
+                NetworkedCannon cannon = hit2d.collider.GetComponent<NetworkedCannon>();
+
+                if (cannon)
+                {
+                    cannon.Press();
+                    return;
+                }
+
+                CashBasherSpiritGUI spiritGUI = hit2d.collider.GetComponent<CashBasherSpiritGUI>();
+
+                if (spiritGUI)
+                {
+                    spiritGUI.Remove();
+                    return;
+                }
+            }
+        }
     }
 
     public void End()
