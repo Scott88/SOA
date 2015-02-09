@@ -1,9 +1,13 @@
-﻿using UnityEngine;
+﻿#define HOME_LAN
+
+using UnityEngine;
 using System.Collections;
 
 public class ServerMenu : MonoBehaviour
 {
     public GUISkin mySkin;
+
+
 
     public TextMesh display;
 
@@ -19,7 +23,12 @@ public class ServerMenu : MonoBehaviour
     // Use this for initialization
     void Start()
     {
+#if HOME_LAN
+        MasterServer.ipAddress = "192.168.2.16";
+#else
         MasterServer.ipAddress = "10.10.10.181";
+#endif
+        
         MasterServer.port = 23466;
 
         gameObject.SetActive(false);

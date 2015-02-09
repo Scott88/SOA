@@ -5,7 +5,7 @@ public class LoseState : GameState {
 
 	CashBasherManager manager;
 
-    float timer = 3.0f;
+    float timer = 1.5ff;
 
     Vector3 targetPosition;
 
@@ -18,6 +18,8 @@ public class LoseState : GameState {
 
     public void Prepare()
     {
+        Time.timeScale = 0.5f;
+
         manager.cameraMan.StopFollowing();
         manager.connectionRequired = false;
     }
@@ -74,6 +76,8 @@ public class LoseState : GameState {
     {
         treasureExplosion = false;
         timer = 2.0f;
+
+        Time.timeScale = 1.0f;
 
         if (Network.isServer)
         {

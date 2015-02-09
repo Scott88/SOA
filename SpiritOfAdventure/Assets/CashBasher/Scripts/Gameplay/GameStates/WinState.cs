@@ -5,7 +5,7 @@ public class WinState : GameState
 {
 	CashBasherManager manager;
 
-    float timer = 3.0f;
+    float timer = 1.5f;
 
     Vector3 targetPosition;
 
@@ -76,6 +76,8 @@ public class WinState : GameState
     {
         treasureExplosion = false;
         timer = 2.0f;
+
+        Time.timeScale = 1.0f;
 
         if (Network.isServer)
         {
