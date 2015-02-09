@@ -212,7 +212,7 @@ public class Cannon : MonoBehaviour
     {
         Vector3 indPos = powerIndicator.transform.localPosition;
 
-        indPos.x = ((velocity - minVelocity) / velocityRange) * 8f - 4f;
+        indPos.x = ((velocity - minVelocity) / velocityRange) * 2.6f - 1.3f; 
 
         powerIndicator.transform.localPosition = indPos;
     }
