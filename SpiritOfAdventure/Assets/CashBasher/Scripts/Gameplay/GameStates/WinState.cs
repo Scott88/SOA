@@ -18,11 +18,11 @@ public class WinState : GameState
     {
         if (Network.isServer)
         {
-            targetPosition = new Vector3(4.5f, 1f, 0f);
+            targetPosition = new Vector3(-4.5f, 1f, 0f);
         }
         else
         {
-            targetPosition = new Vector3(-4.5f, 1f, 0f);            
+            targetPosition = new Vector3(4.5f, 1f, 0f);            
         }
 
         manager.cameraMan.FollowPosition(targetPosition);
