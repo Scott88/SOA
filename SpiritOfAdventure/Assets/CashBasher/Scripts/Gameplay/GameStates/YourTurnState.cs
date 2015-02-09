@@ -7,9 +7,7 @@ public class YourTurnState : GameState
     NetworkedCannon yourCannon;
     CameraMan cameraMan;
 
-    GameObject cannonBall = null;
-    bool ballRecieved = false;
-
+    bool nextTurn = false;
     float timer = 1.0f;
 
     public YourTurnState(CashBasherManager m, NetworkedCannon c, CameraMan cm)
@@ -23,34 +21,67 @@ public class YourTurnState : GameState
     {
         if (Network.isServer)
         {
-            cameraMan.FollowPosition(new Vector3(-10f, 0f, 0f));
+            cameraMan.FollowPosition(new Vector3(4.5f, 1f, 0f));
         }
         else
         {
-            cameraMan.FollowPosition(new Vector3(10f, 0f, 0f));
+            cameraMan.FollowPosition(new Vector3(-4.5f, 1f, 0f));
         }
+
+        cameraMan.ZoomTo(7f);
 
         yourCannon.Activate();
     }
 
-    public void SetCannonBall(GameObject ball)
+    public void ReadyNextTurn()
     {
-        cannonBall = ball;
-        ballRecieved = true;
+        nextTurn = true;
     }
 
     public void Update()
     {
-        if (ballRecieved)
+        if (nextTurn)
         {
-            if (cannonBall == null)
-            {
-                timer -= Time.deltaTime;
+            timer -= Time.deltaTime;
 
-                if (timer <= 0.0f)
+            if (timer <= 0.0f)
+            {
+                manager.networkView.RPC("SwitchToState", RPCMode.Others, (int)GamePhase.GP_YOUR_TURN);
+                manager.SwitchToState((int)GamePhase.GP_THEIR_TURN);
+            }
+        }
+
+        if (Input.GetMouseButtonDown(0))
+        {
+            Vector2 rayOrigin = (Vector2)(manager.playerCamera.ScreenToWorldPoint(Input.mousePosition));
+            Vector2 rayDirection = new Vector2();
+
+            RaycastHit2D hit2d = Physics2D.Raycast(rayOrigin, rayDirection);
+
+            if (hit2d)
+            {
+                NetworkedCannon cannon = hit2d.collider.GetComponent<NetworkedCannon>();
+
+                if (cannon)
                 {
-                    manager.networkView.RPC("SwitchToState", RPCMode.Others, (int)GamePhase.GP_YOUR_TURN);
-                    manager.SwitchToState((int)GamePhase.GP_THEIR_TURN);
+                    cannon.Press();
+                    return;
+                }
+            }
+
+            rayOrigin = (Vector2)(manager.guiCamera.ScreenToWorldPoint(Input.mousePosition));
+            rayDirection = new Vector2();
+
+            hit2d = Physics2D.Raycast(rayOrigin, rayDirection);
+
+            if (hit2d)
+            {
+                CashBasherSpiritGUI spiritGUI = hit2d.collider.GetComponent<CashBasherSpiritGUI>();
+
+                if (spiritGUI)
+                {
+                    spiritGUI.Remove();
+                    return;
                 }
             }
         }
@@ -59,6 +90,8 @@ public class YourTurnState : GameState
     public void End()
     {
         yourCannon.Deactivate();
-        ballRecieved = false;
+
+        nextTurn = false;
+        timer = 1.0f;
     }
 }

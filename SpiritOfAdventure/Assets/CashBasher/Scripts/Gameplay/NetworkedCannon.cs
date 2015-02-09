@@ -168,11 +168,6 @@ public class NetworkedCannon : MonoBehaviour
 
             cannonWrapper.transform.localPosition = cannonPos;
         }
-
-        if (currentState != CannonState.CS_IDLE && Input.GetMouseButtonDown(0))
-        {
-            GetClickedOn();
-        }
     }
 
     float GetAngle()
@@ -217,12 +212,12 @@ public class NetworkedCannon : MonoBehaviour
     {
         Vector3 indPos = powerIndicator.transform.localPosition;
 
-        indPos.x = ((velocity - minVelocity) / velocityRange) * 8f - 4f;
+        indPos.x = ((velocity - minVelocity) / velocityRange) * 2.6f - 1.3f;
 
         powerIndicator.transform.localPosition = indPos;
     }
 
-    void GetClickedOn()
+    public void Press()
     {
         if (myCannon)
         {
@@ -305,7 +300,7 @@ public class NetworkedCannon : MonoBehaviour
             ball.rigidbody2D.velocity = finalVel;
             ball.networkView.RPC("SetVelocity", RPCMode.Others, finalVel);
 
-            manager.SetCannonBall(ball.gameObject);
+            //manager.SetCannonBall(ball.gameObject);
         }
 
         currentState = CannonState.CS_FIRED;

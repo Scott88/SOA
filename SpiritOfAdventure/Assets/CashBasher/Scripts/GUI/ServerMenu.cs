@@ -9,6 +9,8 @@ public class ServerMenu : MonoBehaviour
 
     public GameObject minigameMenu;
 
+    public Camera mainCamera;
+
     private bool readyToStart = false;
     private bool serverFailed = false;
 
@@ -34,7 +36,7 @@ public class ServerMenu : MonoBehaviour
                 FindObjectOfType<NetworkedLevelLoader>().LoadLevel("MiniGame");
             }
 
-            display.text = "Player found! Game starts in : " + startTimer.ToString("g");
+            display.text = "Player found!\nGame starts in:\n" + startTimer.ToString("0.#");
         }
     }
 
@@ -50,7 +52,7 @@ public class ServerMenu : MonoBehaviour
 
         int myPoints = PlayerPrefs.GetInt("Blocks") * 5;
 
-        MasterServer.RegisterHost("CashBasher", "SpiritOfAdventure", myPoints.ToString());
+        MasterServer.RegisterHost("SorryUnityIWillGiveYouBackYourServerWhenTheBlizzardClears", "SpiritOfAdventure", myPoints.ToString());
     }
 
     void OnGUI()
@@ -62,6 +64,8 @@ public class ServerMenu : MonoBehaviour
             if (GUI.Button(new Rect(Screen.width * (0.8f), Screen.height * (0.8f), Screen.width * (0.18f), Screen.height * (0.18f)),
                                "Back"))
             {
+                mainCamera.transform.position = new Vector3(0f, 0f, -10f);
+
                 if (Network.isServer)
                 {
                     Network.Disconnect();

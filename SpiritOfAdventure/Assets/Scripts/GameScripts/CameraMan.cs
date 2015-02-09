@@ -47,11 +47,13 @@ public class CameraMan : MonoBehaviour
 
 	void FixedUpdate()
 	{
-		Vector3 target = new Vector3();
+        if (followingObject && !targetObject)
+        {
+            followingObject = false;
+        }
 
 		if (followingObject)
-		{
-			
+		{	
 			if (targetObject.rigidbody2D)
 			{
 				Vector3 offset;
@@ -77,21 +79,17 @@ public class CameraMan : MonoBehaviour
 					offset = manualDirection * leadingDistance;
 				}
 
-				target = targetObject.transform.position + offset;
+				targetPosition = targetObject.transform.position + offset;
 			}
 			else
 			{
-				target = targetObject.transform.position;
+                targetPosition = targetObject.transform.position;
 			}
 		}
-		else
-		{
-			target = targetPosition;
-		}
 
-		target.z = -60f;
+        targetPosition.z = -60f;
 
-		transform.position = Vector3.SmoothDamp(transform.position, target, ref currentVelocity, timeToReachTarget, maximumSpeed, Time.fixedDeltaTime);
+        transform.position = Vector3.SmoothDamp(transform.position, targetPosition, ref currentVelocity, timeToReachTarget, maximumSpeed, Time.fixedDeltaTime);
 
 		GetShake();
 

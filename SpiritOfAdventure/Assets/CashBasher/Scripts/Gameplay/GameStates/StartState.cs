@@ -18,7 +18,7 @@ public class StartState : GameState
 
     public void Prepare()
     {
-        
+        manager.gameText.text = "Get ready to start...!";
     }
 
     public void Update()
@@ -31,7 +31,18 @@ public class StartState : GameState
             {
                 manager.RandomizeTreasure();
 
-                manager.networkView.RPC("SwitchToState", RPCMode.All, (int)GamePhase.GP_BUILD);
+                bool serverFirst = Random.value > 0.5f;
+
+                if (serverFirst)
+                {
+                    manager.networkView.RPC("SwitchToState", RPCMode.Others, (int)GamePhase.GP_THEIR_TURN);
+                    manager.SwitchToState((int)GamePhase.GP_YOUR_TURN);
+                }
+                else
+                {
+                    manager.networkView.RPC("SwitchToState", RPCMode.Others, (int)GamePhase.GP_YOUR_TURN);
+                    manager.SwitchToState((int)GamePhase.GP_THEIR_TURN);
+                }
             }
         }
     }

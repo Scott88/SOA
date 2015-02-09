@@ -8,6 +8,8 @@ public class ClientMenu : MonoBehaviour
 
     public GameObject minigameMenu;
 
+    public Camera mainCamera;
+
     private bool clientFailed = false;
 
     void OnGUI()
@@ -17,6 +19,7 @@ public class ClientMenu : MonoBehaviour
         if (GUI.Button(new Rect(Screen.width * (0.8f), Screen.height * (0.8f), Screen.width * (0.18f), Screen.height * (0.18f)),
                            "Back"))
         {
+            mainCamera.transform.position = new Vector3(0f, 0f, -10f);
             gameObject.SetActive(false);
             minigameMenu.SetActive(true);
         }
@@ -36,7 +39,7 @@ public class ClientMenu : MonoBehaviour
     public void SearchForServers()
     {
         display.text = "Looking for servers...";
-        MasterServer.RequestHostList("CashBasher");
+        MasterServer.RequestHostList("SorryUnityIWillGiveYouBackYourServerWhenTheBlizzardClears");
     }
 
     void OnMasterServerEvent(MasterServerEvent msEvent)
@@ -75,7 +78,7 @@ public class ClientMenu : MonoBehaviour
             }
             else
             {
-                display.text = "Found a server! Connecting now...";
+                display.text = "Found a server!\nConnecting now...";
                 Network.Connect(hostList[closestServer]);
             }
         }
@@ -83,7 +86,7 @@ public class ClientMenu : MonoBehaviour
 
     void OnConnectedToServer()
     {
-        display.text = "Connected! Waiting for the game to start...";
+        display.text = "Connected!\nWaiting for the\ngame to start...";
     }
 
     void OnFailedToConnect(NetworkConnectionError info)

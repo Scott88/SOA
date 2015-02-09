@@ -9,24 +9,23 @@ public class BlockInventory : MonoBehaviour
     public TextMesh blockCounter;
     public GameObject selectionIndicator;
 
+    public GameObject spawnIndicator;
+
+    public BlockType type;
+
     private int blockCount;
 
     private bool selected = false;
 
-    // Use this for initialization
-    void Start()
+    void Awake()
     {
-        if (PlayerPrefs.HasKey(blockName))
-        {
-            blockCount = PlayerPrefs.GetInt(blockName);
-        }
-        else
-        {
-            blockCount = 10;
-            PlayerPrefs.SetInt(blockName, blockCount);
-        }
-
+        blockCount = SaveFile.Instance().GetBlockInventory(type);
         blockCounter.text = "x" + blockCount.ToString();
+    }
+
+    public bool Empty()
+    {
+        return blockCount == 0;
     }
 
     public GameObject GetBlock()
@@ -51,13 +50,24 @@ public class BlockInventory : MonoBehaviour
         {
             if (!blockPlaced)
             {
-                blockCount++;
-                blockCounter.text = "x" + blockCount.ToString();
+                ReturnBlock();
             }
 
             selected = false;
             selectionIndicator.SetActive(false);
         }
+    }
+
+    public void TakeBlock()
+    {
+        blockCount--;
+        blockCounter.text = "x" + blockCount.ToString();
+    }
+
+    public void ReturnBlock()
+    {
+        blockCount++;
+        blockCounter.text = "x" + blockCount.ToString();
     }
 
     public bool IsSelected()

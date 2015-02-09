@@ -11,8 +11,6 @@ public class BuildState : GameState
 
     private TileSet tileSet;
 
-    private GameObject spawnIndicator;
-
     private Vector3 lastTouchPos;
 
     private bool cameraFocusLeft;
@@ -20,12 +18,11 @@ public class BuildState : GameState
 
     private float buildTimer;
 
-    public BuildState(CashBasherManager gameManager, int team, TileSet yourSet, GameObject indicator, float timer)
+    public BuildState(CashBasherManager gameManager, int team, TileSet yourSet, float timer)
     {
         manager = gameManager;
         myTeam = team;
         tileSet = yourSet;
-        spawnIndicator = indicator;
 
         cameraFocusLeft = myTeam == 0;
 
@@ -42,6 +39,8 @@ public class BuildState : GameState
         if (buildTimer > 0f)
         {
             buildTimer -= Time.deltaTime;
+
+            manager.gameText.text = "Time remaining: " + buildTimer.ToString("0");
         }
         else
         {
@@ -50,7 +49,7 @@ public class BuildState : GameState
                 manager.networkView.RPC("OpponentReady", RPCMode.Server);
             }
 
-            manager.SwitchToState((int)GamePhase.GP_WAITING);
+            //manager.SwitchToState((int)GamePhase.GP_WAITING);
         }
 
         if (Input.GetMouseButtonDown(0))
@@ -107,18 +106,18 @@ public class BuildState : GameState
 
             if (tileSet.CanPlace(position))
             {
-                spawnIndicator.SetActive(true);
+                selectedInventory.spawnIndicator.SetActive(true);
             }
             else
             {
-                spawnIndicator.SetActive(false);
+                selectedInventory.spawnIndicator.SetActive(false);
             }
 
             position.x = Mathf.Floor(position.x) + 0.5f;
             position.y = Mathf.Floor(position.y) + 0.5f;
             position.z = 0;
 
-            spawnIndicator.transform.position = position;
+            selectedInventory.spawnIndicator.transform.position = position;
         }
         else if(cameraGrabbed)
         {
@@ -143,7 +142,7 @@ public class BuildState : GameState
     {
         if (selectedInventory)
         {
-            spawnIndicator.SetActive(false);
+            selectedInventory.spawnIndicator.SetActive(false);
 
             Ray clickRay = manager.playerCamera.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
@@ -184,7 +183,12 @@ public class BuildState : GameState
 
     public void End()
     {
+        if (selectedInventory)
+        {
+            selectedInventory.spawnIndicator.SetActive(false);
 
+            DeselectInventory(selectedInventory);
+        }
     }
 
     void SelectInventory(BlockInventory inventory)
@@ -200,9 +204,6 @@ public class BuildState : GameState
         position.z = 0;
 
         GameObject block = Network.Instantiate(inventory.GetBlock(), position, new Quaternion(), 0) as GameObject;
-
-        Breakable b = block.GetComponent<Breakable>();
-        b.SetTeam(myTeam);
 
         inventory.Deselect(true);
         selectedInventory = null;
