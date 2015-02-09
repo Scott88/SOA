@@ -7,5 +7,7 @@ public interface GameState
 
     void Update();
 
+    void OnGUI();
+
     void End();
 }

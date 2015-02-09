@@ -87,8 +87,8 @@ public class CashBasherManager : MonoBehaviour
         //waitingState = new WaitingState(this);
         yourTurnState = new YourTurnState(this, myTeam == 0 ? serverCannon : clientCannon, cameraMan);
         theirTurnState = new TheirTurnState(this, cameraMan);
-        winState = new WinState(this, winScreenPos);
-        loseState = new LoseState(this, loseScreenPos);
+        winState = new WinState(this);
+        loseState = new LoseState(this);
 
         SwitchToState((int)GamePhase.GP_STARTING);
     }
@@ -98,6 +98,14 @@ public class CashBasherManager : MonoBehaviour
         if (state != null)
         {
             state.Update();
+        }
+    }
+
+    void OnGUI()
+    {
+        if (state != null)
+        {
+            state.OnGUI();
         }
     }
 
@@ -173,9 +181,11 @@ public class CashBasherManager : MonoBehaviour
                 break;
             case GamePhase.GP_WIN:
                 state = winState;
+                gameText.text = "YOU WIN!";
                 break;
             case GamePhase.GP_LOSE:
                 state = loseState;
+                gameText.text = "You lose...";
                 break;
         }
 

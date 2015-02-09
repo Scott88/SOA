@@ -47,6 +47,11 @@ public class StartState : GameState
         }
     }
 
+    public void OnGUI()
+    {
+
+    }
+
     public void End()
     {
         

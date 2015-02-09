@@ -87,6 +87,11 @@ public class YourTurnState : GameState
         }
     }
 
+    public void OnGUI()
+    {
+
+    }
+
     public void End()
     {
         yourCannon.Deactivate();

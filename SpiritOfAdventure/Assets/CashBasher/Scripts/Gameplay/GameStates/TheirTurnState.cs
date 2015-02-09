@@ -29,6 +29,11 @@ public class TheirTurnState : GameState
 
     }
 
+    public void OnGUI()
+    {
+
+    }
+
     public void End()
     {
 

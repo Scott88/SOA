@@ -9,27 +9,53 @@ public class WinState : GameState
 
     Vector3 targetPosition;
 
-    public WinState(CashBasherManager m, Vector3 pos)
+    public WinState(CashBasherManager m)
     {
         manager = m;
-        targetPosition = pos;
     }
 
     public void Prepare()
     {
+        if (Network.isServer)
+        {
+            targetPosition = new Vector3(4.5f, 1f, 0f);
+        }
+        else
+        {
+            targetPosition = new Vector3(-4.5f, 1f, 0f);            
+        }
+
         manager.cameraMan.FollowPosition(targetPosition);
         manager.connectionRequired = false;
     }
 
     public void Update()
     {
-        if (Vector3.Distance(manager.playerCamera.transform.position, targetPosition) < 0.1f)
+        if (Vector2.Distance(manager.playerCamera.transform.position, targetPosition) < 0.1f)
         {
             timer -= Time.deltaTime;
+        }
+    }
 
-            if (timer < 0.0f)
+    public void OnGUI()
+    {
+        if (timer < 0.0f)
+        {
+            if (Network.isServer)
             {
-                Application.LoadLevel("MiniGameMenu");
+                if (GUI.Button(new Rect(Screen.width * (0.75f), Screen.height * (0.05f), Screen.width * (0.22f), Screen.height * (0.2f)),
+                               "Continue"))
+                {
+                    Application.LoadLevel("MiniGameMenu");
+                }
+            }
+            else
+            {
+                if (GUI.Button(new Rect(Screen.width * (0.05f), Screen.height * (0.05f), Screen.width * (0.22f), Screen.height * (0.2f)),
+                               "Continue"))
+                {
+                    Application.LoadLevel("MiniGameMenu");
+                }
             }
         }
     }
