@@ -8,7 +8,8 @@ enum GamePhase
     //GP_WAITING = 2,
     GP_YOUR_TURN = 3,
     GP_THEIR_TURN = 4,
-    GP_OVER = 5
+    GP_WIN = 5,
+    GP_LOSE = 6
 }
 
 public class CashBasherManager : MonoBehaviour
@@ -29,9 +30,13 @@ public class CashBasherManager : MonoBehaviour
     public GameObject treasure;
     public GameObject treasureSupport;
 
+    public Vector3 winScreenPos = new Vector3(0f, 20f, 0f), loseScreenPos = new Vector3(0f, -20f, 0f);
+
     public int myTeam { get; set; }
 
     public bool opponentIsReady { get; set; }
+
+    public bool connectionRequired { get; set; }
 
     private GameState state = null;
     private GamePhase currentPhase = GamePhase.GP_STARTING;
@@ -43,6 +48,8 @@ public class CashBasherManager : MonoBehaviour
     //private WaitingState waitingState;
     private YourTurnState yourTurnState;
     private TheirTurnState theirTurnState;
+    private WinState winState;
+    private LoseState loseState;
 
     void Awake()
     {
@@ -54,6 +61,8 @@ public class CashBasherManager : MonoBehaviour
         {
             myTeam = 1;
         }
+
+        connectionRequired = true;
     }
 
     void Start()
@@ -78,6 +87,8 @@ public class CashBasherManager : MonoBehaviour
         //waitingState = new WaitingState(this);
         yourTurnState = new YourTurnState(this, myTeam == 0 ? serverCannon : clientCannon, cameraMan);
         theirTurnState = new TheirTurnState(this, cameraMan);
+        winState = new WinState(this, winScreenPos);
+        loseState = new LoseState(this, loseScreenPos);
 
         SwitchToState((int)GamePhase.GP_STARTING);
     }
@@ -160,6 +171,12 @@ public class CashBasherManager : MonoBehaviour
                 state = theirTurnState;
                 gameText.text = "Their turn...";
                 break;
+            case GamePhase.GP_WIN:
+                state = winState;
+                break;
+            case GamePhase.GP_LOSE:
+                state = loseState;
+                break;
         }
 
         if (state != null)
@@ -176,15 +193,23 @@ public class CashBasherManager : MonoBehaviour
 
     void OnDisconnectedFromServer(NetworkDisconnection info)
     {
-        Application.LoadLevel("MiniGameMenu");
+        if (connectionRequired)
+        {
+            Application.LoadLevel("MiniGameMenu");
+        }
     }
 
     void OnPlayerDisconnected()
     {
         Network.Disconnect();
-        Application.LoadLevel("MiniGameMenu");
+
+        if (connectionRequired)
+        {         
+            Application.LoadLevel("MiniGameMenu");
+        }
     }
 
+#if UNITY_EDITOR
     void OnApplicationQuit()
     {
         SaveFile.Instance().SaveToXML();
@@ -194,4 +219,6 @@ public class CashBasherManager : MonoBehaviour
     {
         SaveFile.Instance().SaveToXML();
     }
+#endif
+
 }

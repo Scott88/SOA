@@ -323,4 +323,16 @@ public class BlockEditor : MonoBehaviour
         SmoothDamper damper = t.GetComponent<SmoothDamper>();
         damper.target = inventory.transform.position;
     }
+
+#if UNITY_EDITOR
+    void OnApplicationQuit()
+    {
+        SaveFile.Instance().SaveToXML();
+    }
+
+    void OnApplicationPause()
+    {
+        SaveFile.Instance().SaveToXML();
+    }
+#endif
 }
