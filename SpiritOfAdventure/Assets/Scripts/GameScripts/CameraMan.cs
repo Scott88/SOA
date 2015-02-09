@@ -40,6 +40,11 @@ public class CameraMan : MonoBehaviour
 		followingObject = false;
 	}
 
+    public void StopFollowing()
+    {
+        followingObject = false;
+    }
+
     public void ZoomTo(float zoom)
     {
         targetZoom = zoom;

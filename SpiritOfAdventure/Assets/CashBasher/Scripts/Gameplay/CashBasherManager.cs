@@ -30,6 +30,8 @@ public class CashBasherManager : MonoBehaviour
     public GameObject treasure;
     public GameObject treasureSupport;
 
+    public GUISkin mySkin;
+
     public Vector3 winScreenPos = new Vector3(0f, 20f, 0f), loseScreenPos = new Vector3(0f, -20f, 0f);
 
     public int myTeam { get; set; }
@@ -105,6 +107,8 @@ public class CashBasherManager : MonoBehaviour
     {
         if (state != null)
         {
+            GUI.skin = mySkin;
+
             state.OnGUI();
         }
     }

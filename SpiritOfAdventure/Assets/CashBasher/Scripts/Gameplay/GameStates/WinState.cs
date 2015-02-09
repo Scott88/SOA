@@ -9,6 +9,8 @@ public class WinState : GameState
 
     Vector3 targetPosition;
 
+    bool treasureExplosion = true;
+
     public WinState(CashBasherManager m)
     {
         manager = m;
@@ -16,30 +18,35 @@ public class WinState : GameState
 
     public void Prepare()
     {
-        if (Network.isServer)
-        {
-            targetPosition = new Vector3(-4.5f, 1f, 0f);
-        }
-        else
-        {
-            targetPosition = new Vector3(4.5f, 1f, 0f);            
-        }
+        Time.timeScale = 0.5f;
 
-        manager.cameraMan.FollowPosition(targetPosition);
+        manager.cameraMan.StopFollowing();
         manager.connectionRequired = false;
     }
 
     public void Update()
     {
-        if (Vector2.Distance(manager.playerCamera.transform.position, targetPosition) < 0.1f)
+        if (treasureExplosion)
         {
             timer -= Time.deltaTime;
+
+            if (timer < 0f)
+            {
+                TreasureExploded();
+            }
+        }
+        else
+        {
+            if (Vector2.Distance(manager.playerCamera.transform.position, targetPosition) < 0.1f)
+            {
+                timer -= Time.deltaTime;
+            }
         }
     }
 
     public void OnGUI()
     {
-        if (timer < 0.0f)
+        if (timer < 0.0f && !treasureExplosion)
         {
             if (Network.isServer)
             {
@@ -63,5 +70,22 @@ public class WinState : GameState
     public void End()
     {
 
+    }
+
+    public void TreasureExploded()
+    {
+        treasureExplosion = false;
+        timer = 2.0f;
+
+        if (Network.isServer)
+        {
+            targetPosition = new Vector3(-4.5f, 1f, 0f);
+        }
+        else
+        {
+            targetPosition = new Vector3(4.5f, 1f, 0f);
+        }
+
+        manager.cameraMan.FollowPosition(targetPosition);
     }
 }

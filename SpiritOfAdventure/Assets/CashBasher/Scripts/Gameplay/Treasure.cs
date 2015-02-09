@@ -8,6 +8,8 @@ public class Treasure : MonoBehaviour
 
     public float speedDamper = 0.8f;
 
+    public GameObject coinExplosion;
+
     void OnCollisionEnter2D(Collision2D coll)
     {
         if (coll.collider.tag == "CannonBall")
@@ -30,6 +32,7 @@ public class Treasure : MonoBehaviour
     public void Damage()
     {
         FindObjectOfType<CashBasherManager>().SwitchToState((int)GamePhase.GP_WIN);
+        Instantiate(coinExplosion, transform.position, Quaternion.Euler(270f, 0f, 0f));
         Destroy(gameObject);
         networkView.RPC("NetDamage", RPCMode.Others);
     }
@@ -38,6 +41,7 @@ public class Treasure : MonoBehaviour
     public void NetDamage()
     {
         FindObjectOfType<CashBasherManager>().SwitchToState((int)GamePhase.GP_LOSE);
+        Instantiate(coinExplosion, transform.position, Quaternion.Euler(270f, 0f, 0f));
         Destroy(gameObject);
     }
 }
