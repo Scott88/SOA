@@ -24,6 +24,7 @@ public class CashBasherSpirit : MonoBehaviour
     private float volumeRef;
 
     private bool poofOnArrival;
+    private bool buffCannon;
 
     void Start()
     {
@@ -68,6 +69,12 @@ public class CashBasherSpirit : MonoBehaviour
         active = false;
         retreating = false;
         audio.Stop();
+
+        collider2D.enabled = false;
+
+        poofOnArrival = false;
+
+        transform.localScale = Vector3.zero;
     }
 
     public void Retreat(Vector3 spawnPoint)
@@ -75,6 +82,10 @@ public class CashBasherSpirit : MonoBehaviour
         retreating = true;
         targetPosition = spawnPoint;
         targetScale = Vector3.zero;
+
+        collider2D.enabled = false;
+
+        poofOnArrival = false;
 
         networkView.RPC("NetRetreat", RPCMode.Others, spawnPoint);
     }
@@ -85,6 +96,10 @@ public class CashBasherSpirit : MonoBehaviour
         retreating = true;
         targetPosition = spawnPoint;
         targetScale = Vector3.zero;
+
+        collider2D.enabled = false;
+
+        poofOnArrival = false;
     }
 
     public void MoveHereAndPoof(Vector3 position)
@@ -110,9 +125,10 @@ public class CashBasherSpirit : MonoBehaviour
         collider2D.enabled = false;      
     }
 
-    public void MoveHereAndTrigger(bool serverCannon)
+    public void MoveHereAndTrigger(bool serverCannon, bool buff)
     {
         poofOnArrival = true;
+        buffCannon = buff;
 
         targetCannon = manager.GetCannon(serverCannon);
 
@@ -137,13 +153,19 @@ public class CashBasherSpirit : MonoBehaviour
         collider2D.enabled = false;
     }
 
+    public void MoveHere(Vector3 target)
+    {
+        targetPosition = target;
+        targetPosition.z = -30f;
+    }
+
     void Poof()
     {
         active = false;
 
         if (targetCannon)
         {
-            targetCannon.ApplyEffect(type);
+            targetCannon.ApplyEffect(type, buffCannon);
         }
         else
         {
@@ -155,6 +177,8 @@ public class CashBasherSpirit : MonoBehaviour
 
         particleSystem.Stop();
         audio.Stop();
+
+        poofOnArrival = false;
     }
 
     void FixedUpdate()

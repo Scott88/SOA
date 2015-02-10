@@ -14,6 +14,9 @@ public class YourTurnState : GameState
     bool nextTurn = false;
     float timer = 1.0f;
 
+    CashBasherSpiritGUI spiritGUIPushed = null;
+    bool holdingSpirit = false;
+
     public YourTurnState(CashBasherManager m, NetworkedCannon c, CameraMan cm, GameObject waypoint)
     {
         manager = m;
@@ -66,7 +69,7 @@ public class YourTurnState : GameState
             GetHeldOn();
         }
 
-        if(Input.GetMouseButtonDown(0))
+        if(Input.GetMouseButtonUp(0))
         {
             GetReleasedOn();
         }
@@ -101,6 +104,133 @@ public class YourTurnState : GameState
 
             if (spiritGUI)
             {
+                spiritGUIPushed = spiritGUI;
+                return;
+            }
+        }
+
+		rayOrigin = (Vector2)(manager.playerCamera.ScreenToWorldPoint(Input.mousePosition));
+		rayDirection = new Vector2();
+		
+		hit2d = Physics2D.Raycast(rayOrigin, rayDirection);
+
+		if (hit2d)
+		{		
+			CashBasherSpirit spirit = hit2d.collider.GetComponent<CashBasherSpirit>();
+			
+			if (spirit)
+			{
+				holdingSpirit = true;
+			}
+		}
+    }
+
+    public void GetHeldOn()
+    {
+        if (holdingSpirit)
+        {
+            selectedSpirit.MoveHere(manager.playerCamera.ScreenToWorldPoint(Input.mousePosition));
+        }
+
+        if (spiritGUIPushed)
+        {
+            Vector2 rayOrigin = (Vector2)(manager.guiCamera.ScreenToWorldPoint(Input.mousePosition));
+            Vector2 rayDirection = new Vector2();
+
+            RaycastHit2D hit2d = Physics2D.Raycast(rayOrigin, rayDirection);
+
+            if (hit2d)
+            {
+                CashBasherSpiritGUI spiritGUI = hit2d.collider.GetComponent<CashBasherSpiritGUI>();
+
+                if (spiritGUI != spiritGUIPushed)
+                {
+                    if (selectedSpirit && selectedSpirit != spiritGUI.spirit)
+                    {
+                        selectedSpirit.Retreat(spiritWaypoint);
+                    }
+
+                    selectedSpirit = spiritGUI.spirit;
+                    selectedSpirit.Activate(spiritWaypoint);
+
+                    spiritGUIPushed = null;
+
+                    holdingSpirit = true;
+
+                    return;
+                }
+            }
+            else
+            {
+                if (selectedSpirit && selectedSpirit != spiritGUIPushed.spirit)
+                {
+                    selectedSpirit.Retreat(spiritWaypoint);
+                }
+
+                selectedSpirit = spiritGUIPushed.spirit;
+                selectedSpirit.Activate(spiritWaypoint);
+
+                spiritGUIPushed = null;
+
+                holdingSpirit = true;
+
+                return;
+            }
+        }
+    }
+
+    public void GetReleasedOn()
+    {
+        Vector2 rayOrigin = (Vector2)(manager.playerCamera.ScreenToWorldPoint(Input.mousePosition));
+        Vector2 rayDirection = new Vector2();
+
+        RaycastHit2D hit2d = Physics2D.Raycast(rayOrigin, rayDirection);
+
+        if (selectedSpirit)
+        {
+            if (hit2d)
+            {
+                NetworkedCannon cannon = hit2d.collider.GetComponent<NetworkedCannon>();
+
+                if (cannon == yourCannon)
+                {
+                    selectedSpirit.MoveHereAndTrigger(cannon, true);
+
+                    holdingSpirit = false;
+                    selectedSpirit = null;
+
+                    return;
+                }
+                else if (cannon)
+                {
+                    selectedSpirit.MoveHereAndTrigger(cannon, false);
+
+                    holdingSpirit = false;
+                    selectedSpirit = null;
+
+                    return;
+                }
+            }
+
+            selectedSpirit.MoveHereAndPoof(rayOrigin);
+
+            holdingSpirit = false;
+            selectedSpirit = null;
+
+            return;
+        }
+
+        rayOrigin = (Vector2)(manager.guiCamera.ScreenToWorldPoint(Input.mousePosition));
+        rayDirection = new Vector2();
+
+        hit2d = Physics2D.Raycast(rayOrigin, rayDirection);
+
+        if (hit2d)
+        {
+            CashBasherSpiritGUI spiritGUI = hit2d.collider.GetComponent<CashBasherSpiritGUI>();
+
+            if (spiritGUI)
+            {
                 if (selectedSpirit && selectedSpirit != spiritGUI.spirit)
                 {
                     selectedSpirit.Retreat(spiritWaypoint);
@@ -108,19 +238,14 @@ public class YourTurnState : GameState
 
                 selectedSpirit = spiritGUI.spirit;
                 selectedSpirit.Activate(spiritWaypoint);
+
+                spiritGUIPushed = null;
+
+                holdingSpirit = false;
+
                 return;
             }
         }
-    }
-
-    public void GetHeldOn()
-    {
-
-    }
-
-    public void GetReleasedOn()
-    {
-
     }
 
     public void OnGUI()

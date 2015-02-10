@@ -256,7 +256,7 @@ public class NetworkedCannon : MonoBehaviour
         currentState = CannonState.CS_FIRING;
     }
 
-    public void ApplyEffect(SpiritType type)
+    public void ApplyEffect(SpiritType type, bool buff)
     {
 
     }
