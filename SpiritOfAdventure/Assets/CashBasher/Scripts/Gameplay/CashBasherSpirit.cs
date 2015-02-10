@@ -7,6 +7,8 @@ public class CashBasherSpirit : MonoBehaviour
 
     public GameObject fizzleEffect;
 
+    public CashBasherSpiritGUI gui;
+
     private bool active = false;
 
     private bool retreating = false;
@@ -24,7 +26,6 @@ public class CashBasherSpirit : MonoBehaviour
     private float volumeRef;
 
     private bool poofOnArrival;
-    private bool buffCannon;
 
     void Start()
     {
@@ -125,10 +126,9 @@ public class CashBasherSpirit : MonoBehaviour
         collider2D.enabled = false;      
     }
 
-    public void MoveHereAndTrigger(bool serverCannon, bool buff)
+    public void MoveHereAndTrigger(bool serverCannon)
     {
         poofOnArrival = true;
-        buffCannon = buff;
 
         targetCannon = manager.GetCannon(serverCannon);
 
@@ -165,7 +165,8 @@ public class CashBasherSpirit : MonoBehaviour
 
         if (targetCannon)
         {
-            targetCannon.ApplyEffect(type, buffCannon);
+            gui.Remove();
+            targetCannon.ApplyEffect(type);
         }
         else
         {

@@ -9,6 +9,8 @@ public class YourTurnState : GameState
 
     Vector3 spiritWaypoint;
 
+    GameObject spiritButtons;
+
     CashBasherSpirit selectedSpirit;
 
     bool nextTurn = false;
@@ -17,13 +19,25 @@ public class YourTurnState : GameState
     CashBasherSpiritGUI spiritGUIPushed = null;
     bool holdingSpirit = false;
 
-    public YourTurnState(CashBasherManager m, NetworkedCannon c, CameraMan cm, GameObject waypoint)
+    Vector3 velocityRef;
+
+    Vector3 buttonDownPos, buttonUpPos;
+
+    bool showButtons = true;
+
+    public YourTurnState(CashBasherManager m, NetworkedCannon c, CameraMan cm, GameObject waypoint, GameObject buttons)
     {
         manager = m;
         yourCannon = c;
         cameraMan = cm;
 
         spiritWaypoint = waypoint.transform.position;
+
+        spiritButtons = buttons;
+
+        buttonUpPos = spiritButtons.transform.position;
+        buttonDownPos = buttonUpPos;
+        buttonDownPos.y -= 2.0f;
     }
 
     public void Prepare()
@@ -40,6 +54,8 @@ public class YourTurnState : GameState
         cameraMan.ZoomTo(7f);
 
         yourCannon.Activate();
+
+        showButtons = true;
     }
 
     public void ReadyNextTurn()
@@ -58,6 +74,15 @@ public class YourTurnState : GameState
                 manager.networkView.RPC("SwitchToState", RPCMode.Others, (int)GamePhase.GP_YOUR_TURN);
                 manager.SwitchToState((int)GamePhase.GP_THEIR_TURN);
             }
+        }
+
+        if (showButtons)
+        {
+            spiritButtons.transform.position = Vector3.SmoothDamp(spiritButtons.transform.position, buttonDownPos, ref velocityRef, 1f);
+        }
+        else
+        {
+            spiritButtons.transform.position = Vector3.SmoothDamp(spiritButtons.transform.position, buttonUpPos, ref velocityRef, 1f);
         }
 
         if (Input.GetMouseButtonDown(0))
@@ -82,14 +107,18 @@ public class YourTurnState : GameState
 
         RaycastHit2D hit2d = Physics2D.Raycast(rayOrigin, rayDirection);
 
-        if (hit2d)
+        if (!selectedSpirit)
         {
-            NetworkedCannon cannon = hit2d.collider.GetComponent<NetworkedCannon>();
-
-            if (cannon)
+            if (hit2d)
             {
-                cannon.Press();
-                return;
+                NetworkedCannon cannon = hit2d.collider.GetComponent<NetworkedCannon>();
+
+                if (cannon)
+                {
+                    showButtons = !cannon.Press();
+
+                    return;
+                }
             }
         }
 
@@ -131,8 +160,7 @@ public class YourTurnState : GameState
         {
             selectedSpirit.MoveHere(manager.playerCamera.ScreenToWorldPoint(Input.mousePosition));
         }
-
-        if (spiritGUIPushed)
+        else if (spiritGUIPushed)
         {
             Vector2 rayOrigin = (Vector2)(manager.guiCamera.ScreenToWorldPoint(Input.mousePosition));
             Vector2 rayDirection = new Vector2();
@@ -145,34 +173,14 @@ public class YourTurnState : GameState
 
                 if (spiritGUI != spiritGUIPushed)
                 {
-                    if (selectedSpirit && selectedSpirit != spiritGUI.spirit)
-                    {
-                        selectedSpirit.Retreat(spiritWaypoint);
-                    }
-
-                    selectedSpirit = spiritGUI.spirit;
-                    selectedSpirit.Activate(spiritWaypoint);
-
-                    spiritGUIPushed = null;
-
-                    holdingSpirit = true;
+                    SummonSpirit(spiritGUI);
 
                     return;
                 }
             }
             else
             {
-                if (selectedSpirit && selectedSpirit != spiritGUIPushed.spirit)
-                {
-                    selectedSpirit.Retreat(spiritWaypoint);
-                }
-
-                selectedSpirit = spiritGUIPushed.spirit;
-                selectedSpirit.Activate(spiritWaypoint);
-
-                spiritGUIPushed = null;
-
-                holdingSpirit = true;
+                SummonSpirit(spiritGUIPushed);
 
                 return;
             }
@@ -194,16 +202,9 @@ public class YourTurnState : GameState
 
                 if (cannon == yourCannon)
                 {
-                    selectedSpirit.MoveHereAndTrigger(cannon, true);
+                    selectedSpirit.MoveHereAndTrigger(cannon.team == 0);
 
-                    holdingSpirit = false;
-                    selectedSpirit = null;
-
-                    return;
-                }
-                else if (cannon)
-                {
-                    selectedSpirit.MoveHereAndTrigger(cannon, false);
+                    showButtons = false;
 
                     holdingSpirit = false;
                     selectedSpirit = null;
@@ -231,21 +232,26 @@ public class YourTurnState : GameState
 
             if (spiritGUI)
             {
-                if (selectedSpirit && selectedSpirit != spiritGUI.spirit)
-                {
-                    selectedSpirit.Retreat(spiritWaypoint);
-                }
-
-                selectedSpirit = spiritGUI.spirit;
-                selectedSpirit.Activate(spiritWaypoint);
-
-                spiritGUIPushed = null;
-
-                holdingSpirit = false;
+                SummonSpirit(spiritGUI);
 
                 return;
             }
         }
+    }
+
+    void SummonSpirit(CashBasherSpiritGUI spiritGUI)
+    {
+        if (selectedSpirit && selectedSpirit != spiritGUIPushed.spirit)
+        {
+            selectedSpirit.Retreat(spiritWaypoint);
+        }
+
+        selectedSpirit = spiritGUIPushed.spirit;
+        selectedSpirit.Activate(spiritWaypoint);
+
+        spiritGUIPushed = null;
+
+        holdingSpirit = true;
     }
 
     public void OnGUI()

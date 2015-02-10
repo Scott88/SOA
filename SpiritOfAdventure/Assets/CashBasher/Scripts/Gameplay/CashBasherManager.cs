@@ -34,6 +34,8 @@ public class CashBasherManager : MonoBehaviour
     public GameObject treasure;
     public GameObject treasureSupport;
 
+    public GameObject spiritButtons;
+
     public GUISkin mySkin;
 
     public int myTeam { get; set; }
@@ -89,7 +91,7 @@ public class CashBasherManager : MonoBehaviour
         startState = new StartState(this, startTimer, loader);
         //buildState = new BuildState(this, myTeam, myTeam == 0 ? serverSet : clientSet, buildTimer);
         //waitingState = new WaitingState(this);
-        yourTurnState = new YourTurnState(this, myTeam == 0 ? serverCannon : clientCannon, cameraMan, myTeam == 0 ? serverSpiritWaypoint : clientSpiritWaypoint);
+        yourTurnState = new YourTurnState(this, myTeam == 0 ? serverCannon : clientCannon, cameraMan, myTeam == 0 ? serverSpiritWaypoint : clientSpiritWaypoint, spiritButtons);
         theirTurnState = new TheirTurnState(this, cameraMan);
         winState = new WinState(this);
         loseState = new LoseState(this);

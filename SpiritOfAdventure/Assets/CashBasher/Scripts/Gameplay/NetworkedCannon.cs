@@ -217,21 +217,27 @@ public class NetworkedCannon : MonoBehaviour
         powerIndicator.transform.localPosition = indPos;
     }
 
-    public void Press()
+    public bool Press()
     {
         if (myCannon)
         {
             if (currentState == CannonState.CS_ROTATING)
             {
                 networkView.RPC("PointCannonAt", RPCMode.All, markerPivot.transform.localRotation);
+
+                return false;
             }
             else if (currentState == CannonState.CS_VELOCITY)
             {
                 power.SetActive(false);
 
                 networkView.RPC("LightTheFuse", RPCMode.All, velocity);
+
+                return true;
             }
         }
+
+        return false;
     }
 
     [RPC]
@@ -256,8 +262,8 @@ public class NetworkedCannon : MonoBehaviour
         currentState = CannonState.CS_FIRING;
     }
 
-    public void ApplyEffect(SpiritType type, bool buff)
-    {
+    public void ApplyEffect(SpiritType type)
+    { 
 
     }
 
