@@ -68,18 +68,19 @@ public class CashBasherSpirit : MonoBehaviour
         active = false;
         retreating = false;
         audio.Stop();
-
-        networkView.RPC("NetDeactivate", RPCMode.Others);
-    }
-
-    void NetDeactivate()
-    {
-        active = false;
-        retreating = false;
-        audio.Stop();
     }
 
     public void Retreat(Vector3 spawnPoint)
+    {
+        retreating = true;
+        targetPosition = spawnPoint;
+        targetScale = Vector3.zero;
+
+        networkView.RPC("NetRetreat", RPCMode.Others, spawnPoint);
+    }
+
+    [RPC]
+    void NetRetreat(Vector3 spawnPoint)
     {
         retreating = true;
         targetPosition = spawnPoint;
