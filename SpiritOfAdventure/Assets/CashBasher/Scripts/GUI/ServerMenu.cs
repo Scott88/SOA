@@ -24,7 +24,7 @@ public class ServerMenu : MonoBehaviour
     void Start()
     {
 #if HOME_LAN
-        MasterServer.ipAddress = "192.168.2.16";
+        MasterServer.ipAddress = "192.168.2.18";
 #else
         MasterServer.ipAddress = "10.10.10.181";
 #endif

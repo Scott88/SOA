@@ -115,8 +115,8 @@ public class CashBasherManager : MonoBehaviour
 
     public void RandomizeTreasure()
     {
-        int x = Random.Range(0, 2);
-        int y = Random.Range(0, 3);
+        int x = Random.Range(0, 3);
+        int y = Random.Range(0, 4);
 
         networkView.RPC("PlaceTreasureAndLoad", RPCMode.All, x, y);
     }

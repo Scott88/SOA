@@ -5,7 +5,7 @@ public class CameraMan : MonoBehaviour
 {
 	public float timeToReachTarget = 1f;
 	public float leadingDistance = 10f;
-	public float maximumSpeed = 20f; 
+	public float maximumSpeed = 20f;
 
 	private GameObject targetObject = null;
 	private Vector3 targetPosition = new Vector3();
@@ -111,7 +111,7 @@ public class CameraMan : MonoBehaviour
 
         if (camera.orthographicSize != targetZoom && targetZoom != 0)
         {
-            camera.orthographicSize = Mathf.SmoothDamp(camera.orthographicSize, targetZoom, ref zoomVel, 4f);
+            camera.orthographicSize = Mathf.SmoothDamp(camera.orthographicSize, targetZoom, ref zoomVel, 0.5f);
         }
 	}
 

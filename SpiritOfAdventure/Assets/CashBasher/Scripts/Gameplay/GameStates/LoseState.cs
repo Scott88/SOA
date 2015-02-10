@@ -21,7 +21,7 @@ public class LoseState : GameState {
         Time.timeScale = 0.5f;
 
         manager.cameraMan.StopFollowing();
-        manager.cameraMan.ShakeCamera(1.0f, 0.5f);
+        manager.cameraMan.ShakeCamera(0.75f, 0.52f);
         manager.cameraMan.ZoomTo(4f);
         manager.connectionRequired = false;
     }
@@ -55,6 +55,7 @@ public class LoseState : GameState {
                 if (GUI.Button(new Rect(Screen.width * (0.75f), Screen.height * (0.05f), Screen.width * (0.22f), Screen.height * (0.2f)),
                                "Continue"))
                 {
+                    Network.Disconnect();
                     Application.LoadLevel("MiniGameMenu");
                 }
             }
@@ -63,6 +64,7 @@ public class LoseState : GameState {
                 if (GUI.Button(new Rect(Screen.width * (0.05f), Screen.height * (0.05f), Screen.width * (0.22f), Screen.height * (0.2f)),
                                "Continue"))
                 {
+                    Network.Disconnect();
                     Application.LoadLevel("MiniGameMenu");
                 }
             }
