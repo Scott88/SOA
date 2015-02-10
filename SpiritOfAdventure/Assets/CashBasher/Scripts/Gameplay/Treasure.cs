@@ -32,7 +32,7 @@ public class Treasure : MonoBehaviour
     public void Damage()
     {
         FindObjectOfType<CashBasherManager>().SwitchToState((int)GamePhase.GP_WIN);
-        Instantiate(coinExplosion, transform.position, Quaternion.Euler(270f, 0f, 0f));
+        Instantiate(coinExplosion, transform.position + Vector3.back * 5, Quaternion.Euler(270f, 0f, 0f));
         Destroy(gameObject);
         networkView.RPC("NetDamage", RPCMode.Others);
     }
@@ -41,7 +41,7 @@ public class Treasure : MonoBehaviour
     public void NetDamage()
     {
         FindObjectOfType<CashBasherManager>().SwitchToState((int)GamePhase.GP_LOSE);
-        Instantiate(coinExplosion, transform.position, Quaternion.Euler(270f, 0f, 0f));
+        Instantiate(coinExplosion, transform.position + Vector3.back * 5, Quaternion.Euler(270f, 0f, 0f));
         Destroy(gameObject);
     }
 }
