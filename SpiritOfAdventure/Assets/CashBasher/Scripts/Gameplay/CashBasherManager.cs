@@ -25,14 +25,16 @@ public class CashBasherManager : MonoBehaviour
 
     public NetworkedCannon serverCannon, clientCannon;
 
+    public CashBasherSpirit greenSpirit, blueSpirit, redSpirit;
+
+    public GameObject serverSpiritWaypoint, clientSpiritWaypoint;
+
     public TextMesh gameText;
 
     public GameObject treasure;
     public GameObject treasureSupport;
 
     public GUISkin mySkin;
-
-    public Vector3 winScreenPos = new Vector3(0f, 20f, 0f), loseScreenPos = new Vector3(0f, -20f, 0f);
 
     public int myTeam { get; set; }
 
@@ -87,7 +89,7 @@ public class CashBasherManager : MonoBehaviour
         startState = new StartState(this, startTimer, loader);
         //buildState = new BuildState(this, myTeam, myTeam == 0 ? serverSet : clientSet, buildTimer);
         //waitingState = new WaitingState(this);
-        yourTurnState = new YourTurnState(this, myTeam == 0 ? serverCannon : clientCannon, cameraMan);
+        yourTurnState = new YourTurnState(this, myTeam == 0 ? serverCannon : clientCannon, cameraMan, myTeam == 0 ? serverSpiritWaypoint : clientSpiritWaypoint);
         theirTurnState = new TheirTurnState(this, cameraMan);
         winState = new WinState(this);
         loseState = new LoseState(this);
@@ -110,6 +112,18 @@ public class CashBasherManager : MonoBehaviour
             GUI.skin = mySkin;
 
             state.OnGUI();
+        }
+    }
+
+    public NetworkedCannon GetCannon(bool serversCannon)
+    {
+        if (serversCannon)
+        {
+            return serverCannon;
+        }
+        else
+        {
+            return clientCannon;
         }
     }
 

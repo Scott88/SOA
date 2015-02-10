@@ -256,6 +256,11 @@ public class NetworkedCannon : MonoBehaviour
         currentState = CannonState.CS_FIRING;
     }
 
+    public void ApplyEffect(SpiritType type)
+    {
+
+    }
+
     public void Fire()
     { 
         float angle = cannonPivot.transform.eulerAngles.z * Mathf.Deg2Rad;

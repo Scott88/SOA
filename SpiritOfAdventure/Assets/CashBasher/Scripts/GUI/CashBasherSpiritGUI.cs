@@ -5,6 +5,8 @@ public class CashBasherSpiritGUI : MonoBehaviour
 {
     public SpiritType type;
 
+    public CashBasherSpirit spirit;
+
     public TextMesh display;
 
     private int count;

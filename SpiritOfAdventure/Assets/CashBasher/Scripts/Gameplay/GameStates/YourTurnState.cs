@@ -7,14 +7,20 @@ public class YourTurnState : GameState
     NetworkedCannon yourCannon;
     CameraMan cameraMan;
 
+    Vector3 spiritWaypoint;
+
+    CashBasherSpirit selectedSpirit;
+
     bool nextTurn = false;
     float timer = 1.0f;
 
-    public YourTurnState(CashBasherManager m, NetworkedCannon c, CameraMan cm)
+    public YourTurnState(CashBasherManager m, NetworkedCannon c, CameraMan cm, GameObject waypoint)
     {
         manager = m;
         yourCannon = c;
         cameraMan = cm;
+
+        spiritWaypoint = waypoint.transform.position;
     }
 
     public void Prepare()
@@ -53,38 +59,68 @@ public class YourTurnState : GameState
 
         if (Input.GetMouseButtonDown(0))
         {
-            Vector2 rayOrigin = (Vector2)(manager.playerCamera.ScreenToWorldPoint(Input.mousePosition));
-            Vector2 rayDirection = new Vector2();
+            GetClickedOn();
+        }
+        else if(Input.GetMouseButton(0))
+        {
+            GetHeldOn();
+        }
 
-            RaycastHit2D hit2d = Physics2D.Raycast(rayOrigin, rayDirection);
+        if(Input.GetMouseButtonDown(0))
+        {
+            GetReleasedOn();
+        }
+    }
 
-            if (hit2d)
+    public void GetClickedOn()
+    {
+        Vector2 rayOrigin = (Vector2)(manager.playerCamera.ScreenToWorldPoint(Input.mousePosition));
+        Vector2 rayDirection = new Vector2();
+
+        RaycastHit2D hit2d = Physics2D.Raycast(rayOrigin, rayDirection);
+
+        if (hit2d)
+        {
+            NetworkedCannon cannon = hit2d.collider.GetComponent<NetworkedCannon>();
+
+            if (cannon)
             {
-                NetworkedCannon cannon = hit2d.collider.GetComponent<NetworkedCannon>();
-
-                if (cannon)
-                {
-                    cannon.Press();
-                    return;
-                }
-            }
-
-            rayOrigin = (Vector2)(manager.guiCamera.ScreenToWorldPoint(Input.mousePosition));
-            rayDirection = new Vector2();
-
-            hit2d = Physics2D.Raycast(rayOrigin, rayDirection);
-
-            if (hit2d)
-            {
-                CashBasherSpiritGUI spiritGUI = hit2d.collider.GetComponent<CashBasherSpiritGUI>();
-
-                if (spiritGUI)
-                {
-                    spiritGUI.Remove();
-                    return;
-                }
+                cannon.Press();
+                return;
             }
         }
+
+        rayOrigin = (Vector2)(manager.guiCamera.ScreenToWorldPoint(Input.mousePosition));
+        rayDirection = new Vector2();
+
+        hit2d = Physics2D.Raycast(rayOrigin, rayDirection);
+
+        if (hit2d)
+        {
+            CashBasherSpiritGUI spiritGUI = hit2d.collider.GetComponent<CashBasherSpiritGUI>();
+
+            if (spiritGUI)
+            {
+                if (selectedSpirit && selectedSpirit != spiritGUI.spirit)
+                {
+                    selectedSpirit.Retreat(spiritWaypoint);
+                }
+
+                selectedSpirit = spiritGUI.spirit;
+                selectedSpirit.Activate(spiritWaypoint);
+                return;
+            }
+        }
+    }
+
+    public void GetHeldOn()
+    {
+
+    }
+
+    public void GetReleasedOn()
+    {
+
     }
 
     public void OnGUI()
