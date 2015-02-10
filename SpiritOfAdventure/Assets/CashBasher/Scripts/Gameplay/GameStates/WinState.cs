@@ -21,6 +21,8 @@ public class WinState : GameState
         Time.timeScale = 0.5f;
 
         manager.cameraMan.StopFollowing();
+        manager.cameraMan.ShakeCamera(1.0f, 0.5f);
+        manager.cameraMan.ZoomTo(4f);
         manager.connectionRequired = false;
     }
 
@@ -88,6 +90,7 @@ public class WinState : GameState
             targetPosition = new Vector3(4.5f, 1f, 0f);
         }
 
+        manager.cameraMan.ZoomTo(7f);
         manager.cameraMan.FollowPosition(targetPosition);
     }
 }

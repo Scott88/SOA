@@ -23,6 +23,8 @@ public class CameraMan : MonoBehaviour
 
 	private Vector3 shakeOffset;
 
+    private float shakeMoveTimer = 0.0f;
+
 	public void FollowObject(GameObject target)
 	{
 		targetObject = target;
@@ -96,7 +98,14 @@ public class CameraMan : MonoBehaviour
 
         transform.position = Vector3.SmoothDamp(transform.position, targetPosition, ref currentVelocity, timeToReachTarget, maximumSpeed, Time.fixedDeltaTime);
 
-		GetShake();
+        if (Time.timeScale >= 1f || shakeMoveTimer >= 1f)
+        {
+            GetShake();
+        }
+        else
+        {
+            shakeMoveTimer += Time.timeScale;
+        }
 
 		transform.position += shakeOffset;
 
@@ -114,7 +123,7 @@ public class CameraMan : MonoBehaviour
 
 	void GetShake()
 	{
-		if (shakeIntensity > 0f)
+		if (shakeIntensity >= 0f)
 		{
 			shakeOffset = Random.insideUnitSphere * shakeIntensity;
 
