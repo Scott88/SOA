@@ -34,7 +34,11 @@ public class NetworkedTileSet : TileSet
         GameObject placed = Network.Instantiate(block, tiles[x, y].GetCenter(), new Quaternion(), 0) as GameObject;
 
         Breakable breakable = placed.GetComponent<Breakable>();
-        tiles[x, y].SetBlock(breakable);
+
+        if (breakable)
+        {
+            tiles[x, y].SetBlock(breakable);
+        }
     }
 
     public void Spread()
