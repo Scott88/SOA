@@ -286,9 +286,27 @@ public class NetworkedCannon : MonoBehaviour
         currentState = CannonState.CS_FIRING;
     }
 
+    public bool CanApplyBuff(SpiritType type)
+    {
+        return debuff == SpiritType.ST_NULL ||
+               debuff == SpiritType.ST_GREEN && type == SpiritType.ST_RED ||
+                debuff == SpiritType.ST_BLUE && type == SpiritType.ST_GREEN ||
+                debuff == SpiritType.ST_RED && type == SpiritType.ST_BLUE;
+    }
+
     public void ApplyBuff(SpiritType type)
     {
-        buff = type; 
+        if(debuff == SpiritType.ST_NULL)
+        {
+            buff = type;
+        }
+        else if (debuff == SpiritType.ST_GREEN && type == SpiritType.ST_RED ||
+                debuff == SpiritType.ST_BLUE && type == SpiritType.ST_GREEN ||
+                debuff == SpiritType.ST_RED && type == SpiritType.ST_BLUE)
+        {
+            debuff = SpiritType.ST_NULL;
+            cannonRenderer.material.color = Color.white;
+        }
     }
 
     [RPC]
@@ -359,7 +377,11 @@ public class NetworkedCannon : MonoBehaviour
 
             ball.rigidbody2D.velocity = finalVel;
             ball.networkView.RPC("SetVelocity", RPCMode.Others, finalVel);
-            ball.networkView.RPC("Enchant", RPCMode.All, (int)buff);
+
+            if (buff != SpiritType.ST_NULL)
+            {
+                ball.networkView.RPC("Enchant", RPCMode.All, (int)buff);
+            }
         }
 
         buff = SpiritType.ST_NULL;

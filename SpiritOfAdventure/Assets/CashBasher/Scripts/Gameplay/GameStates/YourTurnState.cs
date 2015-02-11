@@ -213,7 +213,7 @@ public class YourTurnState : GameState
             {
                 NetworkedCannon cannon = hit2d.collider.GetComponent<NetworkedCannon>();
 
-                if (cannon == yourCannon)
+                if (cannon == yourCannon && cannon.CanApplyBuff(selectedSpirit.type))
                 {
                     selectedSpirit.MoveHereAndTrigger(cannon.team == 0);
 
