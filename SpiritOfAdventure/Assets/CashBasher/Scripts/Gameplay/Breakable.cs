@@ -54,8 +54,7 @@ public class Breakable : MonoBehaviour
             {
                 if (IsDebuffedBy(ball.GetEnchantment()))
                 {
-                    SetStatusEffect(ball.GetEnchantment());
-                    Apply();
+                    SetStatusEffect(ball.GetEnchantment(), true);
                     ball.Damage();
                 }
                 else
@@ -122,16 +121,26 @@ public class Breakable : MonoBehaviour
                type == BlockType.BT_METAL && spiritType == SpiritType.ST_BLUE;
     }
 
-    public void SetStatusEffect(SpiritType status)
+    public void SetStatusEffect(SpiritType status, bool immediate)
     {
+        if (immediate)
+        {
+            statusEffect = status;
+        }
+
         pendingEffect = status;
         AdjustColorsFor(pendingEffect);
-        networkView.RPC("NetSetStatusEffect", RPCMode.Others, (int)status);
+        networkView.RPC("NetSetStatusEffect", RPCMode.Others, (int)status, immediate);
     }
 
     [RPC]
-    void NetSetStatusEffect(int spiritType)
+    void NetSetStatusEffect(int spiritType, bool immediate)
     {
+        if (immediate)
+        {
+            statusEffect = (SpiritType)spiritType;
+        }
+
         pendingEffect = (SpiritType)spiritType;
         AdjustColorsFor(pendingEffect);
     }

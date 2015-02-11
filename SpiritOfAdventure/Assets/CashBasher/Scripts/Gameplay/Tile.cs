@@ -66,7 +66,7 @@ public class Tile
 
     public void Debuff(SpiritType type)
     {
-        block.SetStatusEffect(type);
+        block.SetStatusEffect(type, false);
     }
 
     public void Tick()
