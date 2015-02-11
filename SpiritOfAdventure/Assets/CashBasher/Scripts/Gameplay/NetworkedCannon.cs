@@ -31,6 +31,8 @@ public class NetworkedCannon : MonoBehaviour
 
     public Animator cannonAnimator;
 
+    public Renderer cannonRenderer;
+
 
     enum CannonState
     {
@@ -61,8 +63,8 @@ public class NetworkedCannon : MonoBehaviour
 
     private float knockbackTimer;
 
-    public float knockbackDuration = 0.25f;
-    public float rollForwardDuration = 0.25f;
+    private float knockbackDuration = 0.25f;
+    private float rollForwardDuration = 0.25f;
 
     private float rollForwardSpeed;
 
@@ -294,7 +296,7 @@ public class NetworkedCannon : MonoBehaviour
     {
         debuff = type;
 
-        Color color = renderer.material.color;
+        Color color = cannonRenderer.material.color;
 
         if (type != SpiritType.ST_GREEN)
         {
@@ -311,7 +313,7 @@ public class NetworkedCannon : MonoBehaviour
             color.r = 0.5f;
         }
 
-        renderer.material.color = color;
+        cannonRenderer.material.color = color;
     }
 
     public void Fire()
@@ -357,12 +359,12 @@ public class NetworkedCannon : MonoBehaviour
 
             ball.rigidbody2D.velocity = finalVel;
             ball.networkView.RPC("SetVelocity", RPCMode.Others, finalVel);
-            ball.networkView.RPC("Enchant", RPCMode.All, buff);
+            ball.networkView.RPC("Enchant", RPCMode.All, (int)buff);
         }
 
         buff = SpiritType.ST_NULL;
         debuff = SpiritType.ST_NULL;
-        renderer.material.color = Color.white;
+        cannonRenderer.material.color = Color.white;
 
         currentState = CannonState.CS_FIRED;
         knockbackTimer = knockbackDuration;
