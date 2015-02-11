@@ -13,6 +13,8 @@ public class YourTurnState : GameState
 
     CashBasherSpirit selectedSpirit;
 
+    NetworkedTileSet yourTileSet;
+
     bool nextTurn = false;
     float timer = 1.0f;
 
@@ -25,7 +27,7 @@ public class YourTurnState : GameState
 
     bool showButtons = true;
 
-    public YourTurnState(CashBasherManager m, NetworkedCannon c, CameraMan cm, GameObject waypoint, GameObject buttons)
+    public YourTurnState(CashBasherManager m, NetworkedCannon c, CameraMan cm, GameObject waypoint, GameObject buttons, NetworkedTileSet set)
     {
         manager = m;
         yourCannon = c;
@@ -38,6 +40,8 @@ public class YourTurnState : GameState
         buttonUpPos = spiritButtons.transform.position;
         buttonDownPos = buttonUpPos;
         buttonDownPos.y -= 2.0f;
+
+        yourTileSet = set;
     }
 
     public void Prepare()
@@ -73,7 +77,11 @@ public class YourTurnState : GameState
 
         cameraMan.ZoomTo(5f);
 
-        yield return new WaitForSeconds(3.0f);
+        yield return new WaitForSeconds(2.0f);
+
+        yourTileSet.TickDebuffs();
+
+        yield return new WaitForSeconds(1.0f);
 
         if (Network.isServer)
         {

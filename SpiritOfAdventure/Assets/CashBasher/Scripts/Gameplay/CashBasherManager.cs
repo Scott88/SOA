@@ -94,14 +94,14 @@ public class CashBasherManager : MonoBehaviour
 
         if (myTeam == 0)
         {
-            yourTurnState = new YourTurnState(this, serverCannon, cameraMan, serverSpiritWaypoint, spiritButtons);
+            yourTurnState = new YourTurnState(this, serverCannon, cameraMan, serverSpiritWaypoint, spiritButtons, serverSet);
         }
         else
         {
-            yourTurnState = new YourTurnState(this, clientCannon, cameraMan, clientSpiritWaypoint, spiritButtons);
+            yourTurnState = new YourTurnState(this, clientCannon, cameraMan, clientSpiritWaypoint, spiritButtons, clientSet);
         }
 
-        theirTurnState = new TheirTurnState(this, cameraMan, myTeam == 0 ? clientSet : serverSet);
+        theirTurnState = new TheirTurnState(this, cameraMan);
 
         winState = new WinState(this);
 

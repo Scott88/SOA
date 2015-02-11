@@ -6,14 +6,10 @@ public class TheirTurnState : GameState
     CashBasherManager manager;
     CameraMan cameraMan;
 
-    NetworkedTileSet theirTileSet;
-
-    public TheirTurnState(CashBasherManager m, CameraMan cm, NetworkedTileSet enemy)
+    public TheirTurnState(CashBasherManager m, CameraMan cm)
     {
         manager = m;
         cameraMan = cm;
-
-        theirTileSet = enemy;
     }
 
     public void Prepare()
@@ -43,11 +39,7 @@ public class TheirTurnState : GameState
 
         cameraMan.ZoomTo(5f);
 
-        yield return new WaitForSeconds(2.0f);
-
-        theirTileSet.TickDebuffs();
-
-        yield return new WaitForSeconds(1.0f);
+        yield return new WaitForSeconds(3.0f);
 
         if (Network.isServer)
         {
