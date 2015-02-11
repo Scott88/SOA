@@ -66,8 +66,8 @@ public class YourTurnState : GameState
 
     IEnumerator Preshow()
     {
-        if (manager.HasEffects(Network.isServer))
-        {
+        //if (manager.HasEffects(Network.isServer))
+        //{
             if (Network.isServer)
             {
                 cameraMan.FollowPosition(new Vector3(-10f, 0f, 0f));
@@ -84,7 +84,7 @@ public class YourTurnState : GameState
             yourTileSet.TickDebuffs();
 
             yield return new WaitForSeconds(1.0f);
-        }
+        //}
 
         if (Network.isServer)
         {
