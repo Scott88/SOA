@@ -292,23 +292,23 @@ public class NetworkedCannon : MonoBehaviour
     }
 
     [RPC]
-    void ApplyDebuff(SpiritType type)
+    void ApplyDebuff(int type)
     {
-        debuff = type;
+        debuff = (SpiritType)type;
 
         Color color = cannonRenderer.material.color;
 
-        if (type != SpiritType.ST_GREEN)
+        if (debuff != SpiritType.ST_GREEN)
         {
             color.g = 0.5f;
         }
 
-        if (type != SpiritType.ST_BLUE)
+        if (debuff != SpiritType.ST_BLUE)
         {
             color.b = 0.5f;
         }
 
-        if (type != SpiritType.ST_RED)
+        if (debuff != SpiritType.ST_RED)
         {
             color.r = 0.5f;
         }
