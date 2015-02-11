@@ -5,6 +5,8 @@ public class NetworkedCannonBall : MonoBehaviour
 {
     public int health;
 
+    private SpiritType enchantment = SpiritType.ST_NULL;
+
     private CashBasherManager manager;
 
     void Start()
@@ -41,6 +43,36 @@ public class NetworkedCannonBall : MonoBehaviour
         {
             Destroy(gameObject);
         }
+    }
+
+    [RPC]
+    public void Enchant(int spiritType)
+    {
+        enchantment = (SpiritType)spiritType;
+
+        Color color = renderer.material.color;
+
+        if (enchantment != SpiritType.ST_GREEN)
+        {
+            color.g = 0.5f;
+        }
+
+        if (enchantment != SpiritType.ST_BLUE)
+        {
+            color.b = 0.5f;
+        }
+
+        if (enchantment != SpiritType.ST_RED)
+        {
+            color.r = 0.5f;
+        }
+
+        renderer.material.color = color;
+    }
+
+    public SpiritType GetEnchantment()
+    {
+        return enchantment;
     }
 
     public void DamageAndSlow(Vector3 startSpeed, Vector3 blockPos, float speedDamper)

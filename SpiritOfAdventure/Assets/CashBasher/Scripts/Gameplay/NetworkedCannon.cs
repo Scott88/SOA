@@ -68,6 +68,8 @@ public class NetworkedCannon : MonoBehaviour
 
     private CashBasherManager manager;
 
+    private SpiritType buff, debuff;
+
     void Start()
     {
         manager = FindObjectOfType<CashBasherManager>();
@@ -100,6 +102,26 @@ public class NetworkedCannon : MonoBehaviour
             Vector3 scale = baseAndWheels.transform.localScale;
             scale.z *= -1;
             baseAndWheels.transform.localScale = scale;
+        }
+    }
+
+    void OnCollisionEnter2D(Collision2D coll)
+    {
+        if (coll.collider.tag == "CannonBall")
+        {
+            NetworkedCannonBall ball = coll.gameObject.GetComponent<NetworkedCannonBall>() as NetworkedCannonBall;
+
+            if (!ball.networkView.isMine || myCannon)
+            {
+                return;
+            }
+
+            if (ball.GetEnchantment() != SpiritType.ST_NULL)
+            {
+                networkView.RPC("ApplyDebuff", RPCMode.All, (int)ball.GetEnchantment());
+            }
+
+            ball.Damage();
         }
     }
 
@@ -262,9 +284,34 @@ public class NetworkedCannon : MonoBehaviour
         currentState = CannonState.CS_FIRING;
     }
 
-    public void ApplyEffect(SpiritType type)
-    { 
+    public void ApplyBuff(SpiritType type)
+    {
+        buff = type; 
+    }
 
+    [RPC]
+    void ApplyDebuff(SpiritType type)
+    {
+        debuff = type;
+
+        Color color = renderer.material.color;
+
+        if (type != SpiritType.ST_GREEN)
+        {
+            color.g = 0.5f;
+        }
+
+        if (type != SpiritType.ST_BLUE)
+        {
+            color.b = 0.5f;
+        }
+
+        if (type != SpiritType.ST_RED)
+        {
+            color.r = 0.5f;
+        }
+
+        renderer.material.color = color;
     }
 
     public void Fire()
@@ -310,9 +357,12 @@ public class NetworkedCannon : MonoBehaviour
 
             ball.rigidbody2D.velocity = finalVel;
             ball.networkView.RPC("SetVelocity", RPCMode.Others, finalVel);
-
-            //manager.SetCannonBall(ball.gameObject);
+            ball.networkView.RPC("Enchant", RPCMode.All, buff);
         }
+
+        buff = SpiritType.ST_NULL;
+        debuff = SpiritType.ST_NULL;
+        renderer.material.color = Color.white;
 
         currentState = CannonState.CS_FIRED;
         knockbackTimer = knockbackDuration;

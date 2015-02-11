@@ -102,16 +102,16 @@ public class YourTurnState : GameState
 
     public void GetClickedOn()
     {
-        Vector2 rayOrigin = (Vector2)(manager.playerCamera.ScreenToWorldPoint(Input.mousePosition));
-        Vector2 rayDirection = new Vector2();
+        Vector2 playerRayOrigin = (Vector2)(manager.playerCamera.ScreenToWorldPoint(Input.mousePosition));
+        Vector2 playerRayDirection = new Vector2();
 
-        RaycastHit2D hit2d = Physics2D.Raycast(rayOrigin, rayDirection);
+        RaycastHit2D playerHit2d = Physics2D.Raycast(playerRayOrigin, playerRayDirection);
 
         if (!selectedSpirit)
         {
-            if (hit2d)
+            if (playerHit2d)
             {
-                NetworkedCannon cannon = hit2d.collider.GetComponent<NetworkedCannon>();
+                NetworkedCannon cannon = playerHit2d.collider.GetComponent<NetworkedCannon>();
 
                 if (cannon)
                 {
@@ -122,10 +122,10 @@ public class YourTurnState : GameState
             }
         }
 
-        rayOrigin = (Vector2)(manager.guiCamera.ScreenToWorldPoint(Input.mousePosition));
-        rayDirection = new Vector2();
+        Vector2 rayOrigin = (Vector2)(manager.guiCamera.ScreenToWorldPoint(Input.mousePosition));
+        Vector2 rayDirection = new Vector2();
 
-        hit2d = Physics2D.Raycast(rayOrigin, rayDirection);
+        RaycastHit2D hit2d = Physics2D.Raycast(rayOrigin, rayDirection);
 
         if (hit2d)
         {
@@ -138,14 +138,9 @@ public class YourTurnState : GameState
             }
         }
 
-		rayOrigin = (Vector2)(manager.playerCamera.ScreenToWorldPoint(Input.mousePosition));
-		rayDirection = new Vector2();
-		
-		hit2d = Physics2D.Raycast(rayOrigin, rayDirection);
-
-		if (hit2d)
-		{		
-			CashBasherSpirit spirit = hit2d.collider.GetComponent<CashBasherSpirit>();
+        if (playerHit2d)
+		{
+            CashBasherSpirit spirit = playerHit2d.collider.GetComponent<CashBasherSpirit>();
 			
 			if (spirit)
 			{
@@ -156,11 +151,7 @@ public class YourTurnState : GameState
 
     public void GetHeldOn()
     {
-        if (holdingSpirit)
-        {
-            selectedSpirit.MoveHere(manager.playerCamera.ScreenToWorldPoint(Input.mousePosition));
-        }
-        else if (spiritGUIPushed)
+        if (spiritGUIPushed)
         {
             Vector2 rayOrigin = (Vector2)(manager.guiCamera.ScreenToWorldPoint(Input.mousePosition));
             Vector2 rayDirection = new Vector2();
@@ -173,26 +164,48 @@ public class YourTurnState : GameState
 
                 if (spiritGUI != spiritGUIPushed)
                 {
-                    SummonSpirit(spiritGUI);
+                    SummonSpirit(spiritGUI, true);
 
                     return;
                 }
             }
             else
             {
-                SummonSpirit(spiritGUIPushed);
+                SummonSpirit(spiritGUIPushed, true);
 
                 return;
             }
         }
+
+        if (holdingSpirit)
+        {
+            selectedSpirit.MoveHere(manager.playerCamera.ScreenToWorldPoint(Input.mousePosition));
+        }  
     }
 
     public void GetReleasedOn()
     {
-        Vector2 rayOrigin = (Vector2)(manager.playerCamera.ScreenToWorldPoint(Input.mousePosition));
+        Vector2 rayOrigin = (Vector2)(manager.guiCamera.ScreenToWorldPoint(Input.mousePosition));
         Vector2 rayDirection = new Vector2();
 
         RaycastHit2D hit2d = Physics2D.Raycast(rayOrigin, rayDirection);
+
+        if (hit2d)
+        {
+            CashBasherSpiritGUI spiritGUI = hit2d.collider.GetComponent<CashBasherSpiritGUI>();
+
+            if (spiritGUI)
+            {
+                SummonSpirit(spiritGUI, false);
+
+                return;
+            }
+        }
+
+        rayOrigin = (Vector2)(manager.playerCamera.ScreenToWorldPoint(Input.mousePosition));
+        rayDirection = new Vector2();
+
+        hit2d = Physics2D.Raycast(rayOrigin, rayDirection);
 
         if (selectedSpirit)
         {
@@ -219,27 +232,10 @@ public class YourTurnState : GameState
             selectedSpirit = null;
 
             return;
-        }
-
-        rayOrigin = (Vector2)(manager.guiCamera.ScreenToWorldPoint(Input.mousePosition));
-        rayDirection = new Vector2();
-
-        hit2d = Physics2D.Raycast(rayOrigin, rayDirection);
-
-        if (hit2d)
-        {
-            CashBasherSpiritGUI spiritGUI = hit2d.collider.GetComponent<CashBasherSpiritGUI>();
-
-            if (spiritGUI)
-            {
-                SummonSpirit(spiritGUI);
-
-                return;
-            }
-        }
+        }   
     }
 
-    void SummonSpirit(CashBasherSpiritGUI spiritGUI)
+    void SummonSpirit(CashBasherSpiritGUI spiritGUI, bool holding)
     {
         if (selectedSpirit && selectedSpirit != spiritGUIPushed.spirit)
         {
@@ -251,7 +247,7 @@ public class YourTurnState : GameState
 
         spiritGUIPushed = null;
 
-        holdingSpirit = true;
+        holdingSpirit = holding;
     }
 
     public void OnGUI()

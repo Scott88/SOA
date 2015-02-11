@@ -166,7 +166,7 @@ public class CashBasherSpirit : MonoBehaviour
         if (targetCannon)
         {
             gui.Remove();
-            targetCannon.ApplyEffect(type);
+            targetCannon.ApplyBuff(type);
         }
         else
         {
