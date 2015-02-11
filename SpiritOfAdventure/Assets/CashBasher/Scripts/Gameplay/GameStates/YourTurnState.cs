@@ -13,6 +13,8 @@ public class YourTurnState : GameState
 
     CashBasherSpirit selectedSpirit;
 
+    NetworkedTileSet yourTileSet;
+
     bool nextTurn = false;
     float timer = 1.0f;
 
@@ -25,7 +27,7 @@ public class YourTurnState : GameState
 
     bool showButtons = true;
 
-    public YourTurnState(CashBasherManager m, NetworkedCannon c, CameraMan cm, GameObject waypoint, GameObject buttons)
+    public YourTurnState(CashBasherManager m, NetworkedCannon c, CameraMan cm, GameObject waypoint, GameObject buttons, NetworkedTileSet set)
     {
         manager = m;
         yourCannon = c;
@@ -38,10 +40,49 @@ public class YourTurnState : GameState
         buttonUpPos = spiritButtons.transform.position;
         buttonDownPos = buttonUpPos;
         buttonDownPos.y -= 2.0f;
+
+        yourTileSet = set;
     }
 
     public void Prepare()
     {
+        //if (Network.isServer)
+        //{
+        //    cameraMan.FollowPosition(new Vector3(4.5f, 1f, 0f));
+        //}
+        //else
+        //{
+        //    cameraMan.FollowPosition(new Vector3(-4.5f, 1f, 0f));
+        //}
+
+        //cameraMan.ZoomTo(7f);
+
+        //yourCannon.Activate();
+
+        //showButtons = true;
+
+        manager.StartCoroutine(Preshow());
+    }
+
+    IEnumerator Preshow()
+    {
+        if (Network.isServer)
+        {
+            cameraMan.FollowPosition(new Vector3(10f, 0f, 0f));
+        }
+        else
+        {
+            cameraMan.FollowPosition(new Vector3(10f, 0f, 0f));
+        }
+
+        cameraMan.ZoomTo(5f);
+
+        yield return new WaitForSeconds(2.0f);
+
+        yourTileSet.TickDebuffs();
+
+        yield return new WaitForSeconds(1.0f);
+
         if (Network.isServer)
         {
             cameraMan.FollowPosition(new Vector3(4.5f, 1f, 0f));

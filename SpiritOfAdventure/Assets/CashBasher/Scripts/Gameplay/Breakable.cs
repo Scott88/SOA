@@ -21,9 +21,22 @@ public class Breakable : MonoBehaviour
 
     private int startingHealth;
 
+    private Tile parent;
+
+    private SpiritType statusEffect = SpiritType.ST_NULL;
+    private SpiritType pendingEffect = SpiritType.ST_NULL;
+
+    private Color startColor;
+
     void Start()
     {
         startingHealth = health;
+        startColor = renderer.material.color;
+    }
+
+    public void SetTile(Tile t)
+    {
+        parent = t;
     }
 
     void OnCollisionEnter2D(Collision2D coll)
@@ -39,14 +52,23 @@ public class Breakable : MonoBehaviour
 
             if (coll.relativeVelocity.magnitude > minimumSpeed)
             {
-                if (Damage())
+                if (IsDebuffedBy(ball.GetEnchantment()))
                 {
-                    ball.DamageAndSlow(-coll.relativeVelocity, transform.position, speedDamper);
+                    SetStatusEffect(ball.GetEnchantment());
+                    Apply();
+                    ball.Damage();
                 }
                 else
                 {
-                    ball.Damage();
-                }     
+                    if (Damage())
+                    {
+                        ball.DamageAndSlow(-coll.relativeVelocity, transform.position, speedDamper);
+                    }
+                    else
+                    {
+                        ball.Damage();
+                    }
+                }
             }
         }
     }
@@ -86,5 +108,73 @@ public class Breakable : MonoBehaviour
         Color color = renderer.material.color;
         color.a = (float)health / (float)startingHealth;
         renderer.material.color = color;
+    }
+
+    public SpiritType GetStatusEffect()
+    {
+        return statusEffect;
+    }
+
+    public bool IsDebuffedBy(SpiritType spiritType)
+    {
+        return type == BlockType.BT_WOOD && spiritType == SpiritType.ST_RED ||
+               type == BlockType.BT_STONE && spiritType == SpiritType.ST_GREEN ||
+               type == BlockType.BT_METAL && spiritType == SpiritType.ST_BLUE;
+    }
+
+    public void SetStatusEffect(SpiritType status)
+    {
+        pendingEffect = status;
+        AdjustColorsFor(pendingEffect);
+        networkView.RPC("NetSetStatusEffect", RPCMode.Others, (int)status);
+    }
+
+    [RPC]
+    void NetSetStatusEffect(int spiritType)
+    {
+        pendingEffect = (SpiritType)spiritType;
+        AdjustColorsFor(pendingEffect);
+    }
+
+    void AdjustColorsFor(SpiritType type)
+    {
+        Color color = renderer.material.color;
+
+        if (type == SpiritType.ST_NULL)
+        {
+            color = startColor;
+        }
+        else
+        {
+            if (type != SpiritType.ST_GREEN)
+            {
+                color.g *= 0.5f;
+            }
+
+            if (type != SpiritType.ST_BLUE)
+            {
+                color.b *= 0.5f;
+            }
+
+            if (type != SpiritType.ST_RED)
+            {
+                color.r *= 0.5f;
+            }
+        }
+
+        renderer.material.color = color;
+    }
+
+    public void Tick()
+    {
+        if (statusEffect != SpiritType.ST_NULL)
+        {
+            Damage();
+        }
+    }
+
+    public void Apply()
+    {
+        statusEffect = pendingEffect;
     }
 }

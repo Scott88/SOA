@@ -40,6 +40,51 @@ public class Tile
         }
     }
 
+    public SpiritType GetDebuff()
+    {
+        if (block)
+        {
+            return block.GetStatusEffect();
+        }
+        else
+        {
+            return SpiritType.ST_NULL;
+        }
+    }
+
+    public bool IsDebuffedBy(SpiritType type)
+    {
+        if (block)
+        {
+            return block.IsDebuffedBy(type);
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    public void Debuff(SpiritType type)
+    {
+        block.SetStatusEffect(type);
+    }
+
+    public void Tick()
+    {
+        if (block)
+        {
+            block.Tick();
+        }
+    }
+
+    public void Apply()
+    {
+        if (block)
+        {
+            block.Apply();
+        }
+    }
+
     public Vector3 GetCenter()
     {
         Vector3 pos = parent.transform.position;
@@ -57,6 +102,7 @@ public class Tile
     public void SetBlock(Breakable b)
     {
         block = b;
+        block.SetTile(this);
     }
 
     public bool Empty()

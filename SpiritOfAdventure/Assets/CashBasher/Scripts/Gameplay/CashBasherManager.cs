@@ -91,9 +91,20 @@ public class CashBasherManager : MonoBehaviour
         startState = new StartState(this, startTimer, loader);
         //buildState = new BuildState(this, myTeam, myTeam == 0 ? serverSet : clientSet, buildTimer);
         //waitingState = new WaitingState(this);
-        yourTurnState = new YourTurnState(this, myTeam == 0 ? serverCannon : clientCannon, cameraMan, myTeam == 0 ? serverSpiritWaypoint : clientSpiritWaypoint, spiritButtons);
+
+        if (myTeam == 0)
+        {
+            yourTurnState = new YourTurnState(this, serverCannon, cameraMan, serverSpiritWaypoint, spiritButtons, serverSet);
+        }
+        else
+        {
+            yourTurnState = new YourTurnState(this, clientCannon, cameraMan, clientSpiritWaypoint, spiritButtons, clientSet);
+        }
+
         theirTurnState = new TheirTurnState(this, cameraMan);
+
         winState = new WinState(this);
+
         loseState = new LoseState(this);
 
         SwitchToState((int)GamePhase.GP_STARTING);

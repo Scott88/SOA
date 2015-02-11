@@ -8,6 +8,10 @@ public class NetworkedCannon : MonoBehaviour
     public float minVelocity = 5f, maxVelocity = 20f;
     public float velocitySpeed = 1.0f;
 
+    public float redDebuffSpeed = 3f;
+    public float blueDebuffCap = 0.6f;
+    public float greenDebuffCap = 0.6f;
+
     public int team;
 
     public GameObject cannonBall;
@@ -196,39 +200,75 @@ public class NetworkedCannon : MonoBehaviour
 
     float GetAngle()
     {
-        timer += Time.deltaTime;
+        if (debuff == SpiritType.ST_RED)
+        {
+            timer += Time.deltaTime * redDebuffSpeed;
+        }
+        else
+        {
+            timer += Time.deltaTime;
+        }
 
         if (timer >= anglePeriod * 2f)
         {
             timer -= anglePeriod * 2f;
         }
 
+        float resultingAngle;
+
         if (timer < anglePeriod)
         {
-            return (timer / anglePeriod) * angleRange + minAngle;
+            resultingAngle = (timer / anglePeriod) * angleRange + minAngle;
         }
         else
         {
-            return ((2f * anglePeriod - timer) / anglePeriod) * angleRange + minAngle;
+            resultingAngle = ((2f * anglePeriod - timer) / anglePeriod) * angleRange + minAngle;
+        }
+
+        if (debuff == SpiritType.ST_GREEN)
+        {
+            return resultingAngle * greenDebuffCap;
+        }
+        else
+        {
+            return resultingAngle;
         }
     }
 
     float GetPower()
     {
-        timer += Time.deltaTime;
+        if (debuff == SpiritType.ST_RED)
+        {
+            timer += Time.deltaTime * redDebuffSpeed;
+        }
+        else
+        {
+            timer += Time.deltaTime;
+        }
 
         if (timer >= velocityPeriod * 2f)
         {
             timer -= velocityPeriod * 2f;
         }
 
+        float resultingPower;
+
         if (timer < velocityPeriod)
         {
-            return (timer / velocityPeriod) * velocityRange + minVelocity;
+            resultingPower = (timer / velocityPeriod) * velocityRange + minVelocity;
         }
         else
         {
-            return ((2f * velocityPeriod - timer) / velocityPeriod) * velocityRange + minVelocity;
+            resultingPower = ((2f * velocityPeriod - timer) / velocityPeriod) * velocityRange + minVelocity;
+        }
+
+        if (debuff == SpiritType.ST_BLUE)
+        {
+            return resultingPower * blueDebuffCap;
+        }
+        else
+        {
+            return resultingPower;
         }
     }
 
