@@ -8,6 +8,8 @@ public class NetworkedTileSet : TileSet
 
     public SpreadChances vineChances, waterChances, fireChances;
 
+    public CashBasherManager manager;
+
     public void Load()
     {
         IEnumerator<SaveFile.TileInfo> tileList = SaveFile.Instance().GetTileList();
@@ -148,10 +150,28 @@ public class NetworkedTileSet : TileSet
         }
     }
 
+    bool HasStatusEffects()
+    {
+        for (int j = 0; j < width; j++)
+        {
+            for (int k = 0; k < height; k++)
+            {
+                if (tiles[j, k].GetDebuff() != SpiritType.ST_NULL)
+                {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
     public void TickDebuffs()
     {
         Spread();
         Tick();
         Apply();
+
+        manager.SetEffectStatus(this, HasStatusEffects());
     }
 }

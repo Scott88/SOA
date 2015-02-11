@@ -66,22 +66,25 @@ public class YourTurnState : GameState
 
     IEnumerator Preshow()
     {
-        if (Network.isServer)
+        if (manager.HasEffects(Network.isServer))
         {
-            cameraMan.FollowPosition(new Vector3(-10f, 0f, 0f));
+            if (Network.isServer)
+            {
+                cameraMan.FollowPosition(new Vector3(-10f, 0f, 0f));
+            }
+            else
+            {
+                cameraMan.FollowPosition(new Vector3(10f, 0f, 0f));
+            }
+
+            cameraMan.ZoomTo(5f);
+
+            yield return new WaitForSeconds(2.0f);
+
+            yourTileSet.TickDebuffs();
+
+            yield return new WaitForSeconds(1.0f);
         }
-        else
-        {
-            cameraMan.FollowPosition(new Vector3(10f, 0f, 0f));
-        }
-
-        cameraMan.ZoomTo(5f);
-
-        yield return new WaitForSeconds(2.0f);
-
-        yourTileSet.TickDebuffs();
-
-        yield return new WaitForSeconds(1.0f);
 
         if (Network.isServer)
         {

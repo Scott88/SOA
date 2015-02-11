@@ -44,6 +44,8 @@ public class CashBasherManager : MonoBehaviour
 
     public bool connectionRequired { get; set; }
 
+    private bool serverHasEffects = false, clientHasEffects = false;
+
     private GameState state = null;
     private GamePhase currentPhase = GamePhase.GP_STARTING;
 
@@ -137,6 +139,43 @@ public class CashBasherManager : MonoBehaviour
         else
         {
             return clientCannon;
+        }
+    }
+
+    public void SetEffectStatus(NetworkedTileSet set, bool effects)
+    {
+        if (set == serverSet)
+        {
+            networkView.RPC("NetSetEffectStatus", RPCMode.All, true, effects);
+        }
+        else if (set == clientSet)
+        {
+            networkView.RPC("NetSetEffectStatus", RPCMode.All, false, effects);
+        }
+    }
+
+    [RPC]
+    void NetSetEffectStatus(bool server, bool effects)
+    {
+        if (server)
+        {
+            serverHasEffects = effects;
+        }
+        else
+        {
+            clientHasEffects = effects;
+        }
+    }
+
+    public bool HasEffects(bool server)
+    {
+        if (server)
+        {
+            return serverHasEffects;
+        }
+        else
+        {
+            return clientHasEffects;
         }
     }
 

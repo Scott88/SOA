@@ -28,18 +28,21 @@ public class TheirTurnState : GameState
 
     IEnumerator Preshow()
     {
-        if (Network.isServer)
+        if (manager.HasEffects(Network.isClient))
         {
-            cameraMan.FollowPosition(new Vector3(10f, 0f, 0f));
-        }
-        else
-        {
-            cameraMan.FollowPosition(new Vector3(-10f, 0f, 0f));
-        }
+            if (Network.isServer)
+            {
+                cameraMan.FollowPosition(new Vector3(10f, 0f, 0f));
+            }
+            else
+            {
+                cameraMan.FollowPosition(new Vector3(-10f, 0f, 0f));
+            }
 
-        cameraMan.ZoomTo(5f);
+            cameraMan.ZoomTo(5f);
 
-        yield return new WaitForSeconds(3.0f);
+            yield return new WaitForSeconds(3.0f);
+        }
 
         if (Network.isServer)
         {
