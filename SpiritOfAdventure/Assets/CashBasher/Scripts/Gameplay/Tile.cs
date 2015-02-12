@@ -64,9 +64,26 @@ public class Tile
         }
     }
 
+    public bool IsHealedBy(SpiritType type)
+    {
+        if (block)
+        {
+            return block.IsHealedBy(type);
+        }
+        else
+        {
+            return false;
+        }
+    }
+
     public void Debuff(SpiritType type)
     {
         block.SetStatusEffect(type, false);
+    }
+
+    public void Heal()
+    {
+        block.SetStatusEffect(SpiritType.ST_NULL, true);
     }
 
     public void Tick()

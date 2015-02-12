@@ -121,6 +121,13 @@ public class Breakable : MonoBehaviour
                type == BlockType.BT_METAL && spiritType == SpiritType.ST_BLUE;
     }
 
+    public bool IsHealedBy(SpiritType spiritType)
+    {
+        return (statusEffect == SpiritType.ST_GREEN && spiritType == SpiritType.ST_RED ||
+               statusEffect == SpiritType.ST_BLUE && spiritType == SpiritType.ST_GREEN ||
+               statusEffect == SpiritType.ST_RED && spiritType == SpiritType.ST_BLUE);
+    }
+
     public void SetStatusEffect(SpiritType status, bool immediate)
     {
         if (immediate)
@@ -151,7 +158,9 @@ public class Breakable : MonoBehaviour
 
         if (type == SpiritType.ST_NULL)
         {
-            color = startColor;
+            color.r = startColor.r;
+            color.g = startColor.g;
+            color.b = startColor.b;
         }
         else
         {

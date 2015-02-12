@@ -150,9 +150,79 @@ public class NetworkedTileSet : TileSet
         }
     }
 
-    public void HealFrom(Vector3 position)
+    public void HealFrom(Vector3 position, SpiritType type)
     {
+        int x = GetXCoord(position.x), y = GetYCoord(position.y);
 
+        Heal(tiles[x, y], type);
+
+        if (x + 1 < width)
+        {
+            Heal(tiles[x + 1, y], type);
+
+            if (y + 1 < height)
+            {
+                Heal(tiles[x + 1, y + 1], type);
+            }
+
+            if (y - 1 > 0)
+            {
+                Heal(tiles[x + 1, y - 1], type);
+            }
+
+            if (x + 2 < width)
+            {
+                Heal(tiles[x + 2, y], type);
+            }
+        }
+
+        if (x - 1 > 0)
+        {
+            Heal(tiles[x - 1, y], type);
+
+            if (y + 1 < height)
+            {
+                Heal(tiles[x - 1, y + 1], type);
+            }
+
+            if (y - 1 > 0)
+            {
+                Heal(tiles[x - 1, y - 1], type);
+            }
+
+            if (x - 2 > 0)
+            {
+                Heal(tiles[x - 2, y], type);
+            }
+        }
+
+        if (y + 1 < height)
+        {
+            Heal(tiles[x, y + 1], type);
+        }
+
+        if (y - 1 > 0)
+        {
+            Heal(tiles[x, y - 1], type);
+        }
+
+        if (y + 2 < height)
+        {
+            Heal(tiles[x, y + 2], type);
+        }
+
+        if (y - 2 > 0)
+        {
+            Heal(tiles[x, y - 2], type);
+        }
+    }
+
+    public void Heal(Tile tile, SpiritType type)
+    {
+        if (tile.IsHealedBy(type))
+        {
+            tile.Heal();
+        }
     }
 
     public bool HasStatusEffects()
