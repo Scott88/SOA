@@ -150,7 +150,7 @@ public class NetworkedTileSet : TileSet
         }
     }
 
-    bool HasStatusEffects()
+    public bool HasStatusEffects()
     {
         for (int j = 0; j < width; j++)
         {
@@ -171,7 +171,5 @@ public class NetworkedTileSet : TileSet
         Spread();
         Tick();
         Apply();
-
-        manager.SetEffectStatus(this, HasStatusEffects());
     }
 }

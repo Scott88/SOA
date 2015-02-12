@@ -66,8 +66,8 @@ public class YourTurnState : GameState
 
     IEnumerator Preshow()
     {
-        //if (manager.HasEffects(Network.isServer))
-        //{
+        if (manager.HasEffects(Network.isServer))
+        {
             if (Network.isServer)
             {
                 cameraMan.FollowPosition(new Vector3(-10f, 0f, 0f));
@@ -84,7 +84,7 @@ public class YourTurnState : GameState
             yourTileSet.TickDebuffs();
 
             yield return new WaitForSeconds(1.0f);
-        //}
+        }
 
         if (Network.isServer)
         {
@@ -105,6 +105,7 @@ public class YourTurnState : GameState
     public void ReadyNextTurn()
     {
         nextTurn = true;
+        manager.networkView.RPC("UpdateEffectStatus", RPCMode.Others);
     }
 
     public void Update()
@@ -159,7 +160,14 @@ public class YourTurnState : GameState
 
                 if (cannon)
                 {
-                    showButtons = !cannon.Press();
+                    if (showButtons)
+                    {
+                        showButtons = !cannon.Press();
+                    }
+                    else
+                    {
+                        cannon.Press();
+                    }
 
                     return;
                 }
@@ -171,7 +179,7 @@ public class YourTurnState : GameState
 
         RaycastHit2D hit2d = Physics2D.Raycast(rayOrigin, rayDirection);
 
-        if (hit2d)
+        if (hit2d && showButtons)
         {
             CashBasherSpiritGUI spiritGUI = hit2d.collider.GetComponent<CashBasherSpiritGUI>();
 
@@ -223,7 +231,7 @@ public class YourTurnState : GameState
 
         if (holdingSpirit)
         {
-            selectedSpirit.MoveHere(manager.playerCamera.ScreenToWorldPoint(Input.mousePosition));
+            selectedSpirit.MoveHere(manager.playerCamera.ScreenToWorldPoint(Input.mousePosition) + Vector3.up * 2f);
         }  
     }
 
@@ -234,7 +242,7 @@ public class YourTurnState : GameState
 
         RaycastHit2D hit2d = Physics2D.Raycast(rayOrigin, rayDirection);
 
-        if (hit2d)
+        if (hit2d && spiritGUIPushed)
         {
             CashBasherSpiritGUI spiritGUI = hit2d.collider.GetComponent<CashBasherSpiritGUI>();
 
