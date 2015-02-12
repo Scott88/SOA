@@ -1,4 +1,4 @@
-﻿//#define HOME_LAN
+﻿#define HOME_LAN
 
 using UnityEngine;
 using System.Collections;
