@@ -382,6 +382,13 @@ public class YourTurnState : GameState
                 {
                     selectedSpirit.healAOE.SetActive(false);
                     selectedSpirit.MoveHereAndHeal(manager.playerCamera.ScreenToWorldPoint(Input.mousePosition), Network.isServer);
+
+                    showButtons = false;
+
+                    holdingSpirit = false;
+                    selectedSpirit = null;
+
+                    return;
                 }
 
                 selectedSpirit.MoveHereAndPoof(rayOrigin);

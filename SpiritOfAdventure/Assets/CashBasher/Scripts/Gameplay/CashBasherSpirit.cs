@@ -171,6 +171,7 @@ public class CashBasherSpirit : MonoBehaviour
         networkView.RPC("NetMoveHereAndHeal", RPCMode.Others, position, serverSet);
     }
 
+    [RPC]
     void NetMoveHereAndHeal(Vector3 position, bool serverSet)
     {
         poofOnArrival = true;
