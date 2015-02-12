@@ -38,6 +38,12 @@ public class CashBasherManager : MonoBehaviour
 
     public GUISkin mySkin;
 
+    public StartState startState;
+    public YourTurnState yourTurnState;
+    public TheirTurnState theirTurnState;
+    public WinState winState;
+    public LoseState loseState;
+
     public int myTeam { get; set; }
 
     public bool opponentIsReady { get; set; }
@@ -51,13 +57,7 @@ public class CashBasherManager : MonoBehaviour
 
     private NetworkedLevelLoader loader;
 
-    private StartState startState;
-    //private BuildState buildState;
-    //private WaitingState waitingState;
-    private YourTurnState yourTurnState;
-    private TheirTurnState theirTurnState;
-    private WinState winState;
-    private LoseState loseState;
+    
 
     void Awake()
     {
@@ -87,27 +87,6 @@ public class CashBasherManager : MonoBehaviour
             myTeam = 1;
             cameraMan.FollowPosition(new Vector3(10f, 0f, 0f)); 
         }
-        
-        //cameraMan.ZoomTo(4f);
-
-        startState = new StartState(this, startTimer, loader);
-        //buildState = new BuildState(this, myTeam, myTeam == 0 ? serverSet : clientSet, buildTimer);
-        //waitingState = new WaitingState(this);
-
-        if (myTeam == 0)
-        {
-            yourTurnState = new YourTurnState(this, serverCannon, cameraMan, serverSpiritWaypoint, spiritButtons, serverSet);
-        }
-        else
-        {
-            yourTurnState = new YourTurnState(this, clientCannon, cameraMan, clientSpiritWaypoint, spiritButtons, clientSet);
-        }
-
-        theirTurnState = new TheirTurnState(this, cameraMan);
-
-        winState = new WinState(this);
-
-        loseState = new LoseState(this);
 
         SwitchToState((int)GamePhase.GP_STARTING);
     }
@@ -116,7 +95,7 @@ public class CashBasherManager : MonoBehaviour
     {
         if (state != null)
         {
-            state.Update();
+            state.UpdateState();
         }
     }
 
@@ -126,7 +105,7 @@ public class CashBasherManager : MonoBehaviour
         {
             GUI.skin = mySkin;
 
-            state.OnGUI();
+            state.OnStateGUI();
         }
     }
 

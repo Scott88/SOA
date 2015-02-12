@@ -45,7 +45,7 @@ public class Breakable : MonoBehaviour
         {
             NetworkedCannonBall ball = coll.gameObject.GetComponent<NetworkedCannonBall>() as NetworkedCannonBall;
 
-            if (!ball.networkView.isMine)
+            if (!ball.networkView.isMine || networkView.isMine)
             {
                 return;
             }

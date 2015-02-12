@@ -119,7 +119,7 @@ public class NetworkedTileSet : TileSet
 
     void SpreadToTile(Tile tile, float chance, SpiritType type)
     {
-        if (tile.IsDebuffedBy(type))
+        if (tile.IsDebuffedBy(type) && tile.GetDebuff() == SpiritType.ST_NULL)
         {
             if (Random.value <= chance)
             {

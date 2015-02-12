@@ -3,29 +3,27 @@ using System.Collections;
 
 public class StartState : GameState
 {
-    CashBasherManager manager;
+    public CashBasherManager manager;
 
-    float delay;
+    public float startDelay;
 
-    NetworkedLevelLoader loader;
+    private NetworkedLevelLoader loader;
 
-    public StartState(CashBasherManager m, float startDelay, NetworkedLevelLoader load)
+    void Start()
     {
-        delay = startDelay;
-        manager = m;
-        loader = load;
+        loader = FindObjectOfType<NetworkedLevelLoader>();
     }
 
-    public void Prepare()
+    public override void Prepare()
     {
         manager.gameText.text = "Get ready to start...!";
     }
 
-    public void Update()
+    public override void UpdateState()
     {
-        delay -= Time.deltaTime;
+        startDelay -= Time.deltaTime;
 
-        if (delay <= 0f)
+        if (startDelay <= 0f)
         {
             if (Network.isServer && loader.IsReady())
             {
@@ -45,15 +43,5 @@ public class StartState : GameState
                 }
             }
         }
-    }
-
-    public void OnGUI()
-    {
-
-    }
-
-    public void End()
-    {
-        
     }
 }

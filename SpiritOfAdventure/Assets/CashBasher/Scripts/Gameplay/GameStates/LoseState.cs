@@ -3,7 +3,7 @@ using System.Collections;
 
 public class LoseState : GameState {
 
-	CashBasherManager manager;
+	public CashBasherManager manager;
 
     float timer = 1.5f;
 
@@ -11,12 +11,7 @@ public class LoseState : GameState {
 
     bool treasureExplosion = true;
 
-    public LoseState(CashBasherManager m)
-    {
-        manager = m;
-    }
-
-    public void Prepare()
+    public override void Prepare()
     {
         Time.timeScale = 0.5f;
 
@@ -26,7 +21,7 @@ public class LoseState : GameState {
         manager.connectionRequired = false;
     }
 
-    public void Update()
+    public override void UpdateState()
     {
         if (treasureExplosion)
         {
@@ -46,7 +41,7 @@ public class LoseState : GameState {
         }
     }
 
-    public void OnGUI()
+    public override void OnStateGUI()
     {
         if (timer < 0.0f && !treasureExplosion)
         {
@@ -69,11 +64,6 @@ public class LoseState : GameState {
                 }
             }
         }
-    }
-
-    public void End()
-    {
-
     }
 
     public void TreasureExploded()
