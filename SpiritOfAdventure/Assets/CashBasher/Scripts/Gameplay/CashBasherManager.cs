@@ -121,6 +121,18 @@ public class CashBasherManager : MonoBehaviour
         }
     }
 
+    public NetworkedTileSet GetTileSet(bool server)
+    {
+        if (server)
+        {
+            return serverSet;
+        }
+        else
+        {
+            return clientSet;
+        }
+    }
+
     [RPC]
     void UpdateEffectStatus()
     {

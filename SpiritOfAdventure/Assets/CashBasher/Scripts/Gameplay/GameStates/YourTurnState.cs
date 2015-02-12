@@ -378,8 +378,13 @@ public class YourTurnState : GameState
                     }
                 }
 
+                if (yourTileSet.IsInside(manager.playerCamera.ScreenToWorldPoint(Input.mousePosition)))
+                {
+                    selectedSpirit.healAOE.SetActive(false);
+                    selectedSpirit.MoveHereAndHeal(manager.playerCamera.ScreenToWorldPoint(Input.mousePosition), Network.isServer);
+                }
+
                 selectedSpirit.MoveHereAndPoof(rayOrigin);
-                selectedSpirit.healAOE.SetActive(false);
 
                 holdingSpirit = false;
                 selectedSpirit = null;

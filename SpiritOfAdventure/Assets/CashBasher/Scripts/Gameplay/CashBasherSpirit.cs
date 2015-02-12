@@ -23,6 +23,8 @@ public class CashBasherSpirit : MonoBehaviour
 
     private NetworkedCannon targetCannon;
 
+    private NetworkedTileSet targetSet;
+
     private Vector3 velocityRef;
     private Vector3 scaleRef;
     private float volumeRef;
@@ -155,6 +157,32 @@ public class CashBasherSpirit : MonoBehaviour
         collider2D.enabled = false;
     }
 
+    public void MoveHereAndHeal(Vector3 position, bool serverSet)
+    {
+        poofOnArrival = true;
+
+        targetSet = manager.GetTileSet(serverSet);
+
+        targetPosition = position;
+        targetPosition.z = -30f;
+
+        collider2D.enabled = false;
+
+        networkView.RPC("NetMoveHereAndHeal", RPCMode.Others, position, serverSet);
+    }
+
+    void NetMoveHereAndHeal(Vector3 position, bool serverSet)
+    {
+        poofOnArrival = true;
+
+        targetSet = manager.GetTileSet(serverSet);
+
+        targetPosition = position;
+        targetPosition.z = -30f;
+
+        collider2D.enabled = false;
+    }
+
     public void MoveHere(Vector3 target)
     {
         targetPosition = target;
@@ -169,6 +197,11 @@ public class CashBasherSpirit : MonoBehaviour
         {
             gui.Remove();
             targetCannon.ApplyBuff(type);
+        }
+        else if (targetSet)
+        {
+            gui.Remove();
+            targetSet.HealFrom(targetPosition, type);
         }
         else
         {

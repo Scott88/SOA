@@ -10,6 +10,8 @@ public class NetworkedTileSet : TileSet
 
     public CashBasherManager manager;
 
+    private bool filledOut = false;
+
     public void Load()
     {
         IEnumerator<SaveFile.TileInfo> tileList = SaveFile.Instance().GetTileList();
@@ -29,6 +31,8 @@ public class NetworkedTileSet : TileSet
                     break;
             }
         }
+
+        filledOut = true;
     }
 
     public void LoadNetworkedBlock(int x, int y, GameObject block)
@@ -43,7 +47,7 @@ public class NetworkedTileSet : TileSet
         }
     }
 
-    public void Spread()
+    void Spread()
     {
         for (int j = 0; j < width; j++)
         {
@@ -152,6 +156,11 @@ public class NetworkedTileSet : TileSet
 
     public void HealFrom(Vector3 position, SpiritType type)
     {
+        if (!filledOut)
+        {
+            return;
+        }
+
         int x = GetXCoord(position.x), y = GetYCoord(position.y);
 
         Heal(tiles[x, y], type);
@@ -217,7 +226,7 @@ public class NetworkedTileSet : TileSet
         }
     }
 
-    public void Heal(Tile tile, SpiritType type)
+    void Heal(Tile tile, SpiritType type)
     {
         if (tile.IsHealedBy(type))
         {
