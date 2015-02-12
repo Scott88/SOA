@@ -9,6 +9,8 @@ public class CashBasherSpirit : MonoBehaviour
 
     public CashBasherSpiritGUI gui;
 
+    public GameObject healAOE;
+
     private bool active = false;
 
     private bool retreating = false;

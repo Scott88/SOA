@@ -150,6 +150,11 @@ public class NetworkedTileSet : TileSet
         }
     }
 
+    public void HealFrom(Vector3 position)
+    {
+
+    }
+
     public bool HasStatusEffects()
     {
         for (int j = 0; j < width; j++)

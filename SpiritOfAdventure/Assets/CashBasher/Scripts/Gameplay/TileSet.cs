@@ -50,6 +50,12 @@ public class TileSet : MonoBehaviour
         }
     }
 
+    public bool IsInside(Vector3 position)
+    {
+        return minCoord.x < position.x && minCoord.y < position.y &&
+               maxCoord.x > position.x && maxCoord.y > position.y;
+    }
+
     public bool CanPlace(Vector3 position)
     {
         return minCoord.x < position.x && minCoord.y < position.y &&
@@ -126,21 +132,5 @@ public class TileSet : MonoBehaviour
         Gizmos.color = Color.yellow;
 
         Gizmos.DrawCube((mnt + mxt) / 2f, (mxt - mnt));
-    }
-
-    public void Save()
-    {
-        SaveFile.Instance().ClearTileList();
-
-        for (int j = 0; j < width; j++)
-        {
-            for (int k = 0; k < height; k++)
-            {
-                if (!tiles[j, k].Empty())
-                {
-                    SaveFile.Instance().AddTile(tiles[j, k]);
-                }
-            }
-        }
     }
 }

@@ -33,7 +33,7 @@ public class YourTurnState : GameState
 
     bool showButtons = true;
 
-    bool nothingGrabbed = false, cameraGrabbed = false;
+    bool airGrabbed = false, cameraGrabbed = false;
     bool cameraFocusLeft;
 
     Vector3 lastTouchPos;
@@ -217,14 +217,19 @@ public class YourTurnState : GameState
 			}
 		}
 
-        nothingGrabbed = true;
+        if(selectedSpirit && yourTileSet.IsInside(manager.playerCamera.ScreenToWorldPoint(Input.mousePosition)))
+        {
+            return;
+        }
+
+        airGrabbed = true;
         lastTouchPos = manager.playerCamera.ScreenToWorldPoint(Input.mousePosition);
         manager.cameraMan.enabled = false;
     }
 
     public void GetHeldOn()
     {
-        if (nothingGrabbed)
+        if (airGrabbed)
         {
             Vector3 nextPos = manager.playerCamera.ScreenToWorldPoint(Input.mousePosition);
 
@@ -279,15 +284,29 @@ public class YourTurnState : GameState
             {
                 selectedSpirit.MoveHere(manager.playerCamera.ScreenToWorldPoint(Input.mousePosition) + Vector3.up * 2f);
             }
+
+            if (selectedSpirit)
+            {
+                if (yourTileSet.IsInside(manager.playerCamera.ScreenToWorldPoint(Input.mousePosition)))
+                {
+                    selectedSpirit.healAOE.SetActive(true);
+                    selectedSpirit.healAOE.transform.position = yourTileSet.CenterOn(manager.playerCamera.ScreenToWorldPoint(Input.mousePosition));
+                    selectedSpirit.healAOE.transform.position += Vector3.back * 2f;
+                }
+                else
+                {
+                    selectedSpirit.healAOE.SetActive(false);
+                }
+            }
         }
     }
 
     public void GetReleasedOn()
     {
-        if (nothingGrabbed)
+        if (airGrabbed)
         {
             manager.cameraMan.enabled = true;
-            nothingGrabbed = false;
+            airGrabbed = false;
         }
 
         if (cameraGrabbed)
@@ -296,11 +315,13 @@ public class YourTurnState : GameState
             {
                 manager.cameraMan.FollowPosition(new Vector3(4.5f, 1f, 0f));
                 cameraFocusLeft = false;
+                manager.networkView.RPC("FocusCamera", RPCMode.Others, cameraFocusLeft);
             }
             else if (!cameraFocusLeft && manager.playerCamera.transform.position.x < 0f)
             {
                 manager.cameraMan.FollowPosition(new Vector3(-4.5f, 1f, 0f));
                 cameraFocusLeft = true;
+                manager.networkView.RPC("FocusCamera", RPCMode.Others, cameraFocusLeft);
             }
 
             cameraGrabbed = false;
@@ -358,6 +379,7 @@ public class YourTurnState : GameState
                 }
 
                 selectedSpirit.MoveHereAndPoof(rayOrigin);
+                selectedSpirit.healAOE.SetActive(false);
 
                 holdingSpirit = false;
                 selectedSpirit = null;

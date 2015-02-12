@@ -212,6 +212,19 @@ public class CashBasherManager : MonoBehaviour
     }
 
     [RPC]
+    void FocusCamera(bool left)
+    {
+        if (left)
+        {
+            cameraMan.FollowPosition(new Vector3(-4.5f, 1f, 0f));
+        }
+        else if (!left)
+        {
+            cameraMan.FollowPosition(new Vector3(4.5f, 1f, 0f));
+        }
+    }
+
+    [RPC]
     public void SwitchToState(int phase)
     {
         currentPhase = (GamePhase)(phase);
