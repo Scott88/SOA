@@ -53,6 +53,8 @@ public class StartState : GameState
 
         manager.GenerateClientSpirits();
 
+        yield return new WaitForSeconds(1.0f);
+
         bool serverFirst = Random.value > 0.5f;
 
         if (serverFirst)

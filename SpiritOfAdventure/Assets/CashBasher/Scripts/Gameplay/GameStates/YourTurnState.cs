@@ -55,7 +55,7 @@ public class YourTurnState : GameState
 
         buttonUpPos = spiritButtons.transform.position;
         buttonDownPos = buttonUpPos;
-        buttonDownPos.y -= 2.0f;
+        buttonDownPos.y -= 2.5f;
     }
 
     public override void Prepare()

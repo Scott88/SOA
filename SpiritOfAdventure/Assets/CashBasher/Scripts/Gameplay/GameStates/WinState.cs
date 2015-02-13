@@ -5,11 +5,21 @@ public class WinState : GameState
 {
 	public CashBasherManager manager;
 
-    float timer = 1.5f;
+    public GameObject spiritButtons;
 
-    Vector3 targetPosition;
+    private float timer = 1.5f;
 
-    bool treasureExplosion = true;
+    private Vector3 targetPosition;
+
+    private bool treasureExplosion = true;
+
+    private Vector3 buttonsPos;
+    private Vector3 velocityRef;
+
+    void Start()
+    {
+        buttonsPos = spiritButtons.transform.position;
+    }
 
     public override void Prepare()
     {
@@ -23,6 +33,8 @@ public class WinState : GameState
 
     public override void UpdateState()
     {
+        spiritButtons.transform.position = Vector3.SmoothDamp(spiritButtons.transform.position, buttonsPos, ref velocityRef, 1f);
+
         if (treasureExplosion)
         {
             timer -= Time.deltaTime;
