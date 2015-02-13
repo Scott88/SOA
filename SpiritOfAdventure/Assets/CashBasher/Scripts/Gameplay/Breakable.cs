@@ -19,6 +19,8 @@ public class Breakable : MonoBehaviour
 
     public BlockType type;
 
+    public SpiritType containedSpirit { get; set; }
+
     private int startingHealth;
 
     private Tile parent;
@@ -28,10 +30,14 @@ public class Breakable : MonoBehaviour
 
     private Color startColor;
 
+    private CashBasherManager manager;
+
     void Start()
     {
         startingHealth = health;
         startColor = renderer.material.color;
+
+        manager = FindObjectOfType<CashBasherManager>();
     }
 
     public void SetTile(Tile t)
@@ -72,15 +78,23 @@ public class Breakable : MonoBehaviour
         }
     }
 
+    [RPC]
+    void SetSpirit(int spiritType)
+    {
+        containedSpirit = (SpiritType)spiritType;
+
+        manager.CreateBlockSpirit(this);
+    }
+
     public bool Damage()
     {
         health--;
 
         if (health == 0)
         {
+            manager.TransferSpirit(containedSpirit, transform.position, false);
             Destroy(gameObject);
-            networkView.RPC("NetDamage", RPCMode.Others);
-
+            networkView.RPC("NetDamage", RPCMode.Others);           
             return true;
         }
 
@@ -100,6 +114,7 @@ public class Breakable : MonoBehaviour
 
         if (health == 0)
         {
+            manager.TransferSpirit(containedSpirit, transform.position, true);
             SaveFile.Instance().ModifyBlockInventory(type, -1);
             Destroy(gameObject);
         }

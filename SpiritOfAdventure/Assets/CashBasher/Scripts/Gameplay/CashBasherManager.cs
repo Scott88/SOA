@@ -14,8 +14,8 @@ enum GamePhase
 
 public class CashBasherManager : MonoBehaviour
 {
-    public float startTimer = 2.0f;
-    public float buildTimer = 30.0f;
+    public float blockSpiritChance = 0.1f;
+    public int minimumSpirits = 1;
 
     public Camera playerCamera, guiCamera;
 
@@ -25,16 +25,20 @@ public class CashBasherManager : MonoBehaviour
 
     public NetworkedCannon serverCannon, clientCannon;
 
-    public CashBasherSpirit greenSpirit, blueSpirit, redSpirit;
+    public CashBasherSpiritGUI greenGUI, blueGUI, redGUI;
 
-    public GameObject serverSpiritWaypoint, clientSpiritWaypoint;
+    public GameObject greenTransfer, blueTransfer, redTransfer;
+
+    public GameObject serverWaypoint, clientWaypoint;
+
+    public GameObject trappedGreenSpirit, trappedBlueSpirit, trappedRedSpirit;
 
     public TextMesh gameText;
 
     public GameObject treasure;
     public GameObject treasureSupport;
 
-    public GameObject spiritButtons;
+    public GameObject splashScreen;
 
     public GUISkin mySkin;
 
@@ -57,8 +61,6 @@ public class CashBasherManager : MonoBehaviour
 
     private NetworkedLevelLoader loader;
 
-    
-
     void Awake()
     {
         if (Network.isServer)
@@ -71,6 +73,8 @@ public class CashBasherManager : MonoBehaviour
         }
 
         connectionRequired = true;
+
+        splashScreen.SetActive(true);
     }
 
     void Start()
@@ -80,12 +84,12 @@ public class CashBasherManager : MonoBehaviour
         if (Network.isServer)
         {
             myTeam = 0;
-            cameraMan.FollowPosition(new Vector3(-10f, 0f, 0f));
+            cameraMan.FollowPosition(new Vector3(-4.5f, 1f, 0f));
         }
         else if (Network.isClient)
         {
             myTeam = 1;
-            cameraMan.FollowPosition(new Vector3(10f, 0f, 0f)); 
+            cameraMan.FollowPosition(new Vector3(4.5f, 1f, 0f)); 
         }
 
         SwitchToState((int)GamePhase.GP_STARTING);
@@ -107,6 +111,22 @@ public class CashBasherManager : MonoBehaviour
 
             state.OnStateGUI();
         }
+    }
+
+    public void GenerateServerSpirits()
+    {
+        serverSet.GenerateBlockSpirits(blockSpiritChance, minimumSpirits);
+    }
+
+    public void GenerateClientSpirits()
+    {
+        networkView.RPC("NetGenerateClientSpirits", RPCMode.Others);
+    }
+
+    [RPC]
+    void NetGenerateClientSpirits()
+    {
+        clientSet.GenerateBlockSpirits(blockSpiritChance, minimumSpirits);
     }
 
     public NetworkedCannon GetCannon(bool serversCannon)
@@ -131,6 +151,47 @@ public class CashBasherManager : MonoBehaviour
         {
             return clientSet;
         }
+    }
+
+    public void CreateBlockSpirit(Breakable block)
+    {
+        GameObject blockSpirit = null;
+
+        switch (block.containedSpirit)
+        {
+            case SpiritType.ST_GREEN:
+                blockSpirit = Instantiate(trappedGreenSpirit, block.transform.position + Vector3.back * 2, Quaternion.identity) as GameObject;
+                break;
+            case SpiritType.ST_BLUE:
+                blockSpirit = Instantiate(trappedBlueSpirit, block.transform.position + Vector3.back * 2, Quaternion.identity) as GameObject;
+                break;
+            case SpiritType.ST_RED:
+                blockSpirit = Instantiate(trappedRedSpirit, block.transform.position + Vector3.back * 2, Quaternion.identity) as GameObject;
+                break;
+        }
+
+        blockSpirit.transform.parent = block.transform;
+    }
+
+    [RPC]
+    void FadeSplashScreen()
+    {
+        StartCoroutine(FadeSplash());
+    }
+
+    IEnumerator FadeSplash()
+    {
+        Color color = splashScreen.renderer.material.color;
+
+        while (color.a > 0f)
+        {
+            color.a -= Time.deltaTime;
+            splashScreen.renderer.material.color = color;
+
+            yield return null;
+        }
+
+        splashScreen.SetActive(false);
     }
 
     [RPC]
@@ -180,6 +241,54 @@ public class CashBasherManager : MonoBehaviour
         else
         {
             return clientHasEffects;
+        }
+    }
+
+    public void TransferSpirit(SpiritType type, Vector3 position, bool myBlock)
+    {
+        switch (type)
+        {
+            case SpiritType.ST_GREEN:
+                TransferSpirit(greenGUI, greenTransfer, position, myBlock);
+                break;
+            case SpiritType.ST_BLUE:
+                TransferSpirit(blueGUI, blueTransfer, position, myBlock);
+                break;
+            case SpiritType.ST_RED:
+                TransferSpirit(redGUI, redTransfer, position, myBlock);
+                break;
+        }     
+    }
+
+    void TransferSpirit(CashBasherSpiritGUI gui, GameObject transferPref, Vector3 position, bool myBlock)
+    {
+        GameObject transferedSpirit = Instantiate(transferPref, position, Quaternion.identity) as GameObject;
+
+        SmoothDamper damper = transferedSpirit.GetComponent<SmoothDamper>();
+
+        if (myBlock)
+        {
+            if (Network.isServer)
+            {
+                damper.target = clientWaypoint.transform.position;
+            }
+            else
+            {
+                damper.target = serverWaypoint.transform.position;
+            }
+        }
+        else
+        {
+            gui.Add();
+
+            if (Network.isServer)
+            {
+                damper.target = serverWaypoint.transform.position;
+            }
+            else
+            {
+                damper.target = clientWaypoint.transform.position;
+            }
         }
     }
 

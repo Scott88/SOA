@@ -60,21 +60,6 @@ public class YourTurnState : GameState
 
     public override void Prepare()
     {
-        //if (Network.isServer)
-        //{
-        //    cameraMan.FollowPosition(new Vector3(4.5f, 1f, 0f));
-        //}
-        //else
-        //{
-        //    cameraMan.FollowPosition(new Vector3(-4.5f, 1f, 0f));
-        //}
-
-        //cameraMan.ZoomTo(7f);
-
-        //yourCannon.Activate();
-
-        //showButtons = true;
-
         manager.StartCoroutine(Preshow());
     }
 

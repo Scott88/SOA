@@ -40,6 +40,11 @@ public class Tile
         }
     }
 
+    public void InsertSpirit(int spiritType)
+    {
+        block.networkView.RPC("SetSpirit", RPCMode.All, spiritType);
+    }
+
     public SpiritType GetDebuff()
     {
         if (block)

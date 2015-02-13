@@ -46,6 +46,54 @@ public class NetworkedTileSet : TileSet
             tiles[x, y].SetBlock(breakable);
         }
     }
+    
+    public void GenerateBlockSpirits(float spiritChance, int minSpirits)
+    {
+        List<Tile> blockList = GetTilesWithBlocks();
+
+        int spiritsPlaced = 0;
+
+        for(int j = 0; j < blockList.Count; j++)
+        {
+            if (Random.value < spiritChance)
+            {
+                InsertSpiritIntoTile(blockList[j]);
+                blockList.RemoveAt(j);
+                spiritsPlaced++;
+            }
+        }
+
+        while (spiritsPlaced < minSpirits && minSpirits - spiritsPlaced < blockList.Count)
+        {
+            int index = Random.Range(0, blockList.Count);
+            InsertSpiritIntoTile(blockList[index]);
+            blockList.RemoveAt(index);
+            spiritsPlaced++;
+        }
+    }
+
+    List<Tile> GetTilesWithBlocks()
+    {
+        List<Tile> blockTileList = new List<Tile>();
+
+        for (int j = 0; j < width; j++)
+        {
+            for (int k = 0; k < height; k++)
+            {
+                if (tiles[j, k].GetBlockType() != BlockType.BT_NULL)
+                {
+                    blockTileList.Add(tiles[j, k]);
+                }
+            }
+        }
+
+        return blockTileList;
+    }
+
+    void InsertSpiritIntoTile(Tile tile)
+    {
+        tile.InsertSpirit(Random.Range(1, 4));
+    }
 
     void Spread()
     {

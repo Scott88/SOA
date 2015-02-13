@@ -17,31 +17,53 @@ public class StartState : GameState
     public override void Prepare()
     {
         manager.gameText.text = "Get ready to start...!";
+
+        if (Network.isServer)
+        {
+            manager.StartCoroutine(Preshow());
+        }
     }
 
-    public override void UpdateState()
+    IEnumerator Preshow()
     {
-        startDelay -= Time.deltaTime;
+        yield return new WaitForSeconds(startDelay);
 
-        if (startDelay <= 0f)
+        while (!loader.IsReady())
         {
-            if (Network.isServer && loader.IsReady())
-            {
-                manager.RandomizeTreasure();
+            yield return null;
+        }
 
-                bool serverFirst = Random.value > 0.5f;
+        manager.RandomizeTreasure();
 
-                if (serverFirst)
-                {
-                    manager.networkView.RPC("SwitchToState", RPCMode.Others, (int)GamePhase.GP_THEIR_TURN);
-                    manager.SwitchToState((int)GamePhase.GP_YOUR_TURN);
-                }
-                else
-                {
-                    manager.networkView.RPC("SwitchToState", RPCMode.Others, (int)GamePhase.GP_YOUR_TURN);
-                    manager.SwitchToState((int)GamePhase.GP_THEIR_TURN);
-                }
-            }
+        manager.networkView.RPC("FadeSplashScreen", RPCMode.All);
+
+        yield return new WaitForSeconds(1.0f);
+
+        manager.networkView.RPC("FocusCamera", RPCMode.All, true);
+
+        yield return new WaitForSeconds(1.5f);
+
+        manager.GenerateServerSpirits();
+
+        yield return new WaitForSeconds(1.0f);
+
+        manager.networkView.RPC("FocusCamera", RPCMode.All, false);
+
+        yield return new WaitForSeconds(1.5f);
+
+        manager.GenerateClientSpirits();
+
+        bool serverFirst = Random.value > 0.5f;
+
+        if (serverFirst)
+        {
+            manager.networkView.RPC("SwitchToState", RPCMode.Others, (int)GamePhase.GP_THEIR_TURN);
+            manager.SwitchToState((int)GamePhase.GP_YOUR_TURN);
+        }
+        else
+        {
+            manager.networkView.RPC("SwitchToState", RPCMode.Others, (int)GamePhase.GP_YOUR_TURN);
+            manager.SwitchToState((int)GamePhase.GP_THEIR_TURN);
         }
     }
 }
