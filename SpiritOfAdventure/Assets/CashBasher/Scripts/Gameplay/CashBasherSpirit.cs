@@ -31,6 +31,8 @@ public class CashBasherSpirit : MonoBehaviour
 
     private bool poofOnArrival;
 
+    private bool consume;
+
     void Start()
     {
         manager = FindObjectOfType<CashBasherManager>();
@@ -133,6 +135,7 @@ public class CashBasherSpirit : MonoBehaviour
     public void MoveHereAndTrigger(bool serverCannon)
     {
         poofOnArrival = true;
+        consume = serverCannon == Network.isServer;
 
         targetCannon = manager.GetCannon(serverCannon);
 
@@ -148,6 +151,7 @@ public class CashBasherSpirit : MonoBehaviour
     void NetMoveHereAndTrigger(bool serverCannon)
     {
         poofOnArrival = true;
+        consume = serverCannon == Network.isServer;
 
         targetCannon = manager.GetCannon(serverCannon);
 
@@ -160,6 +164,7 @@ public class CashBasherSpirit : MonoBehaviour
     public void MoveHereAndHeal(Vector3 position, bool serverSet)
     {
         poofOnArrival = true;
+        consume = serverSet == Network.isServer;
 
         targetSet = manager.GetTileSet(serverSet);
 
@@ -175,6 +180,7 @@ public class CashBasherSpirit : MonoBehaviour
     void NetMoveHereAndHeal(Vector3 position, bool serverSet)
     {
         poofOnArrival = true;
+        consume = serverSet == Network.isServer;
 
         targetSet = manager.GetTileSet(serverSet);
 
@@ -196,12 +202,20 @@ public class CashBasherSpirit : MonoBehaviour
 
         if (targetCannon)
         {
-            gui.Remove();
+            if (consume)
+            {
+                gui.Remove();
+            }
+
             targetCannon.ApplyBuff(type);
         }
         else if (targetSet)
         {
-            gui.Remove();
+            if (consume)
+            {
+                gui.Remove();
+            }
+
             targetSet.HealFrom(targetPosition, type);
         }
         else
