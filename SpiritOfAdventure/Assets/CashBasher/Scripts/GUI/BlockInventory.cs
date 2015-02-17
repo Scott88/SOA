@@ -4,7 +4,6 @@ using System.Collections;
 public class BlockInventory : MonoBehaviour
 {
     public GameObject block;
-    public string blockName;
 
     public TextMesh blockCounter;
     public GameObject selectionIndicator;
@@ -73,10 +72,5 @@ public class BlockInventory : MonoBehaviour
     public bool IsSelected()
     {
         return selected;
-    }
-
-    public void Save()
-    {
-        PlayerPrefs.SetInt(blockName, blockCount > 3 ? blockCount : 3);
     }
 }

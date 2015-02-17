@@ -5,24 +5,28 @@ public class Tile
 {
     int x, y;
 
+    float blockSize;
+
     Breakable block;
 
     TileSet parent;
 
-    public Tile(TileSet p, int xCoord, int yCoord)
+    public Tile(TileSet p, int xCoord, int yCoord, float size)
     {
         parent = p;
         x = xCoord;
         y = yCoord;
         block = null;
+        blockSize = size;
     }
 
-    public Tile(TileSet p, Breakable b, int xCoord, int yCoord)
+    public Tile(TileSet p, Breakable b, int xCoord, int yCoord, float size)
     {
         parent = p;
         block = b;
         x = xCoord;
         y = yCoord;
+        blockSize = size;
     }
 
     public int GetX() { return x; }
@@ -113,11 +117,11 @@ public class Tile
 
         if (!parent.reverseX)
         {
-            return new Vector3(pos.x + x + 0.5f, pos.y + y + 0.5f);
+            return new Vector3(pos.x + (x * blockSize) + blockSize / 2f, pos.y + (y * blockSize) + blockSize / 2f);
         }
         else
         {
-            return new Vector3(pos.x - x - 0.5f, pos.y + y + 0.5f);
+            return new Vector3(pos.x - (x * blockSize) - blockSize / 2f, pos.y + (y * blockSize) + blockSize / 2f);
         }
     }
 
