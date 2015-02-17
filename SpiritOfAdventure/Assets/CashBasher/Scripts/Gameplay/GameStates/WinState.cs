@@ -7,6 +7,8 @@ public class WinState : GameState
 
     public GameObject spiritButtons;
 
+    public CashBasherPlayer serverPlayer, clientPlayer;
+
     private float timer = 1.5f;
 
     private Vector3 targetPosition;
@@ -16,9 +18,13 @@ public class WinState : GameState
     private Vector3 buttonsPos;
     private Vector3 velocityRef;
 
+    private CashBasherPlayer myPlayer;
+
     void Start()
     {
         buttonsPos = spiritButtons.transform.position;
+
+        myPlayer = Network.isServer ? serverPlayer : clientPlayer;
     }
 
     public override void Prepare()
@@ -29,6 +35,8 @@ public class WinState : GameState
         manager.cameraMan.ShakeCamera(0.75f, 0.52f);
         manager.cameraMan.ZoomTo(4f);
         manager.connectionRequired = false;
+
+        myPlayer.Win();
     }
 
     public override void UpdateState()
