@@ -17,6 +17,8 @@ public class CashBasherManager : MonoBehaviour
     public float blockSpiritChance = 0.1f;
     public int minimumSpirits = 1;
 
+    public bool startLookingAtTarget;
+
     public Camera playerCamera, guiCamera;
 
     public CameraMan cameraMan;
@@ -92,12 +94,12 @@ public class CashBasherManager : MonoBehaviour
         if (Network.isServer)
         {
             myTeam = 0;
-            cameraMan.FollowPosition(new Vector3(-4.5f, 1f, 0f));
+            cameraMan.FollowWaypoint(serverCamFocus);
         }
         else if (Network.isClient)
         {
             myTeam = 1;
-            cameraMan.FollowPosition(new Vector3(4.5f, 1f, 0f)); 
+            cameraMan.FollowWaypoint(clientCamFocus);
         }
 
         SwitchToState((int)GamePhase.GP_STARTING);

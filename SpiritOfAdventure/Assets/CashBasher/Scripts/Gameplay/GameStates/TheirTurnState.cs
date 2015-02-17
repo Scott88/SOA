@@ -28,7 +28,7 @@ public class TheirTurnState : GameState
             yield return new WaitForSeconds(3.0f);
         }
 
-        if (Network.isServer)
+        if (Network.isServer == manager.startLookingAtTarget)
         {
             manager.cameraMan.FollowWaypoint(manager.serverCamFocus);
         }

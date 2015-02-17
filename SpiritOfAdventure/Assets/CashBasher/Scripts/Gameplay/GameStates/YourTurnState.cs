@@ -13,8 +13,6 @@ public class YourTurnState : GameState
 
     public NetworkedTileSet serverTileSet, clientTileSet;
 
-    public bool startLookingAtEnemy;
-
     NetworkedCannon yourCannon;
 
     Vector3 spiritWaypoint;
@@ -92,7 +90,7 @@ public class YourTurnState : GameState
             yield return new WaitForSeconds(1.0f);
         }
 
-        if (Network.isServer == startLookingAtEnemy)
+        if (Network.isServer == manager.startLookingAtTarget)
         {
             manager.cameraMan.FollowWaypoint(manager.clientCamFocus);
             cameraFocusLeft = false;
