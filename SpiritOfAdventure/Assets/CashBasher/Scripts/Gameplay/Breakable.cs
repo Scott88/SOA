@@ -92,9 +92,17 @@ public class Breakable : MonoBehaviour
 
         if (health == 0)
         {
-            manager.TransferSpirit(containedSpirit, transform.position, false);
+            manager.TransferSpirit(containedSpirit, transform.position, networkView.isMine);
+
+            if (networkView.isMine)
+            {
+                SaveFile.Instance().ModifyBlockInventory(type, -1);
+            }
+
             Destroy(gameObject);
-            networkView.RPC("NetDamage", RPCMode.Others);           
+
+            networkView.RPC("NetDamage", RPCMode.Others); 
+          
             return true;
         }
 
@@ -114,8 +122,13 @@ public class Breakable : MonoBehaviour
 
         if (health == 0)
         {
-            manager.TransferSpirit(containedSpirit, transform.position, true);
-            SaveFile.Instance().ModifyBlockInventory(type, -1);
+            manager.TransferSpirit(containedSpirit, transform.position, networkView.isMine);
+
+            if (networkView.isMine)
+            {
+                SaveFile.Instance().ModifyBlockInventory(type, -1);
+            }
+
             Destroy(gameObject);
         }
 
