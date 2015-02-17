@@ -48,6 +48,10 @@ public class CashBasherManager : MonoBehaviour
     public WinState winState;
     public LoseState loseState;
 
+    public GameObject pauseScreen;
+
+    public bool paused { get; set; } 
+
     public int myTeam { get; set; }
 
     public bool opponentIsReady { get; set; }
@@ -397,6 +401,29 @@ public class CashBasherManager : MonoBehaviour
         opponentIsReady = true;
     }
 
+    void OnApplicationPause(bool pauseState)
+    {
+        if (connectionRequired)
+        {
+            networkView.RPC("NetworkedPause", RPCMode.Others, pauseState);
+        }
+
+#if UNITY_EDITOR
+        if (pauseState)
+        {
+            SaveFile.Instance().SaveToXML();
+        }
+#endif
+    }
+
+    [RPC]
+    void NetworkedPause(bool pauseState)
+    {
+        Time.timeScale = pauseState ? 0f : 1f;
+        paused = pauseState;
+        pauseScreen.SetActive(pauseState);
+    }
+
     void OnDisconnectedFromServer(NetworkDisconnection info)
     {
         if (connectionRequired)
@@ -415,16 +442,13 @@ public class CashBasherManager : MonoBehaviour
         }
     }
 
+    
+
 #if UNITY_EDITOR
     void OnApplicationQuit()
     {
         SaveFile.Instance().SaveToXML();
-    }
-
-    void OnApplicationPause()
-    {
-        SaveFile.Instance().SaveToXML();
-    }
+    } 
 #endif
 
 }

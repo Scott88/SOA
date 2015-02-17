@@ -330,9 +330,12 @@ public class BlockEditor : MonoBehaviour
         SaveFile.Instance().SaveToXML();
     }
 
-    void OnApplicationPause()
+    void OnApplicationPause(bool pauseStatus)
     {
-        SaveFile.Instance().SaveToXML();
+        if (pauseStatus)
+        {
+            SaveFile.Instance().SaveToXML();
+        }
     }
 #endif
 }

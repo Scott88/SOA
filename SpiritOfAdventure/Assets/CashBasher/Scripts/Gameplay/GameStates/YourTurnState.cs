@@ -131,18 +131,21 @@ public class YourTurnState : GameState
             spiritButtons.transform.position = Vector3.SmoothDamp(spiritButtons.transform.position, buttonUpPos, ref velocityRef, 1f);
         }
 
-        if (Input.GetMouseButtonDown(0))
+        if (!manager.paused)
         {
-            GetClickedOn();
-        }
-        else if(Input.GetMouseButton(0))
-        {
-            GetHeldOn();
-        }
+            if (Input.GetMouseButtonDown(0))
+            {
+                GetClickedOn();
+            }
+            else if (Input.GetMouseButton(0))
+            {
+                GetHeldOn();
+            }
 
-        if(Input.GetMouseButtonUp(0))
-        {
-            GetReleasedOn();
+            if (Input.GetMouseButtonUp(0))
+            {
+                GetReleasedOn();
+            }
         }
     }
 
