@@ -56,7 +56,10 @@ public class Breakable : MonoBehaviour
                 return;
             }
 
-            if (coll.relativeVelocity.magnitude > minimumSpeed)
+            Vector2 normal = coll.contacts[0].normal;
+
+            if (Mathf.Abs(normal.x) > 0 && Mathf.Abs(coll.relativeVelocity.x) > minimumSpeed ||
+                Mathf.Abs(normal.y) > 0 && Mathf.Abs(coll.relativeVelocity.y) > minimumSpeed)
             {
                 if (IsDebuffedBy(ball.GetEnchantment()))
                 {
@@ -67,7 +70,7 @@ public class Breakable : MonoBehaviour
                 {
                     if (Damage())
                     {
-                        ball.DamageAndSlow(-coll.relativeVelocity, transform.position, speedDamper);
+                        ball.DamageAndSlow(-coll.relativeVelocity, coll.contacts[0].normal, speedDamper);
                     }
                     else
                     {

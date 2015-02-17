@@ -75,23 +75,21 @@ public class NetworkedCannonBall : MonoBehaviour
         return enchantment;
     }
 
-    public void DamageAndSlow(Vector3 startSpeed, Vector3 blockPos, float speedDamper)
+    public void DamageAndSlow(Vector3 startSpeed, Vector3 normal, float speedDamper)
     {
         health--;
 
         if (health == 0)
         {
-            networkView.RPC("NetDamageAndSlow", RPCMode.Others, startSpeed, blockPos, speedDamper);
+            networkView.RPC("NetDamageAndSlow", RPCMode.Others, startSpeed, normal, speedDamper);
             Destroy(gameObject);
 
             return;
         }
 
-        Vector3 direction = blockPos - transform.position;
-
         Vector2 velocity = startSpeed;
 
-        if (Mathf.Abs(direction.x) >= Mathf.Abs(direction.y))
+        if (Mathf.Abs(normal.x) >= Mathf.Abs(normal.y))
         {
             velocity.x *= speedDamper;
         }
@@ -102,7 +100,7 @@ public class NetworkedCannonBall : MonoBehaviour
 
         rigidbody2D.velocity = velocity;
 
-        networkView.RPC("NetDamageAndSlow", RPCMode.Others, startSpeed, blockPos, speedDamper);
+        networkView.RPC("NetDamageAndSlow", RPCMode.Others, startSpeed, normal, speedDamper);
     }
 
     [RPC]

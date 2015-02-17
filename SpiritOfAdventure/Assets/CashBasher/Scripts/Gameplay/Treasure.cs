@@ -21,10 +21,13 @@ public class Treasure : MonoBehaviour
                 return;
             }
 
-            if (coll.relativeVelocity.magnitude > minimumSpeed)
+            Vector2 normal = coll.contacts[0].normal;
+
+            if (Mathf.Abs(normal.x) > 0 && Mathf.Abs(coll.relativeVelocity.x) > minimumSpeed ||
+                Mathf.Abs(normal.y) > 0 && Mathf.Abs(coll.relativeVelocity.y) > minimumSpeed)
             {
                 Damage();
-                ball.DamageAndSlow(-coll.relativeVelocity, transform.position, speedDamper);             
+                ball.DamageAndSlow(-coll.relativeVelocity, coll.contacts[0].normal, speedDamper);             
             }
         }
     }
