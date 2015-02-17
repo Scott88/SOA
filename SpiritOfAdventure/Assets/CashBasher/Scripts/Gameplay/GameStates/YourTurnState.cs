@@ -306,13 +306,13 @@ public class YourTurnState : GameState
         {
             if (cameraFocusLeft && manager.playerCamera.transform.position.x > moveRightPos)
             {
-                manager.cameraMan.FollowWaypoint(manager.serverCamFocus);
+                manager.cameraMan.FollowWaypoint(manager.clientCamFocus);
                 cameraFocusLeft = false;
                 manager.networkView.RPC("FocusCamera", RPCMode.Others, cameraFocusLeft);
             }
             else if (!cameraFocusLeft && manager.playerCamera.transform.position.x < moveLeftPos)
             {
-                manager.cameraMan.FollowWaypoint(manager.clientCamFocus);
+                manager.cameraMan.FollowWaypoint(manager.serverCamFocus);
                 cameraFocusLeft = true;
                 manager.networkView.RPC("FocusCamera", RPCMode.Others, cameraFocusLeft);
             }
