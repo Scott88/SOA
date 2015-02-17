@@ -87,14 +87,11 @@ public class WinState : GameState
 
         if (Network.isServer)
         {
-            targetPosition = new Vector3(-4.5f, 1f, 0f);
+            manager.cameraMan.FollowWaypoint(manager.serverCamFocus);
         }
         else
         {
-            targetPosition = new Vector3(4.5f, 1f, 0f);
+            manager.cameraMan.FollowWaypoint(manager.clientCamFocus);
         }
-
-        manager.cameraMan.ZoomTo(7f);
-        manager.cameraMan.FollowPosition(targetPosition);
     }
 }

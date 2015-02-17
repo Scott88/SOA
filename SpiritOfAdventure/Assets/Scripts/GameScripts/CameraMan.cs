@@ -42,6 +42,12 @@ public class CameraMan : MonoBehaviour
 		followingObject = false;
 	}
 
+    public void FollowWaypoint(CameraWaypoint waypoint)
+    {
+        FollowPosition(waypoint.transform.position);
+        ZoomTo(waypoint.zoom);
+    }
+
     public void StopFollowing()
     {
         followingObject = false;

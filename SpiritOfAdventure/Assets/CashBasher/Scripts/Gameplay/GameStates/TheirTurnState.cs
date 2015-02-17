@@ -16,11 +16,11 @@ public class TheirTurnState : GameState
         {
             if (Network.isServer)
             {
-                manager.cameraMan.FollowPosition(new Vector3(10f, 0f, 0f));
+                manager.cameraMan.FollowWaypoint(manager.clientTileFocus);  
             }
             else
             {
-                manager.cameraMan.FollowPosition(new Vector3(-10f, 0f, 0f));
+                manager.cameraMan.FollowWaypoint(manager.serverTileFocus);
             }
 
             manager.cameraMan.ZoomTo(5f);
@@ -30,13 +30,11 @@ public class TheirTurnState : GameState
 
         if (Network.isServer)
         {
-            manager.cameraMan.FollowPosition(new Vector3(-4.5f, 1f, 0f));
+            manager.cameraMan.FollowWaypoint(manager.serverCamFocus);
         }
         else
         {
-            manager.cameraMan.FollowPosition(new Vector3(4.5f, 1f, 0f));
+            manager.cameraMan.FollowWaypoint(manager.clientCamFocus);
         }
-
-        manager.cameraMan.ZoomTo(7f);
     }
 }

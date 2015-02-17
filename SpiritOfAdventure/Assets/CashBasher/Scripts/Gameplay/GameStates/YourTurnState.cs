@@ -38,6 +38,8 @@ public class YourTurnState : GameState
 
     Vector3 lastTouchPos;
 
+    private float moveLeftPos, moveRightPos;
+
     void Start()
     {
         if (Network.isServer)
@@ -56,6 +58,9 @@ public class YourTurnState : GameState
         buttonUpPos = spiritButtons.transform.position;
         buttonDownPos = buttonUpPos;
         buttonDownPos.y -= 2.5f;
+
+        moveLeftPos = manager.clientCamFocus.transform.position.x - manager.playerCamera.orthographicSize * manager.playerCamera.aspect;
+        moveRightPos = manager.serverCamFocus.transform.position.x + manager.playerCamera.orthographicSize * manager.playerCamera.aspect;
     }
 
     public override void Prepare()
@@ -69,11 +74,11 @@ public class YourTurnState : GameState
         {
             if (Network.isServer)
             {
-                manager.cameraMan.FollowPosition(new Vector3(-10f, 0f, 0f));
+                manager.cameraMan.FollowWaypoint(manager.serverTileFocus);
             }
             else
             {
-                manager.cameraMan.FollowPosition(new Vector3(10f, 0f, 0f));
+                manager.cameraMan.FollowWaypoint(manager.clientTileFocus);
             }
 
             manager.cameraMan.ZoomTo(5f);
@@ -87,12 +92,12 @@ public class YourTurnState : GameState
 
         if (Network.isServer)
         {
-            manager.cameraMan.FollowPosition(new Vector3(4.5f, 1f, 0f));
+            manager.cameraMan.FollowWaypoint(manager.clientCamFocus);
             cameraFocusLeft = false;
         }
         else
         {
-            manager.cameraMan.FollowPosition(new Vector3(-4.5f, 1f, 0f));
+            manager.cameraMan.FollowWaypoint(manager.serverCamFocus);
             cameraFocusLeft = true;
         }
 
@@ -223,13 +228,13 @@ public class YourTurnState : GameState
 
             Vector3 translation = new Vector3(lastTouchPos.x - nextPos.x, 0f);
 
-            if (cameraFocusLeft && translation.x + manager.playerCamera.transform.position.x < -4.5f)
+            if (cameraFocusLeft && translation.x + manager.playerCamera.transform.position.x < manager.serverCamFocus.transform.position.x)
             {
-                translation.x = -4.5f - manager.playerCamera.transform.position.x;
+                translation.x = manager.serverCamFocus.transform.position.x - manager.playerCamera.transform.position.x;
             }
-            else if (!cameraFocusLeft && translation.x + manager.playerCamera.transform.position.x > 4.5f)
+            else if (!cameraFocusLeft && translation.x + manager.playerCamera.transform.position.x > manager.clientCamFocus.transform.position.x)
             {
-                translation.x = 4.5f - manager.playerCamera.transform.position.x;
+                translation.x = manager.clientCamFocus.transform.position.x - manager.playerCamera.transform.position.x;
             }
 
             manager.playerCamera.transform.Translate(translation);
@@ -299,15 +304,15 @@ public class YourTurnState : GameState
 
         if (cameraGrabbed)
         {
-            if (cameraFocusLeft && manager.playerCamera.transform.position.x > 0f)
+            if (cameraFocusLeft && manager.playerCamera.transform.position.x > moveRightPos)
             {
-                manager.cameraMan.FollowPosition(new Vector3(4.5f, 1f, 0f));
+                manager.cameraMan.FollowWaypoint(manager.serverCamFocus);
                 cameraFocusLeft = false;
                 manager.networkView.RPC("FocusCamera", RPCMode.Others, cameraFocusLeft);
             }
-            else if (!cameraFocusLeft && manager.playerCamera.transform.position.x < 0f)
+            else if (!cameraFocusLeft && manager.playerCamera.transform.position.x < moveLeftPos)
             {
-                manager.cameraMan.FollowPosition(new Vector3(-4.5f, 1f, 0f));
+                manager.cameraMan.FollowWaypoint(manager.clientCamFocus);
                 cameraFocusLeft = true;
                 manager.networkView.RPC("FocusCamera", RPCMode.Others, cameraFocusLeft);
             }

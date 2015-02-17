@@ -29,6 +29,10 @@ public class CashBasherManager : MonoBehaviour
 
     public GameObject greenTransfer, blueTransfer, redTransfer;
 
+    public CameraWaypoint serverCamFocus, clientCamFocus;
+
+    public CameraWaypoint serverTileFocus, clientTileFocus;
+
     public GameObject serverWaypoint, clientWaypoint;
 
     public GameObject trappedGreenSpirit, trappedBlueSpirit, trappedRedSpirit;
@@ -341,11 +345,11 @@ public class CashBasherManager : MonoBehaviour
     {
         if (left)
         {
-            cameraMan.FollowPosition(new Vector3(-4.5f, 1f, 0f));
+            cameraMan.FollowWaypoint(serverCamFocus);
         }
         else if (!left)
         {
-            cameraMan.FollowPosition(new Vector3(4.5f, 1f, 0f));
+            cameraMan.FollowWaypoint(clientCamFocus);
         }
     }
 
