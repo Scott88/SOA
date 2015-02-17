@@ -349,9 +349,22 @@ public class CashBasherManager : MonoBehaviour
         {
             cameraMan.FollowWaypoint(serverCamFocus);
         }
-        else if (!left)
+        else 
         {
             cameraMan.FollowWaypoint(clientCamFocus);
+        }
+    }
+
+    [RPC]
+    void FocusCameraTiles(bool left)
+    {
+        if (left)
+        {
+            cameraMan.FollowWaypoint(serverTileFocus);
+        }
+        else
+        {
+            cameraMan.FollowWaypoint(clientTileFocus);
         }
     }
 

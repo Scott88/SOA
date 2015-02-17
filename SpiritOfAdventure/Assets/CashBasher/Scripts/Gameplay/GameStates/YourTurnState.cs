@@ -57,8 +57,8 @@ public class YourTurnState : GameState
         buttonDownPos = buttonUpPos;
         buttonDownPos.y -= 2.5f;
 
-        moveLeftPos = manager.clientCamFocus.transform.position.x - manager.playerCamera.orthographicSize * manager.playerCamera.aspect;
-        moveRightPos = manager.serverCamFocus.transform.position.x + manager.playerCamera.orthographicSize * manager.playerCamera.aspect;
+        moveLeftPos = manager.clientCamFocus.transform.position.x - manager.playerCamera.orthographicSize;
+        moveRightPos = manager.serverCamFocus.transform.position.x + manager.playerCamera.orthographicSize;
     }
 
     public override void Prepare()
@@ -283,6 +283,7 @@ public class YourTurnState : GameState
                     selectedSpirit.healAOE.SetActive(true);
                     selectedSpirit.healAOE.transform.position = yourTileSet.CenterOn(manager.playerCamera.ScreenToWorldPoint(Input.mousePosition));
                     selectedSpirit.healAOE.transform.position += Vector3.back * 2f;
+                    selectedSpirit.healAOE.transform.localScale = new Vector3(yourTileSet.blockSize, yourTileSet.blockSize);
                 }
                 else
                 {

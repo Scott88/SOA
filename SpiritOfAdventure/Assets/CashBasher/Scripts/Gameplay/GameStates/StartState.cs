@@ -39,7 +39,7 @@ public class StartState : GameState
 
         yield return new WaitForSeconds(1.0f);
 
-        manager.networkView.RPC("FocusCamera", RPCMode.All, true);
+        manager.networkView.RPC("FocusCameraTiles", RPCMode.All, true);
 
         yield return new WaitForSeconds(1.5f);
 
@@ -47,7 +47,7 @@ public class StartState : GameState
 
         yield return new WaitForSeconds(1.0f);
 
-        manager.networkView.RPC("FocusCamera", RPCMode.All, false);
+        manager.networkView.RPC("FocusCameraTiles", RPCMode.All, false);
 
         yield return new WaitForSeconds(1.5f);
 
