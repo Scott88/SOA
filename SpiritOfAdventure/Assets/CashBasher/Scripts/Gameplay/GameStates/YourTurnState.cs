@@ -7,8 +7,6 @@ public class YourTurnState : GameState
 
     public NetworkedCannon serverCannon, clientCannon;
 
-    public GameObject serverWaypoint, clientWaypoint;
-
     public GameObject spiritButtons;
 
     public NetworkedTileSet serverTileSet, clientTileSet;
@@ -46,13 +44,13 @@ public class YourTurnState : GameState
         {
             yourCannon = serverCannon;
             yourTileSet = serverTileSet;
-            spiritWaypoint = serverWaypoint.transform.position;
+            spiritWaypoint = manager.serverWaypoint.transform.position;
         }
         else
         {
             yourCannon = clientCannon;
             yourTileSet = clientTileSet;
-            spiritWaypoint = clientWaypoint.transform.position;
+            spiritWaypoint = manager.clientWaypoint.transform.position;
         }
 
         buttonUpPos = spiritButtons.transform.position;
