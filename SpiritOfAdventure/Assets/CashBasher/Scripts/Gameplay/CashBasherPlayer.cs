@@ -3,7 +3,7 @@ using System.Collections;
 
 public class CashBasherPlayer : MonoBehaviour
 {
-    public Animator animator;
+    private Animator animator;
 
     void Start()
     {
