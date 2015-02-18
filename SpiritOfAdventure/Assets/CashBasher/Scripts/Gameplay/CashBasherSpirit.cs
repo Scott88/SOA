@@ -192,7 +192,7 @@ public class CashBasherSpirit : MonoBehaviour
 
     public void MoveHere(Vector3 target)
     {
-        targetPosition = target;
+        targetPosition = target; 
         targetPosition.z = -30f;
     }
 
@@ -241,7 +241,6 @@ public class CashBasherSpirit : MonoBehaviour
             if (velocityRef.x < 0 && targetScale.x > 0 ||
                 velocityRef.x > 0 && targetScale.x < 0)
             {
-
                 targetScale.x = -targetScale.x;
             }
 

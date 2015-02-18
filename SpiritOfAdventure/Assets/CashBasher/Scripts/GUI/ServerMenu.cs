@@ -1,4 +1,4 @@
-﻿#define HOME_LAN
+﻿//#define HOME_LAN
 
 using UnityEngine;
 using System.Collections;
@@ -26,13 +26,14 @@ public class ServerMenu : MonoBehaviour
 #if HOME_LAN
         MasterServer.ipAddress = "192.168.2.18";
         Network.natFacilitatorIP = "192.168.2.18";
+        Network.natFacilitatorPort = 50005;
 #else
         MasterServer.ipAddress = "10.10.10.181";
-        Network.natFacilitatorIP = "10.10.10.181";
+        //Network.natFacilitatorIP = "10.10.10.181";
 #endif
         
         MasterServer.port = 23466;
-        Network.natFacilitatorPort = 50005;
+        
 
         gameObject.SetActive(false);
     }
