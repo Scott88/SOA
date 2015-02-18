@@ -11,8 +11,6 @@ public class WinState : GameState
 
     private float timer = 1.5f;
 
-    private Vector3 targetPosition;
-
     private bool treasureExplosion = true;
 
     private Vector3 buttonsPos;
@@ -43,20 +41,13 @@ public class WinState : GameState
     {
         spiritButtons.transform.position = Vector3.SmoothDamp(spiritButtons.transform.position, buttonsPos, ref velocityRef, 1f);
 
+        timer -= Time.deltaTime;
+
         if (treasureExplosion)
         {
-            timer -= Time.deltaTime;
-
             if (timer < 0f)
             {
                 TreasureExploded();
-            }
-        }
-        else
-        {
-            if (Vector2.Distance(manager.playerCamera.transform.position, targetPosition) < 0.1f)
-            {
-                timer -= Time.deltaTime;
             }
         }
     }
