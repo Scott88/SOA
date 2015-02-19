@@ -62,7 +62,7 @@ public class NetworkedLevelLoader : MonoBehaviour {
         otherLoaded = true;
         othersCostume = enemyCostume;
 
-        networkView.RPC("ConfirmOtherReady", RPCMode.Others, FindObjectOfType<NetLevelHandshake>().myCostume);
+        networkView.RPC("ConfirmOtherReady", RPCMode.Others, SaveFile.Instance().GetCurrentCostume());
     }
 
     [RPC]

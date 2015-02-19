@@ -20,8 +20,7 @@ public class CashBasherPlayer : MonoBehaviour
 
         if (team == 0 && Network.isServer || team == 1 && Network.isClient)
         {
-            //animator.SetInteger("costume", SaveFile.Instance().GetCurrentCostume());
-            animator.SetInteger("costume", FindObjectOfType<NetLevelHandshake>().myCostume);
+            animator.SetInteger("costume", SaveFile.Instance().GetCurrentCostume());
         }
         else
         {
