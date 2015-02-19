@@ -3,6 +3,8 @@ using System.Collections;
 
 public class CashBasherPlayer : MonoBehaviour
 {
+    public int team;
+
     private Animator animator;
 
     void Start()
@@ -16,7 +18,15 @@ public class CashBasherPlayer : MonoBehaviour
     {
         yield return new WaitForSeconds(Random.value);
 
-        animator.SetInteger("costume", SaveFile.Instance().GetCurrentCostume());
+        if (team == 0 && Network.isServer || team == 1 && Network.isClient)
+        {
+            animator.SetInteger("costume", SaveFile.Instance().GetCurrentCostume());
+        }
+        else
+        {
+            animator.SetInteger("costume", FindObjectOfType<NetworkedLevelLoader>().othersCostume);
+        }
+
         animator.SetBool("Walk", true);
     }
 
