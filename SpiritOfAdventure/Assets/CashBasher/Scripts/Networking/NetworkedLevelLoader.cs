@@ -61,12 +61,15 @@ public class NetworkedLevelLoader : MonoBehaviour {
     {
         otherLoaded = true;
         othersCostume = enemyCostume;
+
+        networkView.RPC("ConfirmOtherReady", RPCMode.Others, FindObjectOfType<NetLevelHandshake>().myCostume);
     }
 
     [RPC]
     void ConfirmOtherReady(int enemyCostume)
     {
-
+        otherLoaded = true;
+        othersCostume = enemyCostume;
     }
 
     public bool IsReady()
