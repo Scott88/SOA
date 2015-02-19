@@ -63,6 +63,12 @@ public class NetworkedLevelLoader : MonoBehaviour {
         othersCostume = enemyCostume;
     }
 
+    [RPC]
+    void ConfirmOtherReady(int enemyCostume)
+    {
+
+    }
+
     public bool IsReady()
     {
         return loaded && otherLoaded;
