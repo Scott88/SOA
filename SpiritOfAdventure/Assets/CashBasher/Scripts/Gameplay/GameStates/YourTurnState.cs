@@ -417,7 +417,7 @@ public class YourTurnState : GameState
     {
         yourCannon.Deactivate();
 
-        nextTurn = false;
+        nextTurn = false; 
         timer = 1.0f;
     }
 }

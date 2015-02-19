@@ -19,24 +19,24 @@ public class Breakable : MonoBehaviour
 
     public BlockType type;
 
-    public SpiritType containedSpirit { get; set; }
+    public Animator blockAnimator, statusAnimator, putOutAnimator;
 
-    private int startingHealth;
+    public Renderer statusRenderer;
+
+    public bool fadeOutStatus;
+    public float fadeOutDuration;
+
+    public SpiritType containedSpirit { get; set; }
 
     private Tile parent;
 
     private SpiritType statusEffect = SpiritType.ST_NULL;
     private SpiritType pendingEffect = SpiritType.ST_NULL;
 
-    private Color startColor;
-
     private CashBasherManager manager;
 
     void Start()
     {
-        startingHealth = health;
-        startColor = renderer.material.color;
-
         manager = FindObjectOfType<CashBasherManager>();
     }
 
@@ -92,6 +92,12 @@ public class Breakable : MonoBehaviour
     public bool Damage()
     {
         health--;
+        blockAnimator.SetInteger("Health", health);
+
+        if (statusAnimator)
+        {
+            statusAnimator.SetInteger("Health", health);
+        }
 
         if (health == 0)
         {
@@ -102,16 +108,18 @@ public class Breakable : MonoBehaviour
                 SaveFile.Instance().ModifyBlockInventory(type, -1);
             }
 
-            Destroy(gameObject);
+            collider2D.enabled = false;
+            //Destroy(gameObject);
+
+            if (fadeOutStatus)
+            {
+                StartCoroutine(FadeOutStatus());
+            }
 
             networkView.RPC("NetDamage", RPCMode.Others); 
           
             return true;
         }
-
-        Color color = renderer.material.color;
-        color.a = (float)health / (float)startingHealth;
-        renderer.material.color = color;
 
         networkView.RPC("NetDamage", RPCMode.Others);
 
@@ -122,6 +130,12 @@ public class Breakable : MonoBehaviour
     public void NetDamage()
     {
         health--;
+        blockAnimator.SetInteger("Health", health);
+
+        if (statusAnimator)
+        {
+            statusAnimator.SetInteger("Health", health);
+        }
 
         if (health == 0)
         {
@@ -132,12 +146,26 @@ public class Breakable : MonoBehaviour
                 SaveFile.Instance().ModifyBlockInventory(type, -1);
             }
 
-            Destroy(gameObject);
-        }
+            if (fadeOutStatus)
+            {
+                StartCoroutine(FadeOutStatus());
+            }
 
-        Color color = renderer.material.color;
-        color.a = (float)health / (float)startingHealth;
-        renderer.material.color = color;
+            collider2D.enabled = false;
+            //Destroy(gameObject);
+        }
+    }
+
+    IEnumerator FadeOutStatus()
+    {
+        Color color = statusRenderer.material.color;
+
+        while (color.a > 0)
+        {
+            color.a -= Time.deltaTime / fadeOutDuration;
+            statusRenderer.material.color = color;
+            yield return 0;
+        }
     }
 
     public SpiritType GetStatusEffect()
@@ -167,7 +195,18 @@ public class Breakable : MonoBehaviour
         }
 
         pendingEffect = status;
-        AdjustColorsFor(pendingEffect);
+
+        //AdjustColorsFor(pendingEffect);
+
+        if (status != SpiritType.ST_NULL)
+        {
+            statusAnimator.SetBool("StatusEffect", true);
+        }
+        else
+        {
+            putOutAnimator.SetTrigger("PutOut");
+        }
+
         networkView.RPC("NetSetStatusEffect", RPCMode.Others, (int)status, immediate);
     }
 
@@ -180,39 +219,48 @@ public class Breakable : MonoBehaviour
         }
 
         pendingEffect = (SpiritType)spiritType;
-        AdjustColorsFor(pendingEffect);
-    }
+        //AdjustColorsFor(pendingEffect);
 
-    void AdjustColorsFor(SpiritType type)
-    {
-        Color color = renderer.material.color;
-
-        if (type == SpiritType.ST_NULL)
+        if ((SpiritType)spiritType != SpiritType.ST_NULL)
         {
-            color.r = startColor.r;
-            color.g = startColor.g;
-            color.b = startColor.b;
+            statusAnimator.SetBool("StatusEffect", true);
         }
         else
         {
-            if (type != SpiritType.ST_GREEN)
-            {
-                color.g *= 0.5f;
-            }
-
-            if (type != SpiritType.ST_BLUE)
-            {
-                color.b *= 0.5f;
-            }
-
-            if (type != SpiritType.ST_RED)
-            {
-                color.r *= 0.5f;
-            }
+            putOutAnimator.SetTrigger("PutOut");
         }
-
-        renderer.material.color = color;
     }
+
+    //void AdjustColorsFor(SpiritType type)
+    //{
+    //    Color color = renderer.material.color;
+
+    //    if (type == SpiritType.ST_NULL)
+    //    {
+    //        color.r = startColor.r;
+    //        color.g = startColor.g;
+    //        color.b = startColor.b;
+    //    }
+    //    else
+    //    {
+    //        if (type != SpiritType.ST_GREEN)
+    //        {
+    //            color.g *= 0.5f;
+    //        }
+
+    //        if (type != SpiritType.ST_BLUE)
+    //        {
+    //            color.b *= 0.5f;
+    //        }
+
+    //        if (type != SpiritType.ST_RED)
+    //        {
+    //            color.r *= 0.5f;
+    //        }
+    //    }
+
+    //    renderer.material.color = color;
+    //}
 
     public void Tick()
     {
@@ -225,5 +273,10 @@ public class Breakable : MonoBehaviour
     public void Apply()
     {
         statusEffect = pendingEffect;
+    }
+
+    public void PutOut()
+    {
+        statusAnimator.SetBool("StatusEffect", false);
     }
 }

@@ -18,7 +18,7 @@ public class ServerMenu : MonoBehaviour
     private bool readyToStart = false;
     private bool serverFailed = false;
 
-    private float startTimer = 3.0f;
+    private float startTimer = 1.0f;
 
     // Use this for initialization
     void Start()
