@@ -217,18 +217,6 @@ public class CashBasherManager : MonoBehaviour
         }
     }
 
-    public void SetEffectStatus(NetworkedTileSet set, bool effects)
-    {
-        if (set == serverSet)
-        {
-            networkView.RPC("NetSetEffectStatus", RPCMode.All, true, effects);
-        }
-        else if (set == clientSet)
-        {
-            networkView.RPC("NetSetEffectStatus", RPCMode.All, false, effects);
-        }
-    }
-
     [RPC]
     void NetSetEffectStatus(bool server, bool effects)
     {

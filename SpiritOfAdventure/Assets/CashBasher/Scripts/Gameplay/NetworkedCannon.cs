@@ -424,6 +424,8 @@ public class NetworkedCannon : MonoBehaviour
             }
         }
 
+        audio.Play();
+
         buff = SpiritType.ST_NULL;
         debuff = SpiritType.ST_NULL;
         cannonRenderer.material.color = Color.white;

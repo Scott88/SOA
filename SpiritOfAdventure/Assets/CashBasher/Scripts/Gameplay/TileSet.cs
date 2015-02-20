@@ -13,17 +13,21 @@ public class TileSet : MonoBehaviour
 
     protected Tile[,] tiles;
 
+    private bool[,] tilesChecked;
+
     private Vector3 minCoord, maxCoord, minTreasure, maxTreasure;
 
     void Awake()
     {
         tiles = new Tile[width, height];
+        tilesChecked = new bool[width, height];
 
         for (int j = 0; j < width; j++)
         {
             for (int k = 0; k < height; k++)
             {
                 tiles[j, k] = new Tile(this, j, k, blockSize);
+                tilesChecked[j, k] = false;
             }
         }
     }
@@ -98,6 +102,48 @@ public class TileSet : MonoBehaviour
     public void RemoveBlock(GameObject block)
     {
         SaveFile.Instance().RemoveTile(tiles[GetXCoord(block.transform.position.x), GetYCoord(block.transform.position.y)]);
+    }
+
+    public void DetachAdjacentBlocks(int x, int y)
+    {
+        //if (x > 0)
+        //{
+        //    if (IsGrounded(x - 1, y))
+        //    {
+
+        //    }
+        //}
+    }
+
+    //bool IsGrounded(int x, int y)
+    //{
+    //    ResetTilesChecked();
+
+    //    if (y == 0 && !tiles[x, y].Empty())
+    //    {
+    //        return true;
+    //    }
+
+    //    if (y > 0)
+    //    {
+    //        InternalIsGrounded
+    //    }
+    //}
+
+    //bool InternalIsGrounded(int x, int y)
+    //{
+
+    //}
+
+    void ResetTilesChecked()
+    {
+        for (int j = 0; j < width; j++)
+        {
+            for (int k = 0; k < height; k++)
+            {
+                tilesChecked[j, k] = false;
+            }
+        }
     }
 
     void OnDrawGizmosSelected()

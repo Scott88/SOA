@@ -6,7 +6,8 @@ public enum BlockType
     BT_NULL,
     BT_WOOD,
     BT_STONE,
-    BT_METAL
+    BT_METAL,
+    BT_SUPPORT
 }
 
 [RequireComponent(typeof(NetworkView))]
@@ -19,12 +20,16 @@ public class Breakable : MonoBehaviour
 
     public BlockType type;
 
+    public AudioSource collisionSound, brokenSound, debuffSound, healSound;
+
     public Animator blockAnimator, statusAnimator, putOutAnimator;
 
     public Renderer statusRenderer;
 
     public bool fadeOutStatus;
     public float fadeOutDuration;
+
+    private float debuffStartVolume;
 
     public SpiritType containedSpirit { get; set; }
 
@@ -38,6 +43,11 @@ public class Breakable : MonoBehaviour
     void Start()
     {
         manager = FindObjectOfType<CashBasherManager>();
+
+        if(debuffSound)
+        {
+        debuffStartVolume = debuffSound.volume;
+            }
     }
 
     public void SetTile(Tile t)
@@ -49,18 +59,23 @@ public class Breakable : MonoBehaviour
     {
         if (coll.collider.tag == "CannonBall")
         {
-            NetworkedCannonBall ball = coll.gameObject.GetComponent<NetworkedCannonBall>() as NetworkedCannonBall;
-
-            if (!ball.networkView.isMine || networkView.isMine)
-            {
-                return;
-            }
-
             Vector2 normal = coll.contacts[0].normal;
 
             if (Mathf.Abs(normal.x) > Mathf.Abs(normal.y) && Mathf.Abs(coll.relativeVelocity.x) > minimumSpeed ||
                 Mathf.Abs(normal.y) > Mathf.Abs(normal.x) && Mathf.Abs(coll.relativeVelocity.y) > minimumSpeed)
             {
+                if (collisionSound)
+                {
+                    collisionSound.Play();
+                }
+
+                NetworkedCannonBall ball = coll.gameObject.GetComponent<NetworkedCannonBall>() as NetworkedCannonBall;
+
+                if (!ball.networkView.isMine || networkView.isMine)
+                {
+                    return;
+                }
+
                 if (IsDebuffedBy(ball.GetEnchantment()))
                 {
                     SetStatusEffect(ball.GetEnchantment(), true);
@@ -108,13 +123,17 @@ public class Breakable : MonoBehaviour
                 SaveFile.Instance().ModifyBlockInventory(type, -1);
             }
 
-            collider2D.enabled = false;
-            //Destroy(gameObject);
-
             if (fadeOutStatus)
             {
                 StartCoroutine(FadeOutStatus());
             }
+
+            if (brokenSound)
+            {
+                brokenSound.Play();
+            }
+
+            collider2D.enabled = false;
 
             networkView.RPC("NetDamage", RPCMode.Others); 
           
@@ -151,8 +170,12 @@ public class Breakable : MonoBehaviour
                 StartCoroutine(FadeOutStatus());
             }
 
+            if (brokenSound)
+            {
+                brokenSound.Play();
+            }
+
             collider2D.enabled = false;
-            //Destroy(gameObject);
         }
     }
 
@@ -164,8 +187,19 @@ public class Breakable : MonoBehaviour
         {
             color.a -= Time.deltaTime / fadeOutDuration;
             statusRenderer.material.color = color;
+
+            if (debuffSound)
+            {
+                debuffSound.volume = Mathf.Lerp(0, debuffStartVolume, color.a);
+            }
+
             yield return 0;
         }
+    }
+
+    public bool IsDying()
+    {
+        return health == 0;
     }
 
     public SpiritType GetStatusEffect()
@@ -201,10 +235,25 @@ public class Breakable : MonoBehaviour
         if (status != SpiritType.ST_NULL)
         {
             statusAnimator.SetBool("StatusEffect", true);
+
+            if (debuffSound)
+            {
+                debuffSound.Play();
+            }
         }
         else
         {
             putOutAnimator.SetTrigger("PutOut");
+
+            if (debuffSound)
+            {
+                debuffSound.Stop();
+            }
+
+            if (healSound)
+            {
+                healSound.Play();
+            }
         }
 
         networkView.RPC("NetSetStatusEffect", RPCMode.Others, (int)status, immediate);
@@ -224,49 +273,38 @@ public class Breakable : MonoBehaviour
         if ((SpiritType)spiritType != SpiritType.ST_NULL)
         {
             statusAnimator.SetBool("StatusEffect", true);
+
+            if (debuffSound)
+            {
+                debuffSound.Play();
+            }
         }
         else
         {
             putOutAnimator.SetTrigger("PutOut");
+
+            if (debuffSound)
+            {
+                debuffSound.Stop();
+            }
+
+            if (healSound)
+            {
+                healSound.Play();
+            }
         }
     }
-
-    //void AdjustColorsFor(SpiritType type)
-    //{
-    //    Color color = renderer.material.color;
-
-    //    if (type == SpiritType.ST_NULL)
-    //    {
-    //        color.r = startColor.r;
-    //        color.g = startColor.g;
-    //        color.b = startColor.b;
-    //    }
-    //    else
-    //    {
-    //        if (type != SpiritType.ST_GREEN)
-    //        {
-    //            color.g *= 0.5f;
-    //        }
-
-    //        if (type != SpiritType.ST_BLUE)
-    //        {
-    //            color.b *= 0.5f;
-    //        }
-
-    //        if (type != SpiritType.ST_RED)
-    //        {
-    //            color.r *= 0.5f;
-    //        }
-    //    }
-
-    //    renderer.material.color = color;
-    //}
 
     public void Tick()
     {
         if (statusEffect != SpiritType.ST_NULL)
         {
             Damage();
+
+            if (debuffSound)
+            {
+                debuffSound.Play();
+            }
         }
     }
 
@@ -278,5 +316,41 @@ public class Breakable : MonoBehaviour
     public void PutOut()
     {
         statusAnimator.SetBool("StatusEffect", false);
+    }
+
+    public void FallTo(Vector3 position, float acceleration, bool takeDamage)
+    {
+        StartCoroutine(FallToAnim(position, acceleration, takeDamage));
+
+        networkView.RPC("NetFallTo", RPCMode.Others, position, acceleration);
+    }
+
+    [RPC]
+    void NetFallTo(Vector3 position, float acceleration)
+    {
+        StartCoroutine(FallToAnim(position, acceleration, false));
+    }
+
+    IEnumerator FallToAnim(Vector3 position, float acceleration, bool takeDamage)
+    {
+        float speed = 0;
+
+        while (transform.position.y > position.y)
+        {
+            speed += Time.deltaTime * acceleration;
+            transform.Translate(Vector3.down * speed * Time.deltaTime);
+
+            if (transform.position.y < position.y)
+            {
+                transform.position = position;
+
+                if (takeDamage)
+                {
+                    Damage();
+                }
+            }
+
+            yield return 0;
+        }
     }
 }

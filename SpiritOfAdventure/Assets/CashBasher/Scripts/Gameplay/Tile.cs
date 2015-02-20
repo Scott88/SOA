@@ -3,6 +3,8 @@ using System.Collections;
 
 public class Tile 
 {
+    public bool grounded { get; set; }
+
     int x, y;
 
     float blockSize;
@@ -18,6 +20,7 @@ public class Tile
         y = yCoord;
         block = null;
         blockSize = size;
+        grounded = false;
     }
 
     public Tile(TileSet p, Breakable b, int xCoord, int yCoord, float size)
@@ -27,6 +30,7 @@ public class Tile
         x = xCoord;
         y = yCoord;
         blockSize = size;
+        grounded = true;
     }
 
     public int GetX() { return x; }
@@ -53,7 +57,14 @@ public class Tile
     {
         if (block)
         {
-            return block.GetStatusEffect();
+            if(block.IsDying())
+            {
+                return SpiritType.ST_NULL;
+            }
+            else
+            {
+                return block.GetStatusEffect();
+            }
         }
         else
         {
@@ -129,10 +140,25 @@ public class Tile
     {
         block = b;
         block.SetTile(this);
+        grounded = true;
     }
 
     public bool Empty()
     {
         return block == null;
+    }
+
+    public void TransferTo(Tile tile, float acceleration)
+    {
+        block.FallTo(tile.GetCenter(), acceleration, y - tile.GetY() >= 2);
+
+        tile.block = block;
+        block = null;
+    }
+
+    public void RemoveBlock()
+    {
+        grounded = false;
+        parent.DetachAdjacentBlocks(x, y);
     }
 }

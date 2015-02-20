@@ -11,6 +11,8 @@ public class BlockEditor : MonoBehaviour
     public BlockInventory woodInventory, stoneInventory, metalInventory;
     public BlockCounter woodCounter, stoneCounter, metalCounter;
 
+    public AudioSource placeWoodSound, placeStoneSound, placeMetalSound;
+
     public SpiritInventory greenInventory, blueInventory, redInventory;
     public SpiritCounter greenCounter, blueCounter, redCounter;
 
@@ -235,12 +237,15 @@ public class BlockEditor : MonoBehaviour
         {
             case BlockType.BT_WOOD:
                 woodCounter.Add();
+                if (placeWoodSound) placeWoodSound.Play();
                 break;
             case BlockType.BT_STONE:
                 stoneCounter.Add();
+                if (placeStoneSound) placeStoneSound.Play();
                 break;
             case BlockType.BT_METAL:
                 metalCounter.Add();
+                if (placeMetalSound) placeMetalSound.Play();
                 break;
         }
 

@@ -278,6 +278,8 @@ public class Cannon : MonoBehaviour
 
         ball.rigidbody2D.velocity = finalVel;
 
+        audio.Play();
+
         currentState = CannonState.CS_FIRED;
         knockbackTimer = knockbackDuration;
     }
