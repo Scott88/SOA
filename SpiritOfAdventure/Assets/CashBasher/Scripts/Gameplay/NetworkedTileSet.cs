@@ -332,86 +332,86 @@ public class NetworkedTileSet : TileSet
     //    float distance = longestFall * blockSize;
     //}
 
-    int GetNextTileY(int x, int y)
-    {
-        if (y == 0)
-        {
-            return -1;
-        }
-        else
-        {
-            if (BlockIsSupported(x, y - 1, 2, true, true))
-            {
-                return -1;
-            }
-        }
+    //int GetNextTileY(int x, int y)
+    //{
+    //    if (y == 0)
+    //    {
+    //        return -1;
+    //    }
+    //    else
+    //    {
+    //        if (BlockIsSupported(x, y - 1, 2, true, true))
+    //        {
+    //            return -1;
+    //        }
+    //    }
 
-        if (x > 0)
-        {
-            if (BlockIsSupported(x - 1, y, 1, true, false))
-            {
-                return -1;
-            }
-        }
+    //    if (x > 0)
+    //    {
+    //        if (BlockIsSupported(x - 1, y, 1, true, false))
+    //        {
+    //            return -1;
+    //        }
+    //    }
 
-        if (x < width - 1)
-        {
-            if (BlockIsSupported(x + 1, y, 1, false, true))
-            {
-                return -1;
-            }
-        }
+    //    if (x < width - 1)
+    //    {
+    //        if (BlockIsSupported(x + 1, y, 1, false, true))
+    //        {
+    //            return -1;
+    //        }
+    //    }
 
-        for (int k = y - 1; k >= 0; k--)
-        {
-            if (BlockIsSupported(x, k, 0, false, false))
-            {
-                return k + 1;
-            }
-        }
+    //    for (int k = y - 1; k >= 0; k--)
+    //    {
+    //        if (BlockIsSupported(x, k, 0, false, false))
+    //        {
+    //            return k + 1;
+    //        }
+    //    }
 
-        return 0;
-    }
+    //    return 0;
+    //}
 
-    bool BlockIsSupported(int x, int y, int overhang, bool checkLeft, bool checkRight)
-    {
-        if (tiles[x, y].Empty())
-        {
-            return false;
-        }
+    //bool BlockIsSupported(int x, int y, int overhang, bool checkLeft, bool checkRight)
+    //{
+    //    if (tiles[x, y].Empty())
+    //    {
+    //        return false;
+    //    }
 
-        if (y == 0)
-        {
-            return true;
-        }
-        else
-        {
-            if (BlockIsSupported(x, y - 1, overhang, true, true))
-            {
-                return true;
-            }
-        }
+    //    if (y == 0)
+    //    {
+    //        return true;
+    //    }
+    //    else
+    //    {
+    //        if (BlockIsSupported(x, y - 1, overhang, true, true))
+    //        {
+    //            return true;
+    //        }
+    //    }
 
-        if (overhang > 0)
-        {
-            if (checkLeft && x > 0)
-            {
-                if(BlockIsSupported(x - 1, y, overhang - 1, true, false))
-                {
-                    return true;
-                }
-            }
+    //    if (overhang > 0)
+    //    {
+    //        if (checkLeft && x > 0)
+    //        {
+    //            if(BlockIsSupported(x - 1, y, overhang - 1, true, false))
+    //            {
+    //                return true;
+    //            }
+    //        }
 
-            if (checkRight && x < width - 1)
-            {
-                if (BlockIsSupported(x + 1, y, overhang - 1, false, true))
-                {
-                    return true;
-                }
-            }
-        }
+    //        if (checkRight && x < width - 1)
+    //        {
+    //            if (BlockIsSupported(x + 1, y, overhang - 1, false, true))
+    //            {
+    //                return true;
+    //            }
+    //        }
+    //    }
 
-        return false;
-    }
+    //    return false;
+    //}
 
 }
