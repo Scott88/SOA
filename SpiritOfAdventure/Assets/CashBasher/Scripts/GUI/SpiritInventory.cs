@@ -48,6 +48,11 @@ public class SpiritInventory : MonoBehaviour
         {
             spiritCount--;
             spiritCounter.text = "x" + spiritCount.ToString();
+
+            if (audio)
+            {
+                audio.Play();
+            }
         }
     }
 

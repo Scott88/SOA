@@ -20,12 +20,6 @@ public class CashBasherMenu : MonoBehaviour
             Application.LoadLevel("MainMenu");
         }
 
-        if (GUI.Button(new Rect(Screen.width * (0.85f), Screen.height * (0.15f), Screen.width * (0.12f), Screen.height * (0.1f)),
-                               "Save"))
-        {
-            SaveFile.Instance().SaveToXML();
-        }
-
         if (Network.peerType == NetworkPeerType.Disconnected)
         {
             if (GUI.Button(new Rect(Screen.width * (0.85f), Screen.height * (0.7f), Screen.width * (0.12f), Screen.height * (0.1f)),

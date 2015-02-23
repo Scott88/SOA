@@ -67,6 +67,11 @@ public class BuildState : GameState
         }
     }
 
+    public void OnGUI()
+    {
+
+    }
+
     public void GetClickedOn()
     {
         Ray clickRay = manager.guiCamera.ScreenPointToRay(Input.mousePosition);

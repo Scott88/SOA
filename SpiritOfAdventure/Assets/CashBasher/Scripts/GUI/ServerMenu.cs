@@ -1,9 +1,14 @@
-﻿using UnityEngine;
+﻿//#define HOME_LAN
+#define RABBIT_HOLE_SERVER
+
+using UnityEngine;
 using System.Collections;
 
 public class ServerMenu : MonoBehaviour
 {
     public GUISkin mySkin;
+
+
 
     public TextMesh display;
 
@@ -14,13 +19,26 @@ public class ServerMenu : MonoBehaviour
     private bool readyToStart = false;
     private bool serverFailed = false;
 
-    private float startTimer = 3.0f;
+    private float startTimer = 1.0f;
 
     // Use this for initialization
     void Start()
     {
+#if HOME_LAN
+        MasterServer.ipAddress = "192.168.2.18";
+        Network.natFacilitatorIP = "192.168.2.18";
+        Network.natFacilitatorPort = 50005;
+#elif RABBIT_HOLE_SERVER
+        MasterServer.ipAddress = "rabbitholestudios.ca";
+        Network.natFacilitatorIP = "rabbitholestudios.ca";
+        Network.natFacilitatorPort = 50005;
+#else
         MasterServer.ipAddress = "10.10.10.181";
+#endif
+
+
         MasterServer.port = 23466;
+        
 
         gameObject.SetActive(false);
     }

@@ -5,6 +5,8 @@ public class NetworkedCannonBall : MonoBehaviour
 {
     public int health;
 
+    private SpiritType enchantment = SpiritType.ST_NULL;
+
     private CashBasherManager manager;
 
     void Start()
@@ -43,23 +45,51 @@ public class NetworkedCannonBall : MonoBehaviour
         }
     }
 
-    public void DamageAndSlow(Vector3 startSpeed, Vector3 blockPos, float speedDamper)
+    [RPC]
+    public void Enchant(int spiritType)
+    {
+        enchantment = (SpiritType)spiritType;
+
+        Color color = renderer.material.color;
+
+        if (enchantment != SpiritType.ST_GREEN)
+        {
+            color.g = 0.5f;
+        }
+
+        if (enchantment != SpiritType.ST_BLUE)
+        {
+            color.b = 0.5f;
+        }
+
+        if (enchantment != SpiritType.ST_RED)
+        {
+            color.r = 0.5f;
+        }
+
+        renderer.material.color = color;
+    }
+
+    public SpiritType GetEnchantment()
+    {
+        return enchantment;
+    }
+
+    public void DamageAndSlow(Vector3 startSpeed, Vector3 normal, float speedDamper)
     {
         health--;
 
         if (health == 0)
         {
-            networkView.RPC("NetDamageAndSlow", RPCMode.Others, startSpeed, blockPos, speedDamper);
+            networkView.RPC("NetDamageAndSlow", RPCMode.Others, startSpeed, normal, speedDamper);
             Destroy(gameObject);
 
             return;
         }
 
-        Vector3 direction = blockPos - transform.position;
-
         Vector2 velocity = startSpeed;
 
-        if (Mathf.Abs(direction.x) >= Mathf.Abs(direction.y))
+        if (Mathf.Abs(normal.x) >= Mathf.Abs(normal.y))
         {
             velocity.x *= speedDamper;
         }
@@ -70,7 +100,7 @@ public class NetworkedCannonBall : MonoBehaviour
 
         rigidbody2D.velocity = velocity;
 
-        networkView.RPC("NetDamageAndSlow", RPCMode.Others, startSpeed, blockPos, speedDamper);
+        networkView.RPC("NetDamageAndSlow", RPCMode.Others, startSpeed, normal, speedDamper);
     }
 
     [RPC]

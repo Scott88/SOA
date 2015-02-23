@@ -8,6 +8,10 @@ public class NetworkedCannon : MonoBehaviour
     public float minVelocity = 5f, maxVelocity = 20f;
     public float velocitySpeed = 1.0f;
 
+    public float redDebuffSpeed = 3f;
+    public float blueDebuffCap = 0.6f;
+    public float greenDebuffCap = 0.6f;
+
     public int team;
 
     public GameObject cannonBall;
@@ -30,6 +34,8 @@ public class NetworkedCannon : MonoBehaviour
     public GameObject cannonSmoke;
 
     public Animator cannonAnimator;
+
+    public Renderer cannonRenderer;
 
 
     enum CannonState
@@ -61,12 +67,14 @@ public class NetworkedCannon : MonoBehaviour
 
     private float knockbackTimer;
 
-    public float knockbackDuration = 0.25f;
-    public float rollForwardDuration = 0.25f;
+    private float knockbackDuration = 0.25f;
+    private float rollForwardDuration = 0.25f;
 
     private float rollForwardSpeed;
 
     private CashBasherManager manager;
+
+    private SpiritType buff, debuff;
 
     void Start()
     {
@@ -100,6 +108,26 @@ public class NetworkedCannon : MonoBehaviour
             Vector3 scale = baseAndWheels.transform.localScale;
             scale.z *= -1;
             baseAndWheels.transform.localScale = scale;
+        }
+    }
+
+    void OnCollisionEnter2D(Collision2D coll)
+    {
+        if (coll.collider.tag == "CannonBall")
+        {
+            NetworkedCannonBall ball = coll.gameObject.GetComponent<NetworkedCannonBall>() as NetworkedCannonBall;
+
+            if (!ball.networkView.isMine || myCannon)
+            {
+                return;
+            }
+
+            if (ball.GetEnchantment() != SpiritType.ST_NULL)
+            {
+                networkView.RPC("ApplyDebuff", RPCMode.All, (int)ball.GetEnchantment());
+            }
+
+            ball.Damage();
         }
     }
 
@@ -172,39 +200,75 @@ public class NetworkedCannon : MonoBehaviour
 
     float GetAngle()
     {
-        timer += Time.deltaTime;
+        if (debuff == SpiritType.ST_RED)
+        {
+            timer += Time.deltaTime * redDebuffSpeed;
+        }
+        else
+        {
+            timer += Time.deltaTime;
+        }
 
         if (timer >= anglePeriod * 2f)
         {
             timer -= anglePeriod * 2f;
         }
 
+        float resultingAngle;
+
         if (timer < anglePeriod)
         {
-            return (timer / anglePeriod) * angleRange + minAngle;
+            resultingAngle = (timer / anglePeriod) * angleRange + minAngle;
         }
         else
         {
-            return ((2f * anglePeriod - timer) / anglePeriod) * angleRange + minAngle;
+            resultingAngle = ((2f * anglePeriod - timer) / anglePeriod) * angleRange + minAngle;
+        }
+
+        if (debuff == SpiritType.ST_GREEN)
+        {
+            return resultingAngle * greenDebuffCap;
+        }
+        else
+        {
+            return resultingAngle;
         }
     }
 
     float GetPower()
     {
-        timer += Time.deltaTime;
+        if (debuff == SpiritType.ST_RED)
+        {
+            timer += Time.deltaTime * redDebuffSpeed;
+        }
+        else
+        {
+            timer += Time.deltaTime;
+        }
 
         if (timer >= velocityPeriod * 2f)
         {
             timer -= velocityPeriod * 2f;
         }
 
+        float resultingPower;
+
         if (timer < velocityPeriod)
         {
-            return (timer / velocityPeriod) * velocityRange + minVelocity;
+            resultingPower = (timer / velocityPeriod) * velocityRange + minVelocity;
         }
         else
         {
-            return ((2f * velocityPeriod - timer) / velocityPeriod) * velocityRange + minVelocity;
+            resultingPower = ((2f * velocityPeriod - timer) / velocityPeriod) * velocityRange + minVelocity;
+        }
+
+        if (debuff == SpiritType.ST_BLUE)
+        {
+            return resultingPower * blueDebuffCap;
+        }
+        else
+        {
+            return resultingPower;
         }
     }
 
@@ -217,21 +281,27 @@ public class NetworkedCannon : MonoBehaviour
         powerIndicator.transform.localPosition = indPos;
     }
 
-    public void Press()
+    public bool Press()
     {
         if (myCannon)
         {
             if (currentState == CannonState.CS_ROTATING)
             {
                 networkView.RPC("PointCannonAt", RPCMode.All, markerPivot.transform.localRotation);
+
+                return false;
             }
             else if (currentState == CannonState.CS_VELOCITY)
             {
                 power.SetActive(false);
 
                 networkView.RPC("LightTheFuse", RPCMode.All, velocity);
+
+                return true;
             }
         }
+
+        return false;
     }
 
     [RPC]
@@ -254,6 +324,54 @@ public class NetworkedCannon : MonoBehaviour
         velocity = vel;
 
         currentState = CannonState.CS_FIRING;
+    }
+
+    public bool CanApplyBuff(SpiritType type)
+    {
+        return debuff == SpiritType.ST_NULL ||
+               debuff == SpiritType.ST_GREEN && type == SpiritType.ST_RED ||
+                debuff == SpiritType.ST_BLUE && type == SpiritType.ST_GREEN ||
+                debuff == SpiritType.ST_RED && type == SpiritType.ST_BLUE;
+    }
+
+    public void ApplyBuff(SpiritType type)
+    {
+        if(debuff == SpiritType.ST_NULL)
+        {
+            buff = type;
+        }
+        else if (debuff == SpiritType.ST_GREEN && type == SpiritType.ST_RED ||
+                debuff == SpiritType.ST_BLUE && type == SpiritType.ST_GREEN ||
+                debuff == SpiritType.ST_RED && type == SpiritType.ST_BLUE)
+        {
+            debuff = SpiritType.ST_NULL;
+            cannonRenderer.material.color = Color.white;
+        }
+    }
+
+    [RPC]
+    void ApplyDebuff(int type)
+    {
+        debuff = (SpiritType)type;
+
+        Color color = cannonRenderer.material.color;
+
+        if (debuff != SpiritType.ST_GREEN)
+        {
+            color.g = 0.5f;
+        }
+
+        if (debuff != SpiritType.ST_BLUE)
+        {
+            color.b = 0.5f;
+        }
+
+        if (debuff != SpiritType.ST_RED)
+        {
+            color.r = 0.5f;
+        }
+
+        cannonRenderer.material.color = color;
     }
 
     public void Fire()
@@ -300,8 +418,17 @@ public class NetworkedCannon : MonoBehaviour
             ball.rigidbody2D.velocity = finalVel;
             ball.networkView.RPC("SetVelocity", RPCMode.Others, finalVel);
 
-            //manager.SetCannonBall(ball.gameObject);
+            if (buff != SpiritType.ST_NULL)
+            {
+                ball.networkView.RPC("Enchant", RPCMode.All, (int)buff);
+            }
         }
+
+        audio.Play();
+
+        buff = SpiritType.ST_NULL;
+        debuff = SpiritType.ST_NULL;
+        cannonRenderer.material.color = Color.white;
 
         currentState = CannonState.CS_FIRED;
         knockbackTimer = knockbackDuration;

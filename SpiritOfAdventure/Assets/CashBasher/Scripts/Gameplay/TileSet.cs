@@ -3,26 +3,31 @@ using System.Collections;
 
 public class TileSet : MonoBehaviour
 {
-
     public int width, height;
 
     public int treasureWidth, treasureHeight;
 
+    public float blockSize = 1.0f;
+
     public bool reverseX;
 
     protected Tile[,] tiles;
+
+    private bool[,] tilesChecked;
 
     private Vector3 minCoord, maxCoord, minTreasure, maxTreasure;
 
     void Awake()
     {
         tiles = new Tile[width, height];
+        tilesChecked = new bool[width, height];
 
         for (int j = 0; j < width; j++)
         {
             for (int k = 0; k < height; k++)
             {
-                tiles[j, k] = new Tile(this, j, k);
+                tiles[j, k] = new Tile(this, j, k, blockSize);
+                tilesChecked[j, k] = false;
             }
         }
     }
@@ -37,17 +42,23 @@ public class TileSet : MonoBehaviour
             minCoord = pos;
             minTreasure = pos;
 
-            maxCoord = new Vector3(pos.x + width, pos.y + height);
-            maxTreasure = new Vector3(pos.x + treasureWidth, pos.y + treasureHeight);
+            maxCoord = new Vector3(pos.x + width * blockSize, pos.y + height * blockSize);
+            maxTreasure = new Vector3(pos.x + treasureWidth * blockSize, pos.y + treasureHeight * blockSize);
         }
         else
         {
-            minCoord = new Vector3(pos.x - width, pos.y);
-            minTreasure = new Vector3(pos.x - treasureWidth, pos.y);
+            minCoord = new Vector3(pos.x - width * blockSize, pos.y);
+            minTreasure = new Vector3(pos.x - treasureWidth * blockSize, pos.y);
 
-            maxCoord = new Vector3(pos.x, pos.y + height);
-            maxTreasure = new Vector3(pos.x, pos.y + treasureHeight);
+            maxCoord = new Vector3(pos.x, pos.y + height * blockSize);
+            maxTreasure = new Vector3(pos.x, pos.y + treasureHeight * blockSize);
         }
+    }
+
+    public bool IsInside(Vector3 position)
+    {
+        return minCoord.x < position.x && minCoord.y < position.y &&
+               maxCoord.x > position.x && maxCoord.y > position.y;
     }
 
     public bool CanPlace(Vector3 position)
@@ -62,17 +73,17 @@ public class TileSet : MonoBehaviour
     {
         if (!reverseX)
         {
-            return Mathf.FloorToInt(xPos - transform.position.x);
+            return Mathf.FloorToInt((xPos - transform.position.x) / blockSize);
         }
         else
         {
-            return Mathf.FloorToInt(transform.position.x - xPos);
+            return Mathf.FloorToInt((transform.position.x - xPos) / blockSize);
         }
     }
 
     public int GetYCoord(float yPos)
     {
-        return Mathf.FloorToInt(yPos - transform.position.y);
+        return Mathf.FloorToInt((yPos - transform.position.y) / blockSize);
     }
 
     public Vector3 CenterOn(Vector3 position)
@@ -93,6 +104,48 @@ public class TileSet : MonoBehaviour
         SaveFile.Instance().RemoveTile(tiles[GetXCoord(block.transform.position.x), GetYCoord(block.transform.position.y)]);
     }
 
+    public void DetachAdjacentBlocks(int x, int y)
+    {
+        //if (x > 0)
+        //{
+        //    if (IsGrounded(x - 1, y))
+        //    {
+
+        //    }
+        //}
+    }
+
+    //bool IsGrounded(int x, int y)
+    //{
+    //    ResetTilesChecked();
+
+    //    if (y == 0 && !tiles[x, y].Empty())
+    //    {
+    //        return true;
+    //    }
+
+    //    if (y > 0)
+    //    {
+    //        InternalIsGrounded
+    //    }
+    //}
+
+    //bool InternalIsGrounded(int x, int y)
+    //{
+
+    //}
+
+    void ResetTilesChecked()
+    {
+        for (int j = 0; j < width; j++)
+        {
+            for (int k = 0; k < height; k++)
+            {
+                tilesChecked[j, k] = false;
+            }
+        }
+    }
+
     void OnDrawGizmosSelected()
     {
         Vector3 mnc, mxc, mnt, mxt;
@@ -104,16 +157,16 @@ public class TileSet : MonoBehaviour
             mnc = pos;
             mnt = pos;
 
-            mxc = new Vector3(pos.x + width, pos.y + height);
-            mxt = new Vector3(pos.x + treasureWidth, pos.y + treasureHeight);
+            mxc = new Vector3(pos.x + width * blockSize, pos.y + height * blockSize);
+            mxt = new Vector3(pos.x + treasureWidth * blockSize, pos.y + treasureHeight * blockSize);
         }
         else
         {
-            mnc = new Vector3(pos.x - width, pos.y);
-            mnt = new Vector3(pos.x - treasureWidth, pos.y);
+            mnc = new Vector3(pos.x - width * blockSize, pos.y);
+            mnt = new Vector3(pos.x - treasureWidth * blockSize, pos.y);
 
-            mxc = new Vector3(pos.x, pos.y + height);
-            mxt = new Vector3(pos.x, pos.y + treasureHeight);
+            mxc = new Vector3(pos.x, pos.y + height * blockSize);
+            mxt = new Vector3(pos.x, pos.y + treasureHeight * blockSize);
         }
 
         Gizmos.color = Color.green;
@@ -126,21 +179,5 @@ public class TileSet : MonoBehaviour
         Gizmos.color = Color.yellow;
 
         Gizmos.DrawCube((mnt + mxt) / 2f, (mxt - mnt));
-    }
-
-    public void Save()
-    {
-        SaveFile.Instance().ClearTileList();
-
-        for (int j = 0; j < width; j++)
-        {
-            for (int k = 0; k < height; k++)
-            {
-                if (!tiles[j, k].Empty())
-                {
-                    SaveFile.Instance().AddTile(tiles[j, k]);
-                }
-            }
-        }
     }
 }

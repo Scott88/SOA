@@ -2,6 +2,10 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Xml;
+using System.Security.Cryptography;
+using System.Text;
+using System.IO;
+using System;
 
 public class SaveFile
 {
@@ -68,7 +72,24 @@ public class SaveFile
         else
         {
             saveFile = new XmlDocument();
-            saveFile.Load(Application.persistentDataPath + "/soa.xml");
+
+            try
+            {
+                saveFile.Load(Application.persistentDataPath + "/soa.xml");
+            }
+            catch(XmlException)
+            {
+                try
+                {
+                    saveFile.LoadXml(Decrypt(File.ReadAllText(Application.persistentDataPath + "/soa.xml")));
+                }
+                catch (XmlException)
+                {
+                    File.Delete(Application.persistentDataPath + "/soa.xml");
+                    saveFile = TransferFromPrefs();
+                }
+            }
+
         }
 
         LoadFromXML();
@@ -117,7 +138,9 @@ public class SaveFile
             levels.AppendChild(level);
         }
 
-        doc.Save(Application.persistentDataPath + "/soa.xml");
+        //doc.Save(Application.persistentDataPath + "/soa.xml");
+
+        File.WriteAllText(Application.persistentDataPath + "/soa.xml", Encrypt(doc.OuterXml));
 
         return doc;
     }
@@ -343,7 +366,9 @@ public class SaveFile
             blockInv.Attributes.Append(blockInvMetal);
         }
 
-        doc.Save(Application.persistentDataPath + "/soa.xml");
+        //doc.Save(Application.persistentDataPath + "/soa.xml");
+
+        File.WriteAllText(Application.persistentDataPath + "/soa.xml", Encrypt(doc.OuterXml));
     }
 
     public void SetLevelStars(string levelName, int stars)
@@ -528,6 +553,38 @@ public class SaveFile
         levelStates.Add(newState);
 
         return newState;
+    }
+
+    string Encrypt(string toEncrypt)
+    {
+        byte[] keyArray = UTF8Encoding.UTF8.GetBytes("53120246197329465012435945700311");
+        // 256-AES key
+        byte[] toEncryptArray = UTF8Encoding.UTF8.GetBytes(toEncrypt);
+        RijndaelManaged rDel = new RijndaelManaged();
+        rDel.Key = keyArray;
+        rDel.Mode = CipherMode.ECB;
+        // http://msdn.microsoft.com/en-us/library/system.security.cryptography.ciphermode.aspx
+        rDel.Padding = PaddingMode.PKCS7;
+        // better lang support
+        ICryptoTransform cTransform = rDel.CreateEncryptor();
+        byte[] resultArray = cTransform.TransformFinalBlock(toEncryptArray, 0, toEncryptArray.Length);
+        return Convert.ToBase64String(resultArray, 0, resultArray.Length);
+    }
+
+    string Decrypt(string toDecrypt)
+    {
+        byte[] keyArray = UTF8Encoding.UTF8.GetBytes("53120246197329465012435945700311");
+        // AES-256 key
+        byte[] toEncryptArray = Convert.FromBase64String(toDecrypt);
+        RijndaelManaged rDel = new RijndaelManaged();
+        rDel.Key = keyArray;
+        rDel.Mode = CipherMode.ECB;
+        // http://msdn.microsoft.com/en-us/library/system.security.cryptography.ciphermode.aspx
+        rDel.Padding = PaddingMode.PKCS7;
+        // better lang support
+        ICryptoTransform cTransform = rDel.CreateDecryptor();
+        byte[] resultArray = cTransform.TransformFinalBlock(toEncryptArray, 0, toEncryptArray.Length);
+        return UTF8Encoding.UTF8.GetString(resultArray);
     }
     
 }

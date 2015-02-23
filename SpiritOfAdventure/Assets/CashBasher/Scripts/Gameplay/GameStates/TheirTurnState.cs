@@ -3,34 +3,38 @@ using System.Collections;
 
 public class TheirTurnState : GameState 
 {
-    CashBasherManager manager;
-    CameraMan cameraMan;
+    public CashBasherManager manager;
 
-    public TheirTurnState(CashBasherManager m, CameraMan cm)
+    public override void Prepare()
     {
-        manager = m;
-        cameraMan = cm;
+        manager.StartCoroutine(Preshow());
     }
 
-    public void Prepare()
+    IEnumerator Preshow()
     {
-        if (Network.isServer)
+        if (manager.HasEffects(Network.isClient))
         {
-            cameraMan.FollowPosition(new Vector3(-4.5f, 1f, 0f));
+            if (Network.isServer)
+            {
+                manager.cameraMan.FollowWaypoint(manager.clientTileFocus);  
+            }
+            else
+            {
+                manager.cameraMan.FollowWaypoint(manager.serverTileFocus);
+            }
+
+            manager.cameraMan.ZoomTo(5f);
+
+            yield return new WaitForSeconds(3.0f);
+        }
+
+        if (Network.isServer == manager.startLookingAtTarget)
+        {
+            manager.cameraMan.FollowWaypoint(manager.serverCamFocus);
         }
         else
         {
-            cameraMan.FollowPosition(new Vector3(4.5f, 1f, 0f));
+            manager.cameraMan.FollowWaypoint(manager.clientCamFocus);
         }
-    }
-
-    public void Update()
-    {
-
-    }
-
-    public void End()
-    {
-
     }
 }

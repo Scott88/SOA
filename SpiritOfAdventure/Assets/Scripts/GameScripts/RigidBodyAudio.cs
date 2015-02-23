@@ -15,28 +15,31 @@ public class RigidBodyAudio : MonoBehaviour
 	{
 		madeContact = true;
 
-		float magnitude = coll.relativeVelocity.magnitude;
-		float volume = 0;
+        if (impactSource)
+        {
+            float magnitude = coll.relativeVelocity.magnitude;
+            float volume = 0;
 
-		if (magnitude < minCollisionSpeed)
-		{
-			volume = 0f;
-		}
-		else if (magnitude > maxCollisionSpeed)
-		{
-			volume = 1f;
-		}
-		else 
-		{
-			volume = ((magnitude - minCollisionSpeed) / (maxCollisionSpeed - minCollisionSpeed)) *
-						(1 - minCollisionVolume) + minCollisionVolume;
-		}
+            if (magnitude < minCollisionSpeed)
+            {
+                volume = 0f;
+            }
+            else if (magnitude > maxCollisionSpeed)
+            {
+                volume = 1f;
+            }
+            else
+            {
+                volume = ((magnitude - minCollisionSpeed) / (maxCollisionSpeed - minCollisionSpeed)) *
+                            (1 - minCollisionVolume) + minCollisionVolume;
+            }
 
-		if (!impactSource.isPlaying || volume > 0.1f)
-		{
-			impactSource.volume = volume;
-			impactSource.Play();
-		}
+            if (!impactSource.isPlaying || volume > 0.1f)
+            {
+                impactSource.volume = volume;
+                impactSource.Play();
+            }
+        }
 	}
 
 	void OnCollisionExit2D(Collision2D coll)

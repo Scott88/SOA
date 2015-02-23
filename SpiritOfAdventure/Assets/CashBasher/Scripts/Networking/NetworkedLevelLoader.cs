@@ -4,6 +4,8 @@ using System.Collections;
 [RequireComponent(typeof(NetworkView))]
 public class NetworkedLevelLoader : MonoBehaviour {
 
+    public int othersCostume { get; set; }
+
     private static bool created = false;
 
     private int levelPrefix = 0;
@@ -44,20 +46,30 @@ public class NetworkedLevelLoader : MonoBehaviour {
         LevelQueue.LoadLevel(levelName);
     }
 
-    public void Ready()
+    public void Ready(int enemyCostume)
     {
         Network.isMessageQueueRunning = true;
         Network.SetSendingEnabled(0, true);
 
         loaded = true;
 
-        networkView.RPC("OtherReady", RPCMode.Others);
+        networkView.RPC("OtherReady", RPCMode.Others, enemyCostume);
     }
 
     [RPC]
-    void OtherReady()
+    void OtherReady(int enemyCostume)
     {
         otherLoaded = true;
+        othersCostume = enemyCostume;
+
+        networkView.RPC("ConfirmOtherReady", RPCMode.Others, SaveFile.Instance().GetCurrentCostume());
+    }
+
+    [RPC]
+    void ConfirmOtherReady(int enemyCostume)
+    {
+        otherLoaded = true;
+        othersCostume = enemyCostume;
     }
 
     public bool IsReady()

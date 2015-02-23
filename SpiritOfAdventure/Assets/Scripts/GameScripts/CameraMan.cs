@@ -5,7 +5,7 @@ public class CameraMan : MonoBehaviour
 {
 	public float timeToReachTarget = 1f;
 	public float leadingDistance = 10f;
-	public float maximumSpeed = 20f; 
+	public float maximumSpeed = 20f;
 
 	private GameObject targetObject = null;
 	private Vector3 targetPosition = new Vector3();
@@ -23,6 +23,8 @@ public class CameraMan : MonoBehaviour
 
 	private Vector3 shakeOffset;
 
+    private float shakeMoveTimer = 0.0f;
+
 	public void FollowObject(GameObject target)
 	{
 		targetObject = target;
@@ -39,6 +41,17 @@ public class CameraMan : MonoBehaviour
 		targetPosition = target;
 		followingObject = false;
 	}
+
+    public void FollowWaypoint(CameraWaypoint waypoint)
+    {
+        FollowPosition(waypoint.transform.position);
+        ZoomTo(waypoint.zoom);
+    }
+
+    public void StopFollowing()
+    {
+        followingObject = false;
+    }
 
     public void ZoomTo(float zoom)
     {
@@ -91,13 +104,20 @@ public class CameraMan : MonoBehaviour
 
         transform.position = Vector3.SmoothDamp(transform.position, targetPosition, ref currentVelocity, timeToReachTarget, maximumSpeed, Time.fixedDeltaTime);
 
-		GetShake();
+        if (Time.timeScale >= 1f || shakeMoveTimer >= 1f)
+        {
+            GetShake();
+        }
+        else
+        {
+            shakeMoveTimer += Time.timeScale;
+        }
 
 		transform.position += shakeOffset;
 
         if (camera.orthographicSize != targetZoom && targetZoom != 0)
         {
-            camera.orthographicSize = Mathf.SmoothDamp(camera.orthographicSize, targetZoom, ref zoomVel, 4f);
+            camera.orthographicSize = Mathf.SmoothDamp(camera.orthographicSize, targetZoom, ref zoomVel, 0.5f);
         }
 	}
 
@@ -109,7 +129,7 @@ public class CameraMan : MonoBehaviour
 
 	void GetShake()
 	{
-		if (shakeIntensity > 0f)
+		if (shakeIntensity >= 0f)
 		{
 			shakeOffset = Random.insideUnitSphere * shakeIntensity;
 

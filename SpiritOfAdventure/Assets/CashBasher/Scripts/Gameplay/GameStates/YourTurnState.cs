@@ -3,42 +3,116 @@ using System.Collections;
 
 public class YourTurnState : GameState
 {
-    CashBasherManager manager;
+    public CashBasherManager manager;
+
+    public NetworkedCannon serverCannon, clientCannon;
+
+    public GameObject spiritButtons;
+
+    public NetworkedTileSet serverTileSet, clientTileSet;
+
     NetworkedCannon yourCannon;
-    CameraMan cameraMan;
+
+    Vector3 spiritWaypoint;
+
+    CashBasherSpirit selectedSpirit;
+
+    NetworkedTileSet yourTileSet;
 
     bool nextTurn = false;
     float timer = 1.0f;
 
-    public YourTurnState(CashBasherManager m, NetworkedCannon c, CameraMan cm)
-    {
-        manager = m;
-        yourCannon = c;
-        cameraMan = cm;
-    }
+    CashBasherSpiritGUI spiritGUIPushed = null;
+    bool holdingSpirit = false;
 
-    public void Prepare()
+    Vector3 velocityRef;
+
+    Vector3 buttonDownPos, buttonUpPos;
+
+    bool showButtons = true;
+
+    bool airGrabbed = false, cameraGrabbed = false;
+    bool cameraFocusLeft;
+
+    Vector3 lastTouchPos;
+
+    private float moveLeftPos, moveRightPos;
+
+    void Start()
     {
         if (Network.isServer)
         {
-            cameraMan.FollowPosition(new Vector3(4.5f, 1f, 0f));
+            yourCannon = serverCannon;
+            yourTileSet = serverTileSet;
+            spiritWaypoint = manager.serverWaypoint.transform.position;
         }
         else
         {
-            cameraMan.FollowPosition(new Vector3(-4.5f, 1f, 0f));
+            yourCannon = clientCannon;
+            yourTileSet = clientTileSet;
+            spiritWaypoint = manager.clientWaypoint.transform.position;
         }
 
-        cameraMan.ZoomTo(7f);
+        buttonUpPos = spiritButtons.transform.position;
+        buttonDownPos = buttonUpPos;
+        buttonDownPos.y -= 2.5f;
+
+        moveLeftPos = manager.clientCamFocus.transform.position.x - manager.playerCamera.orthographicSize;
+        moveRightPos = manager.serverCamFocus.transform.position.x + manager.playerCamera.orthographicSize;
+    }
+
+    public override void Prepare()
+    {
+        manager.StartCoroutine(Preshow());
+    }
+
+    IEnumerator Preshow()
+    {
+        if (manager.HasEffects(Network.isServer))
+        {
+            if (Network.isServer)
+            {
+                manager.cameraMan.FollowWaypoint(manager.serverTileFocus);
+            }
+            else
+            {
+                manager.cameraMan.FollowWaypoint(manager.clientTileFocus);
+            }
+
+            manager.cameraMan.ZoomTo(5f);
+
+            yield return new WaitForSeconds(2.0f);
+
+            yourTileSet.TickDebuffs();
+
+            yield return new WaitForSeconds(1.0f);
+        }
+
+        if (Network.isServer == manager.startLookingAtTarget)
+        {
+            manager.cameraMan.FollowWaypoint(manager.clientCamFocus);
+            cameraFocusLeft = false;
+        }
+        else
+        {
+            manager.cameraMan.FollowWaypoint(manager.serverCamFocus);
+            cameraFocusLeft = true;
+        }
+
+        manager.cameraMan.ZoomTo(7f);
 
         yourCannon.Activate();
+
+        showButtons = true;
     }
 
     public void ReadyNextTurn()
     {
         nextTurn = true;
+        manager.networkView.RPC("UpdateEffectStatus", RPCMode.Others);
     }
 
-    public void Update()
+    public override void UpdateState()
     {
         if (nextTurn)
         {
@@ -51,47 +125,299 @@ public class YourTurnState : GameState
             }
         }
 
-        if (Input.GetMouseButtonDown(0))
+        if (showButtons)
         {
-            Vector2 rayOrigin = (Vector2)(manager.playerCamera.ScreenToWorldPoint(Input.mousePosition));
-            Vector2 rayDirection = new Vector2();
+            spiritButtons.transform.position = Vector3.SmoothDamp(spiritButtons.transform.position, buttonDownPos, ref velocityRef, 1f);
+        }
+        else
+        {
+            spiritButtons.transform.position = Vector3.SmoothDamp(spiritButtons.transform.position, buttonUpPos, ref velocityRef, 1f);
+        }
 
-            RaycastHit2D hit2d = Physics2D.Raycast(rayOrigin, rayDirection);
-
-            if (hit2d)
+        if (!manager.paused)
+        {
+            if (Input.GetMouseButtonDown(0))
             {
-                NetworkedCannon cannon = hit2d.collider.GetComponent<NetworkedCannon>();
+                GetClickedOn();
+            }
+            else if (Input.GetMouseButton(0))
+            {
+                GetHeldOn();
+            }
+
+            if (Input.GetMouseButtonUp(0))
+            {
+                GetReleasedOn();
+            }
+        }
+    }
+
+    public void GetClickedOn()
+    {
+        Vector2 playerRayOrigin = (Vector2)(manager.playerCamera.ScreenToWorldPoint(Input.mousePosition));
+        Vector2 playerRayDirection = new Vector2();
+
+        RaycastHit2D playerHit2d = Physics2D.Raycast(playerRayOrigin, playerRayDirection);
+
+        if (!selectedSpirit)
+        {
+            if (playerHit2d)
+            {
+                NetworkedCannon cannon = playerHit2d.collider.GetComponent<NetworkedCannon>();
 
                 if (cannon)
                 {
-                    cannon.Press();
+                    if (showButtons)
+                    {
+                        showButtons = !cannon.Press();
+                    }
+                    else
+                    {
+                        cannon.Press();
+                    }
+
+                    return;
+                }
+            }
+        }
+
+        Vector2 rayOrigin = (Vector2)(manager.guiCamera.ScreenToWorldPoint(Input.mousePosition));
+        Vector2 rayDirection = new Vector2();
+
+        RaycastHit2D hit2d = Physics2D.Raycast(rayOrigin, rayDirection);
+
+        if (hit2d && showButtons)
+        {
+            CashBasherSpiritGUI spiritGUI = hit2d.collider.GetComponent<CashBasherSpiritGUI>();
+
+            if (spiritGUI)
+            {
+                spiritGUIPushed = spiritGUI;
+                return;
+            }
+        }
+
+        if (playerHit2d)
+		{
+            CashBasherSpirit spirit = playerHit2d.collider.GetComponent<CashBasherSpirit>();
+			
+			if (spirit)
+			{
+				holdingSpirit = true;
+                return;
+			}
+		}
+
+        if(selectedSpirit && yourTileSet.IsInside(manager.playerCamera.ScreenToWorldPoint(Input.mousePosition)))
+        {
+            return;
+        }
+
+        airGrabbed = true;
+        lastTouchPos = manager.playerCamera.ScreenToWorldPoint(Input.mousePosition);
+        manager.cameraMan.enabled = false;
+    }
+
+    public void GetHeldOn()
+    {
+        if (airGrabbed)
+        {
+            Vector3 nextPos = manager.playerCamera.ScreenToWorldPoint(Input.mousePosition);
+
+            Vector3 translation = new Vector3(lastTouchPos.x - nextPos.x, 0f);
+
+            if (cameraFocusLeft && translation.x + manager.playerCamera.transform.position.x < manager.serverCamFocus.transform.position.x)
+            {
+                translation.x = manager.serverCamFocus.transform.position.x - manager.playerCamera.transform.position.x;
+            }
+            else if (!cameraFocusLeft && translation.x + manager.playerCamera.transform.position.x > manager.clientCamFocus.transform.position.x)
+            {
+                translation.x = manager.clientCamFocus.transform.position.x - manager.playerCamera.transform.position.x;
+            }
+
+            manager.playerCamera.transform.Translate(translation);
+
+            if (Mathf.Abs(translation.x) > 0.5f)
+            {
+                cameraGrabbed = true;
+            }
+        }
+
+        if (!cameraGrabbed)
+        {
+            if (spiritGUIPushed)
+            {
+                Vector2 rayOrigin = (Vector2)(manager.guiCamera.ScreenToWorldPoint(Input.mousePosition));
+                Vector2 rayDirection = new Vector2();
+
+                RaycastHit2D hit2d = Physics2D.Raycast(rayOrigin, rayDirection);
+
+                if (hit2d)
+                {
+                    CashBasherSpiritGUI spiritGUI = hit2d.collider.GetComponent<CashBasherSpiritGUI>();
+
+                    if (spiritGUI != spiritGUIPushed)
+                    {
+                        SummonSpirit(spiritGUI, true);
+
+                        return;
+                    }
+                }
+                else
+                {
+                    SummonSpirit(spiritGUIPushed, true);
+
                     return;
                 }
             }
 
-            rayOrigin = (Vector2)(manager.guiCamera.ScreenToWorldPoint(Input.mousePosition));
-            rayDirection = new Vector2();
-
-            hit2d = Physics2D.Raycast(rayOrigin, rayDirection);
-
-            if (hit2d)
+            if (holdingSpirit)
             {
-                CashBasherSpiritGUI spiritGUI = hit2d.collider.GetComponent<CashBasherSpiritGUI>();
+                selectedSpirit.MoveHere(manager.playerCamera.ScreenToWorldPoint(Input.mousePosition) + Vector3.up * 2f);
+            }
 
-                if (spiritGUI)
+            if (selectedSpirit)
+            {
+                if (yourTileSet.IsInside(manager.playerCamera.ScreenToWorldPoint(Input.mousePosition)))
                 {
-                    spiritGUI.Remove();
-                    return;
+                    selectedSpirit.healAOE.SetActive(true);
+                    selectedSpirit.healAOE.transform.position = yourTileSet.CenterOn(manager.playerCamera.ScreenToWorldPoint(Input.mousePosition));
+                    selectedSpirit.healAOE.transform.position += Vector3.back * 2f;
+                    selectedSpirit.healAOE.transform.localScale = new Vector3(yourTileSet.blockSize, yourTileSet.blockSize);
+                }
+                else
+                {
+                    selectedSpirit.healAOE.SetActive(false);
                 }
             }
         }
     }
 
-    public void End()
+    public void GetReleasedOn()
+    {
+        if (airGrabbed)
+        {
+            manager.cameraMan.enabled = true;
+            airGrabbed = false;
+        }
+
+        if (cameraGrabbed)
+        {
+            if (cameraFocusLeft && manager.playerCamera.transform.position.x > moveRightPos)
+            {
+                manager.cameraMan.FollowWaypoint(manager.clientCamFocus);
+                cameraFocusLeft = false;
+                manager.networkView.RPC("FocusCamera", RPCMode.Others, cameraFocusLeft);
+            }
+            else if (!cameraFocusLeft && manager.playerCamera.transform.position.x < moveLeftPos)
+            {
+                manager.cameraMan.FollowWaypoint(manager.serverCamFocus);
+                cameraFocusLeft = true;
+                manager.networkView.RPC("FocusCamera", RPCMode.Others, cameraFocusLeft);
+            }
+
+            cameraGrabbed = false;
+        }
+        else
+        {
+            Vector2 rayOrigin = (Vector2)(manager.guiCamera.ScreenToWorldPoint(Input.mousePosition));
+            Vector2 rayDirection = new Vector2();
+
+            RaycastHit2D hit2d = Physics2D.Raycast(rayOrigin, rayDirection);
+
+            if (hit2d && spiritGUIPushed)
+            {
+                CashBasherSpiritGUI spiritGUI = hit2d.collider.GetComponent<CashBasherSpiritGUI>();
+
+                if (spiritGUI)
+                {
+                    if (selectedSpirit == spiritGUI.spirit)
+                    {
+                        selectedSpirit.Retreat(spiritWaypoint);
+                        selectedSpirit = null;
+                        spiritGUIPushed = null;
+                    }
+                    else
+                    {
+                        SummonSpirit(spiritGUI, false);
+                    }
+
+                    return;
+                }
+            }
+
+            rayOrigin = (Vector2)(manager.playerCamera.ScreenToWorldPoint(Input.mousePosition));
+            rayDirection = new Vector2();
+
+            hit2d = Physics2D.Raycast(rayOrigin, rayDirection);
+
+            if (selectedSpirit)
+            {
+                if (hit2d)
+                {
+                    NetworkedCannon cannon = hit2d.collider.GetComponent<NetworkedCannon>();
+
+                    if (cannon == yourCannon && cannon.CanApplyBuff(selectedSpirit.type))
+                    {
+                        selectedSpirit.MoveHereAndTrigger(cannon.team == 0);
+
+                        showButtons = false;
+
+                        holdingSpirit = false;
+                        selectedSpirit = null;
+
+                        return;
+                    }
+                }
+
+                if (yourTileSet.IsInside(manager.playerCamera.ScreenToWorldPoint(Input.mousePosition)))
+                {
+                    selectedSpirit.healAOE.SetActive(false);
+                    selectedSpirit.MoveHereAndHeal(manager.playerCamera.ScreenToWorldPoint(Input.mousePosition), Network.isServer);
+
+                    showButtons = false;
+
+                    holdingSpirit = false;
+                    selectedSpirit = null;
+
+                    return;
+                }
+
+                selectedSpirit.MoveHereAndPoof(rayOrigin);
+
+                holdingSpirit = false;
+                selectedSpirit = null;
+
+                return;
+            }
+        }
+    }
+
+    void SummonSpirit(CashBasherSpiritGUI spiritGUI, bool holding)
+    {
+        if (selectedSpirit == spiritGUI.spirit)
+        {
+            return;
+        }
+
+        if (selectedSpirit && selectedSpirit != spiritGUIPushed.spirit)
+        {
+            selectedSpirit.Retreat(spiritWaypoint);
+        }
+
+        selectedSpirit = spiritGUIPushed.spirit;
+        selectedSpirit.Activate(spiritWaypoint);
+
+        spiritGUIPushed = null;
+
+        holdingSpirit = holding;
+    }
+
+    public override void End()
     {
         yourCannon.Deactivate();
 
-        nextTurn = false;
+        nextTurn = false; 
         timer = 1.0f;
     }
 }

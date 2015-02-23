@@ -29,6 +29,11 @@ public class SpiritCounter : MonoBehaviour {
         spiritCount--;
         display.text = "x" + spiritCount.ToString();
 
+        if (audio)
+        {
+            audio.Play();
+        }
+
         SaveFile.Instance().SetSpiritCount(type, spiritCount);
     }
 

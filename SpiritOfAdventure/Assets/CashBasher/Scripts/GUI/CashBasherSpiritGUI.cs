@@ -5,6 +5,8 @@ public class CashBasherSpiritGUI : MonoBehaviour
 {
     public SpiritType type;
 
+    public CashBasherSpirit spirit;
+
     public TextMesh display;
 
     private int count;
@@ -20,11 +22,19 @@ public class CashBasherSpiritGUI : MonoBehaviour
         return count == 0;
     }
 
+    public void Add()
+    {
+        count++;
+        display.text = "x" + count;
+
+        SaveFile.Instance().ModifySpiritInventory(type, 1);
+    }
+
     public void Remove()
     {
         count--;
         display.text = "x" + count;
 
         SaveFile.Instance().ModifySpiritInventory(type, -1);
-    }
+    }  
 }

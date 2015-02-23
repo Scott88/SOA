@@ -34,6 +34,11 @@ public class WaitingState : GameState
         }
     }
 
+    public void OnGUI()
+    {
+
+    }
+
     public void End()
     {
 

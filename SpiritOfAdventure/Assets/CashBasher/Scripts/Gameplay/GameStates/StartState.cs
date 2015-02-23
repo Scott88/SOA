@@ -3,52 +3,69 @@ using System.Collections;
 
 public class StartState : GameState
 {
-    CashBasherManager manager;
+    public CashBasherManager manager;
 
-    float delay;
+    public float startDelay;
 
-    NetworkedLevelLoader loader;
+    private NetworkedLevelLoader loader;
 
-    public StartState(CashBasherManager m, float startDelay, NetworkedLevelLoader load)
+    void Start()
     {
-        delay = startDelay;
-        manager = m;
-        loader = load;
+        loader = FindObjectOfType<NetworkedLevelLoader>();
     }
 
-    public void Prepare()
+    public override void Prepare()
     {
         manager.gameText.text = "Get ready to start...!";
-    }
 
-    public void Update()
-    {
-        delay -= Time.deltaTime;
-
-        if (delay <= 0f)
+        if (Network.isServer)
         {
-            if (Network.isServer && loader.IsReady())
-            {
-                manager.RandomizeTreasure();
-
-                bool serverFirst = Random.value > 0.5f;
-
-                if (serverFirst)
-                {
-                    manager.networkView.RPC("SwitchToState", RPCMode.Others, (int)GamePhase.GP_THEIR_TURN);
-                    manager.SwitchToState((int)GamePhase.GP_YOUR_TURN);
-                }
-                else
-                {
-                    manager.networkView.RPC("SwitchToState", RPCMode.Others, (int)GamePhase.GP_YOUR_TURN);
-                    manager.SwitchToState((int)GamePhase.GP_THEIR_TURN);
-                }
-            }
+            manager.StartCoroutine(Preshow());
         }
     }
 
-    public void End()
+    IEnumerator Preshow()
     {
-        
+        yield return new WaitForSeconds(startDelay);
+
+        while (!loader.IsReady())
+        {
+            yield return null;
+        }
+
+        manager.RandomizeTreasure();
+
+        manager.networkView.RPC("FadeSplashScreen", RPCMode.All);
+
+        yield return new WaitForSeconds(1.0f);
+
+        manager.networkView.RPC("FocusCameraTiles", RPCMode.All, true);
+
+        yield return new WaitForSeconds(1.5f);
+
+        manager.GenerateServerSpirits();
+
+        yield return new WaitForSeconds(1.0f);
+
+        manager.networkView.RPC("FocusCameraTiles", RPCMode.All, false);
+
+        yield return new WaitForSeconds(1.5f);
+
+        manager.GenerateClientSpirits();
+
+        yield return new WaitForSeconds(1.0f);
+
+        bool serverFirst = Random.value > 0.5f;
+
+        if (serverFirst)
+        {
+            manager.networkView.RPC("SwitchToState", RPCMode.Others, (int)GamePhase.GP_THEIR_TURN);
+            manager.SwitchToState((int)GamePhase.GP_YOUR_TURN);
+        }
+        else
+        {
+            manager.networkView.RPC("SwitchToState", RPCMode.Others, (int)GamePhase.GP_YOUR_TURN);
+            manager.SwitchToState((int)GamePhase.GP_THEIR_TURN);
+        }
     }
 }

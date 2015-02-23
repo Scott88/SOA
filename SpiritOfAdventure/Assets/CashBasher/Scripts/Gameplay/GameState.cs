@@ -1,11 +1,13 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public interface GameState
+public class GameState : MonoBehaviour
 {
-    void Prepare();
+    public virtual void Prepare() { }
 
-    void Update();
+    public virtual void UpdateState() { }
 
-    void End();
+    public virtual void OnStateGUI() { }
+
+    public virtual void End() { }
 }
