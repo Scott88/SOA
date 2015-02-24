@@ -6,6 +6,7 @@ public class ScoreManager : MonoBehaviour
 	public GameObject pointFloaterPref;
 	public GameObject firstStar, secondStar, thirdStar;
 	public ParticleSystem greenSaved, blueSaved, redSaved;
+    public ParticleSystem starEarned;
 	public int greenFailsAllowed, blueFailsAllowed, redFailsAllowed;
 	public int pointsLostPerUse, pointsGainedPerSaved;
 	public int pointsPerSecond;
@@ -17,11 +18,15 @@ public class ScoreManager : MonoBehaviour
 	private bool animatingScore = false;
 	private int starCount;
 
+    private int previousStarCount;
+
 	void Start()
 	{
 		firstStar.SetActive(false);
 		secondStar.SetActive(false);
 		thirdStar.SetActive(false);
+
+        previousStarCount = SaveFile.Instance().GetLevelStars(Application.loadedLevelName);
 	}
 	
 	void Update()
@@ -43,18 +48,33 @@ public class ScoreManager : MonoBehaviour
 			{
 				firstStar.SetActive(true);
 				starCount = 1;
+
+                if (starCount > previousStarCount)
+                {
+                    starEarned.Emit(1);
+                }
 			}
 
 			if (!secondStar.activeSelf && GetFinalScore() > silverScore)
 			{
 				secondStar.SetActive(true);
 				starCount = 2;
+
+                if (starCount > previousStarCount)
+                {
+                    starEarned.Emit(1);
+                }
 			}
 
 			if (!thirdStar.activeSelf && GetFinalScore() > goldScore)
 			{
 				thirdStar.SetActive(true);
 				starCount = 3;
+
+                if (starCount > previousStarCount)
+                {
+                    starEarned.Emit(1);
+                }
 			}
 		}
 	}
@@ -167,10 +187,19 @@ public class ScoreManager : MonoBehaviour
 
 		if (animatingScore)
 		{
-			if (SaveFile.Instance().GetStars(Application.loadedLevelName) < starCount)
-			{
-				SaveFile.Instance().SetLevelStars(Application.loadedLevelName, starCount);
-			}
+            int previousStars = SaveFile.Instance().GetLevelStars(Application.loadedLevelName);
+
+            if (previousStars < starCount)
+            {
+                SaveFile.Instance().SetLevelStars(Application.loadedLevelName, starCount);
+
+                SaveFile.Instance().ModifyStars(starCount - previousStars);
+            }
+            else
+            {
+                starEarned.Emit(1);
+                SaveFile.Instance().ModifyStars(1);
+            }       
 
             if (SaveFile.Instance().GetScore(Application.loadedLevelName) < GetActualFinalScore())
             {
@@ -254,10 +283,20 @@ public class ScoreManager : MonoBehaviour
 			starCount = 3;
 		}
 
-		if (SaveFile.Instance().GetStars(Application.loadedLevelName) < starCount)
-		{
-			SaveFile.Instance().SetLevelStars(Application.loadedLevelName, starCount);
-		}
+        int previousStars = SaveFile.Instance().GetLevelStars(Application.loadedLevelName);
+
+        if (previousStars < starCount)
+        {
+            SaveFile.Instance().SetLevelStars(Application.loadedLevelName, starCount);
+
+            starEarned.Emit(starCount - previousStars);
+            SaveFile.Instance().ModifyStars(starCount - previousStars);
+        }
+        else
+        {
+            starEarned.Emit(1);
+            SaveFile.Instance().ModifyStars(1);
+        }
 
         if (SaveFile.Instance().GetScore(Application.loadedLevelName) < GetActualFinalScore())
         {

@@ -7,6 +7,7 @@ public class CashBasherMenu : MonoBehaviour
 
     public ServerMenu serverMenu;
     public ClientMenu clientMenu;
+    public BlockStore blockStore;
 
     public Camera mainCamera;
 
@@ -22,6 +23,14 @@ public class CashBasherMenu : MonoBehaviour
 
         if (Network.peerType == NetworkPeerType.Disconnected)
         {
+            if (GUI.Button(new Rect(Screen.width * (0.85f), Screen.height * (0.2f), Screen.width * (0.12f), Screen.height * (0.1f)),
+                           "Buy Blocks"))
+            {
+                mainCamera.transform.position = new Vector3(-30f, 0f, -10f);
+                gameObject.SetActive(false);
+                blockStore.gameObject.SetActive(true);
+            }
+
             if (GUI.Button(new Rect(Screen.width * (0.85f), Screen.height * (0.7f), Screen.width * (0.12f), Screen.height * (0.1f)),
                            "Start Your Own Game"))
             {

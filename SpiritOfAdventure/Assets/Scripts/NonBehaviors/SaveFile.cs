@@ -49,6 +49,8 @@ public class SaveFile
 
     private int woodBlockInv, stoneBlockInv, metalBlockInv;
 
+    private int stars;
+
     private static SaveFile instance;
 
     private XmlDocument saveFile;
@@ -138,8 +140,6 @@ public class SaveFile
             levels.AppendChild(level);
         }
 
-        //doc.Save(Application.persistentDataPath + "/soa.xml");
-
         File.WriteAllText(Application.persistentDataPath + "/soa.xml", Encrypt(doc.OuterXml));
 
         return doc;
@@ -226,6 +226,22 @@ public class SaveFile
             woodBlockInv = 10;
             stoneBlockInv = 10;
             metalBlockInv = 10;
+        }
+
+        XmlElement starsNode = saveNode["Stars"];
+
+        if (starsNode != null)
+        {
+            stars = int.Parse(starsNode.GetAttribute("count"));
+        }
+        else
+        {
+            stars = 0;
+
+            for (int j = 0; j < levelStates.Count; j++)
+            {
+                stars += levelStates[j].stars;
+            }
         }
     }
 
@@ -366,6 +382,14 @@ public class SaveFile
             blockInv.Attributes.Append(blockInvMetal);
         }
 
+        XmlElement starsNode = doc.CreateElement("Stars");
+        save.AppendChild(starsNode);
+
+        XmlAttribute starsCount = doc.CreateAttribute("count");
+        starsCount.Value = stars.ToString();
+
+        starsNode.Attributes.Append(starsCount);
+
         //doc.Save(Application.persistentDataPath + "/soa.xml");
 
         File.WriteAllText(Application.persistentDataPath + "/soa.xml", Encrypt(doc.OuterXml));
@@ -439,6 +463,16 @@ public class SaveFile
         }
     }
 
+    public void ModifyStars(int change)
+    {
+        stars += change;
+    }
+
+    public int GetStars()
+    {
+        return stars;
+    }
+
     public int GetBlockInventory(BlockType type)
     {
         switch (type)
@@ -506,7 +540,7 @@ public class SaveFile
         tileSetInfo.Remove(dummy);
     }
 
-    public int GetStars(string levelName)
+    public int GetLevelStars(string levelName)
     {
         return GetLevelState(levelName).stars;
     }

@@ -8,10 +8,14 @@ public class BlockEditor : MonoBehaviour
 
     public Camera mainCamera;
 
+    public int woodWorth = 5, stoneWorth = 10, metalWorth = 15, spiritWorth = 25;
+
     public BlockInventory woodInventory, stoneInventory, metalInventory;
     public BlockCounter woodCounter, stoneCounter, metalCounter;
 
     public AudioSource placeWoodSound, placeStoneSound, placeMetalSound;
+
+    public TextMesh worthDisplay;
 
     public SpiritInventory greenInventory, blueInventory, redInventory;
     public SpiritCounter greenCounter, blueCounter, redCounter;
@@ -19,6 +23,8 @@ public class BlockEditor : MonoBehaviour
     public GameObject greenTransfer, blueTransfer, redTransfer;
 
     private BlockInventory selectedInventory;
+
+    private int castleWorth = 0;
 
     private bool blockBroken = false;
 
@@ -31,13 +37,13 @@ public class BlockEditor : MonoBehaviour
             switch (tileList.Current.type)
             {
                 case BlockType.BT_WOOD:
-                    TryLoad(tileList.Current.x, tileList.Current.y, woodInventory, woodCounter);
+                    if(TryLoad(tileList.Current.x, tileList.Current.y, woodInventory, woodCounter)) castleWorth += woodWorth;
                     break;
                 case BlockType.BT_STONE:
-                    TryLoad(tileList.Current.x, tileList.Current.y, stoneInventory, stoneCounter);
+                    if(TryLoad(tileList.Current.x, tileList.Current.y, stoneInventory, stoneCounter)) castleWorth += stoneWorth;
                     break;
                 case BlockType.BT_METAL:
-                    TryLoad(tileList.Current.x, tileList.Current.y, metalInventory, metalCounter);
+                    if(TryLoad(tileList.Current.x, tileList.Current.y, metalInventory, metalCounter)) castleWorth += metalWorth;
                     break;
             }
         }
@@ -45,9 +51,11 @@ public class BlockEditor : MonoBehaviour
         TryTransfer(SaveFile.Instance().GetSpiritCount(SpiritType.ST_GREEN), greenInventory, greenCounter);
         TryTransfer(SaveFile.Instance().GetSpiritCount(SpiritType.ST_BLUE), blueInventory, blueCounter);
         TryTransfer(SaveFile.Instance().GetSpiritCount(SpiritType.ST_RED), redInventory, redCounter);
+
+        worthDisplay.text = "Value:\n" + castleWorth;
     }
 
-    void TryLoad(int x, int y, BlockInventory inventory, BlockCounter counter)
+    bool TryLoad(int x, int y, BlockInventory inventory, BlockCounter counter)
     {
         if (!inventory.Empty())
         {
@@ -56,11 +64,16 @@ public class BlockEditor : MonoBehaviour
             tileSet.LoadBlock(x, y, inventory.GetBlock());
 
             counter.Add();
+
+            return true;
         }
+
+        return false;
     }
 
     void TryTransfer(int count, SpiritInventory inventory, SpiritCounter counter)
     {
+        castleWorth += spiritWorth * count;
         counter.Add(inventory.RemoveSpirits(count));
     }
     
@@ -214,19 +227,25 @@ public class BlockEditor : MonoBehaviour
 
     void SelectInventory(BlockInventory inventory)
     {
-        if (selectedInventory)
+        if (inventory.selectable)
         {
-            DeselectInventory(selectedInventory);
-        }
+            if (selectedInventory)
+            {
+                DeselectInventory(selectedInventory);
+            }
 
-        selectedInventory = inventory;
-        inventory.Select();
+            selectedInventory = inventory;
+            inventory.Select();
+        }
     }
 
     void DeselectInventory(BlockInventory inventory)
     {
-        inventory.Deselect(false);
-        selectedInventory = null;
+        if (inventory.selectable)
+        {
+            inventory.Deselect(false);
+            selectedInventory = null;
+        }
     }
 
     void PlaceBlock(Vector3 position, BlockInventory inventory)
@@ -237,20 +256,25 @@ public class BlockEditor : MonoBehaviour
         {
             case BlockType.BT_WOOD:
                 woodCounter.Add();
+                castleWorth += woodWorth;
                 if (placeWoodSound) placeWoodSound.Play();
                 break;
             case BlockType.BT_STONE:
                 stoneCounter.Add();
+                castleWorth += stoneWorth;
                 if (placeStoneSound) placeStoneSound.Play();
                 break;
             case BlockType.BT_METAL:
                 metalCounter.Add();
+                castleWorth += metalWorth;
                 if (placeMetalSound) placeMetalSound.Play();
                 break;
         }
 
         inventory.Deselect(true);
         selectedInventory = null;
+
+        worthDisplay.text = "Value:\n" + castleWorth;
     }
 
     void RemoveBlock(Breakable block)
@@ -259,20 +283,25 @@ public class BlockEditor : MonoBehaviour
         {
             case BlockType.BT_WOOD:
                 woodInventory.ReturnBlock();
+                castleWorth -= woodWorth;
                 woodCounter.Remove();
                 break;
             case BlockType.BT_STONE:
                 stoneInventory.ReturnBlock();
+                castleWorth -= stoneWorth;
                 stoneCounter.Remove();
                 break;
             case BlockType.BT_METAL:
                 metalInventory.ReturnBlock();
+                castleWorth -= metalWorth;
                 metalCounter.Remove();
                 break;
         }
 
         tileSet.RemoveBlock(block.gameObject);
         Destroy(block.gameObject);
+
+        worthDisplay.text = "Value:\n" + castleWorth;
     }
 
     void AddSpiritToPool(SpiritType type)
@@ -289,6 +318,9 @@ public class BlockEditor : MonoBehaviour
                 AddSpiritToPool(redInventory, redCounter, redTransfer);
                 break;
         }
+
+        castleWorth += spiritWorth;
+        worthDisplay.text = "Value:\n" + castleWorth;
     }
 
     void AddSpiritToPool(SpiritInventory inventory, SpiritCounter counter, GameObject transfer)
@@ -316,6 +348,9 @@ public class BlockEditor : MonoBehaviour
                 RemoveSpiritFromPool(redInventory, redCounter, redTransfer);
                 break;
         }
+
+        castleWorth -= spiritWorth;
+        worthDisplay.text = "Value:\n" + castleWorth;
     }
 
     void RemoveSpiritFromPool(SpiritInventory inventory, SpiritCounter counter, GameObject transfer)

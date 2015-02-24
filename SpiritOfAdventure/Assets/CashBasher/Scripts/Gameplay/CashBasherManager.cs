@@ -29,6 +29,8 @@ public class CashBasherManager : MonoBehaviour
 
     public CashBasherSpiritGUI greenGUI, blueGUI, redGUI;
 
+    public StarInventory starInventory;
+
     public GameObject greenTransfer, blueTransfer, redTransfer;
 
     public CameraWaypoint serverCamFocus, clientCamFocus;
@@ -43,6 +45,9 @@ public class CashBasherManager : MonoBehaviour
 
     public GameObject treasure;
     public GameObject treasureSupport;
+
+    public GameObject starTransfer;
+    public GameObject earnedStar;
 
     public GameObject splashScreen;
 
@@ -287,6 +292,63 @@ public class CashBasherManager : MonoBehaviour
             {
                 damper.target = clientWaypoint.transform.position;
             }
+        }
+    }
+
+    public void TransferStar(Vector3 origin, int starCount, bool myBlock)
+    {
+        
+        if (myBlock)
+        {
+            StartCoroutine(TransferStarsToEnemy(starCount, Network.isServer ? clientWaypoint.transform.position : serverWaypoint.transform.position));
+        }
+        else
+        {
+            StartCoroutine(CollectStars(starCount, origin));
+        }
+    }
+
+    IEnumerator TransferStarsToEnemy(int numStars, Vector3 enemyPos)
+    {
+        float delay = 0.1f;
+        float delayIncrement = (0.75f + (float)numStars * 0.05f) / (float)numStars;
+
+        for (int j = 0; j < numStars; j++)
+        {
+            Vector3 spawnPoint = playerCamera.ScreenToWorldPoint(guiCamera.WorldToScreenPoint(starInventory.transform.position));
+
+            GameObject transfer = Instantiate(starTransfer, spawnPoint, Quaternion.identity) as GameObject;
+
+            SmoothDamper damper = transfer.GetComponent<SmoothDamper>();
+
+            damper.delay = delay;
+            damper.duration = 0.25f;
+
+            damper.target = enemyPos;
+
+            starInventory.Remove(1);
+
+            yield return new WaitForSeconds(delayIncrement);
+        }
+    }
+
+    IEnumerator CollectStars(int numStars, Vector3 origin)
+    {
+        float delay = 0.1f;
+        float delayIncrement = (0.75f + (float)numStars * 0.05f) / (float)numStars;
+
+        for (int j = 0; j < numStars; j++)
+        {
+            Vector3 spawnPoint = guiCamera.ScreenToWorldPoint(playerCamera.WorldToScreenPoint(origin));
+
+            GameObject star = Instantiate(earnedStar, spawnPoint, Quaternion.identity) as GameObject;
+
+            EarnedStar starGiver = star.GetComponent<EarnedStar>();
+
+            starGiver.delay = delay;
+            starGiver.Go();
+
+            yield return new WaitForSeconds(delayIncrement);
         }
     }
 

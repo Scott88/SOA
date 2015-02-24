@@ -12,6 +12,10 @@ public class BlockInventory : MonoBehaviour
 
     public BlockType type;
 
+    public BlockInventory childInventory;
+
+    public bool selectable = true;
+
     private int blockCount;
 
     private bool selected = false;
@@ -36,8 +40,7 @@ public class BlockInventory : MonoBehaviour
     {
         if (blockCount > 0)
         {
-            blockCount--;
-            blockCounter.text = "x" + blockCount.ToString();
+            TakeBlock();
             selected = true;
             selectionIndicator.SetActive(true);
         }
@@ -61,12 +64,33 @@ public class BlockInventory : MonoBehaviour
     {
         blockCount--;
         blockCounter.text = "x" + blockCount.ToString();
+
+        if (childInventory)
+        {
+            childInventory.TakeBlock();
+        }
     }
 
     public void ReturnBlock()
     {
         blockCount++;
         blockCounter.text = "x" + blockCount.ToString();
+
+        if (childInventory)
+        {
+            childInventory.ReturnBlock();
+        }
+    }
+
+    public void GiveBlocks(int count)
+    {
+        blockCount += count;
+        blockCounter.text = "x" + blockCount.ToString();
+
+        if (childInventory)
+        {
+            childInventory.GiveBlocks(count);
+        }
     }
 
     public bool IsSelected()

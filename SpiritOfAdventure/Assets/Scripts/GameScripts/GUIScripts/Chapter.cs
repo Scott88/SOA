@@ -35,7 +35,7 @@ public class Chapter : FocusPoint
 			{
 				for (int j = 0; j < nextChapter.unlockRequirements.Length && requirementsMet; j++)
 				{
-					if (SaveFile.Instance().GetStars(nextChapter.unlockRequirements[j]) == 0)
+					if (SaveFile.Instance().GetLevelStars(nextChapter.unlockRequirements[j]) == 0)
 					{
 						requirementsMet = false;
 					}

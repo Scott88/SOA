@@ -18,6 +18,8 @@ public class Breakable : MonoBehaviour
 
     public float speedDamper = 0.8f;
 
+    public int starValue = 5;
+
     public BlockType type;
 
     public AudioSource collisionSound, brokenSound, debuffSound, healSound;
@@ -44,10 +46,10 @@ public class Breakable : MonoBehaviour
     {
         manager = FindObjectOfType<CashBasherManager>();
 
-        if(debuffSound)
+        if (debuffSound)
         {
-        debuffStartVolume = debuffSound.volume;
-            }
+            debuffStartVolume = debuffSound.volume;
+        }
     }
 
     public void SetTile(Tile t)
@@ -117,6 +119,7 @@ public class Breakable : MonoBehaviour
         if (health == 0)
         {
             manager.TransferSpirit(containedSpirit, transform.position, networkView.isMine);
+            manager.TransferStar(transform.position, starValue, networkView.isMine);
 
             if (networkView.isMine)
             {
@@ -159,6 +162,7 @@ public class Breakable : MonoBehaviour
         if (health == 0)
         {
             manager.TransferSpirit(containedSpirit, transform.position, networkView.isMine);
+            manager.TransferStar(transform.position, starValue, networkView.isMine);
 
             if (networkView.isMine)
             {

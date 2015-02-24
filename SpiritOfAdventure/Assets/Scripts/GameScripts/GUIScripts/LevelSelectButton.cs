@@ -25,7 +25,7 @@ public class LevelSelectButton : MonoBehaviour
 		{
 			for (int j = 0; j < unlockRequirements.Length && requirementsMet; j++)
 			{
-				if (SaveFile.Instance().GetStars(unlockRequirements[j]) == 0)
+				if (SaveFile.Instance().GetLevelStars(unlockRequirements[j]) == 0)
 				{
 					requirementsMet = false;
 				}
@@ -34,7 +34,7 @@ public class LevelSelectButton : MonoBehaviour
 
 		HideStars();
 
-        starCount = SaveFile.Instance().GetStars(sceneToLoad);
+        starCount = SaveFile.Instance().GetLevelStars(sceneToLoad);
 
         ShowStars();
 	}
