@@ -155,10 +155,4 @@ public class Tile
         tile.block = block;
         block = null;
     }
-
-    public void RemoveBlock()
-    {
-        grounded = false;
-        parent.DetachAdjacentBlocks(x, y);
-    }
 }
