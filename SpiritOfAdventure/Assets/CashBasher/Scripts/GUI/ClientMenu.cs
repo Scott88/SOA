@@ -23,6 +23,7 @@ public class ClientMenu : MonoBehaviour
         if (GUI.Button(new Rect(Screen.width * (0.8f), Screen.height * (0.8f), Screen.width * (0.18f), Screen.height * (0.18f)),
                            "Back"))
         {
+            Screen.sleepTimeout = SleepTimeout.SystemSetting;
             mainCamera.transform.position = new Vector3(0f, 0f, -10f);
             gameObject.SetActive(false);
             minigameMenu.SetActive(true);
@@ -52,6 +53,7 @@ public class ClientMenu : MonoBehaviour
 
     public void SearchForServers()
     {
+        Screen.sleepTimeout = SleepTimeout.NeverSleep;
         display.text = "Looking for servers...";
         timer = 0f;
     }
