@@ -58,7 +58,7 @@ public class MainMenu : FocusPoint
 			if(GUI.Button(new Rect(Screen.width * (0.53f),Screen.height * (0.55f),Screen.width * (0.25f), Screen.height * (1f/7f)), "Costumes")) 
 			{
 				focus.PlayButtonSound();
-				Application.LoadLevel("HorizontalTabs");
+				LevelQueue.LoadLevel("HorizontalTabs", true);
 				PlayerPrefs.DeleteAll();
 			}
 
@@ -72,6 +72,11 @@ public class MainMenu : FocusPoint
                 SaveFile.Instance().ModifyBlockInventory(BlockType.BT_WOOD, 10);
                 SaveFile.Instance().ModifyBlockInventory(BlockType.BT_STONE, 10);
                 SaveFile.Instance().ModifyBlockInventory(BlockType.BT_METAL, 10);
+            }
+
+            if (GUI.Button(new Rect(Screen.width * (0.85f), Screen.height * (0.17f), Screen.width * (0.1f), Screen.height * (0.11f)), "STARS"))
+            {
+                SaveFile.Instance().ModifyStars(100);
             }
 #endif
 

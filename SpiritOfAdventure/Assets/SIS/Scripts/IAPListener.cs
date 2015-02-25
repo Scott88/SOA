@@ -66,96 +66,126 @@ namespace SIS
             switch (id)
             {
                 //section for in app purchases
-			case "lilly_bucks100.":
-				//the user bought the item "coins",
-				//increase coins by 1000 and show appropriate feedback
-				DBManager.IncreaseFunds("coins", 100);
-				ShowMessage("100 Lily bucks were added to your balance!");
-				break;
-
-			case "lilly_bucks3003.":
-				//the user bought the item "coins",
-				//increase coins by 1000 and show appropriate feedback
-				DBManager.IncreaseFunds("coins", 300);
-				ShowMessage("300 Lily bucks were added to your balance!");
-				break;
-
-                case "coins":
+                case "lilly_bucks100.":
                     //the user bought the item "coins",
                     //increase coins by 1000 and show appropriate feedback
-                    DBManager.IncreaseFunds("coins", 1000);
-                    ShowMessage("1000 coins were added to your balance!");
-                    break;
-                case "coin_pack":
-                    DBManager.IncreaseFunds("coins", 2500);
-                    ShowMessage("2500 coins were added to your balance!");
-                    break;
-                case "big_coin_pack":
-                    DBManager.IncreaseFunds("coins", 6000);
-                    ShowMessage("6000 coins were added to your balance!");
-                    break;
-                case "huge_coin_pack":
-                    DBManager.IncreaseFunds("coins", 12000);
-                    ShowMessage("12000 coins were added to your balance!");
-                    break;
-                case "no_ads":
-                    //no_ads purchased. You can now check DBManager.isPurchased("no_ads")
-                    //before showing ads and block them
-                    ShowMessage("Ads disabled!");
-                    break;
-                case "abo_monthly":
-                    //same here - your code to unlock subscription content
-                    ShowMessage("Subscribed to monthly abo!");
-                    break;
-                case "restore":
-                    //nothing else to call here,
-                    //the actual restore is handled by IAPManager
-                    ShowMessage("Restored transactions!");
+                    DBManager.IncreaseFunds("coins", 100);
+                    ShowMessage("100 Lily bucks were added to your balance!");
                     break;
 
-                //section for in game content
-                case "bullets":
-                    //for virtual items, you could use DBManager's custom data option in order
-                    //to save amounts of virtual products. E.g. increasing bullets by 100:
-                    //int bullets = DBManager.GetPlayerData("bullets").AsInt;
-                    //DBManager.SetPlayerData("bullets", new SimpleJSON.JSONData(bullets + 100));
-                    ShowMessage("Bullets were added to your inventory!");
-                    break;
-                case "health":
-                    ShowMessage("Medikits were added to your inventory!");
-                    break;
-                case "energy":
-                    ShowMessage("Energy was added to your inventory!");
-                    break;
-                case "bonus":
-                    ShowMessage("Bonus level unlocked!");
+                case "lilly_bucks3003.":
+                    //the user bought the item "coins",
+                    //increase coins by 1000 and show appropriate feedback
+                    DBManager.IncreaseFunds("coins", 300);
+                    ShowMessage("300 Lily bucks were added to your balance!");
                     break;
 
-                case "uzi":
-                    ShowMessage("Uzi unlocked!");
-                    break;
-                case "ak47":
-                    ShowMessage("AK47 unlocked!");
-                    break;
-                case "m4":
-                    ShowMessage("M4 unlocked!");
+                case "woodBlockStack":
+                    SaveFile.Instance().ModifyBlockInventory(BlockType.BT_WOOD, 10);
+                    ShowMessage("Total Wood Blocks: " + SaveFile.Instance().GetBlockInventory(BlockType.BT_WOOD));
                     break;
 
-                case "hat":
-                    ShowMessage("Hat unlocked!");
+                case "stoneBlockStack":
+                    SaveFile.Instance().ModifyBlockInventory(BlockType.BT_STONE, 10);
+                    ShowMessage("Total Stone Blocks: " + SaveFile.Instance().GetBlockInventory(BlockType.BT_STONE));
                     break;
-                case "backpack":
-                    ShowMessage("Backpack unlocked!");
+
+                case "metalBlockStack":
+                    SaveFile.Instance().ModifyBlockInventory(BlockType.BT_METAL, 10);
+                    ShowMessage("Total Metal Blocks: " + SaveFile.Instance().GetBlockInventory(BlockType.BT_METAL));
                     break;
-                case "belt":
-                    ShowMessage("Ammo belt unlocked!");
+
+                case "greenSpirts":
+                    SaveFile.Instance().ModifySpiritInventory(SpiritType.ST_GREEN, 10);
+                    ShowMessage("Total Earth Spirits: " + SaveFile.Instance().GetSpiritInventory(SpiritType.ST_GREEN));
                     break;
-                case "jetpack":
-                    ShowMessage("Jetpack unlocked!");
+
+                case "blueSpirits":
+                    SaveFile.Instance().ModifySpiritInventory(SpiritType.ST_BLUE, 10);
+                    ShowMessage("Total Water Spirits: " + SaveFile.Instance().GetSpiritInventory(SpiritType.ST_BLUE));
                     break;
-                case "booster":
-                    ShowMessage("Double XP unlocked!");
+
+                case "redSpirits":
+                    SaveFile.Instance().ModifySpiritInventory(SpiritType.ST_RED, 10);
+                    ShowMessage("Total Fire Spirits: " + SaveFile.Instance().GetSpiritInventory(SpiritType.ST_RED));
                     break;
+
+                //case "coins":
+                //    //the user bought the item "coins",
+                //    //increase coins by 1000 and show appropriate feedback
+                //    DBManager.IncreaseFunds("coins", 1000);
+                //    ShowMessage("1000 coins were added to your balance!");
+                //    break;
+                //case "coin_pack":
+                //    DBManager.IncreaseFunds("coins", 2500);
+                //    ShowMessage("2500 coins were added to your balance!");
+                //    break;
+                //case "big_coin_pack":
+                //    DBManager.IncreaseFunds("coins", 6000);
+                //    ShowMessage("6000 coins were added to your balance!");
+                //    break;
+                //case "huge_coin_pack":
+                //    DBManager.IncreaseFunds("coins", 12000);
+                //    ShowMessage("12000 coins were added to your balance!");
+                //    break;
+                //case "no_ads":
+                //    //no_ads purchased. You can now check DBManager.isPurchased("no_ads")
+                //    //before showing ads and block them
+                //    ShowMessage("Ads disabled!");
+                //    break;
+                //case "abo_monthly":
+                //    //same here - your code to unlock subscription content
+                //    ShowMessage("Subscribed to monthly abo!");
+                //    break;
+                //case "restore":
+                //    //nothing else to call here,
+                //    //the actual restore is handled by IAPManager
+                //    ShowMessage("Restored transactions!");
+                //    break;
+
+                ////section for in game content
+                //case "bullets":
+                //    //for virtual items, you could use DBManager's custom data option in order
+                //    //to save amounts of virtual products. E.g. increasing bullets by 100:
+                //    //int bullets = DBManager.GetPlayerData("bullets").AsInt;
+                //    //DBManager.SetPlayerData("bullets", new SimpleJSON.JSONData(bullets + 100));
+                //    ShowMessage("Bullets were added to your inventory!");
+                //    break;
+                //case "health":
+                //    ShowMessage("Medikits were added to your inventory!");
+                //    break;
+                //case "energy":
+                //    ShowMessage("Energy was added to your inventory!");
+                //    break;
+                //case "bonus":
+                //    ShowMessage("Bonus level unlocked!");
+                //    break;
+
+                //case "uzi":
+                //    ShowMessage("Uzi unlocked!");
+                //    break;
+                //case "ak47":
+                //    ShowMessage("AK47 unlocked!");
+                //    break;
+                //case "m4":
+                //    ShowMessage("M4 unlocked!");
+                //    break;
+
+                //case "hat":
+                //    ShowMessage("Hat unlocked!");
+                //    break;
+                //case "backpack":
+                //    ShowMessage("Backpack unlocked!");
+                //    break;
+                //case "belt":
+                //    ShowMessage("Ammo belt unlocked!");
+                //    break;
+                //case "jetpack":
+                //    ShowMessage("Jetpack unlocked!");
+                //    break;
+                //case "booster":
+                //    ShowMessage("Double XP unlocked!");
+                //    break;
             }
         }
 

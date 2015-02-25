@@ -5,7 +5,7 @@ MonoImporter:
   defaultReferences:
   - playerCamera: {instanceID: 0}
   - guiCamera: {instanceID: 0}
-  - starPrefab: {fileID: 121264, guid: 1de72970ff85d4743a5a6b442a89fe67, type: 2}
+  - starSpawner: {fileID: 11417022, guid: 7e75ea0ecdfe0344286a238d7d538bea, type: 2}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

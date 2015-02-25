@@ -16,4 +16,9 @@ public class UIButtonScene : MonoBehaviour
         if (!string.IsNullOrEmpty(sceneName))
             Application.LoadLevel(sceneName);
     }
+
+    public void LoadPreviousScene()
+    {
+        LevelQueue.LoadPreviousLevel();
+    }
 }

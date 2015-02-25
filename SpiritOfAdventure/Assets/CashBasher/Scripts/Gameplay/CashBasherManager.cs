@@ -393,7 +393,7 @@ public class CashBasherManager : MonoBehaviour
     }
 
     [RPC]
-    void FocusCamera(bool left)
+    public void FocusCamera(bool left)
     {
         if (left)
         {
@@ -406,7 +406,7 @@ public class CashBasherManager : MonoBehaviour
     }
 
     [RPC]
-    void FocusCameraTiles(bool left)
+    public void FocusCameraTiles(bool left)
     {
         if (left)
         {

@@ -28,6 +28,12 @@ public class BlockStore : MonoBehaviour
             menu.SetActive(true);
         }
 
+        if (GUI.Button(new Rect(Screen.width * (0.05f), Screen.height * (0.05f), Screen.width * (0.12f), Screen.height * (0.1f)),
+                               "Buy Blocks"))
+        {
+            LevelQueue.LoadLevel("HorizontalTabs", true);
+        }
+
         if (starInventory.GetStars() >= woodPrice)
         {
             if (GUI.Button(new Rect(Screen.width * (0.05f), Screen.height * (0.4f), Screen.width * (0.25f), Screen.height * (0.2f)),

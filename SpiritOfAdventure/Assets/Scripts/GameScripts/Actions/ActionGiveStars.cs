@@ -7,25 +7,12 @@ public class ActionGiveStars : SOAAction
 
     public Camera playerCamera, guiCamera;
 
-    public GameObject starPrefab;
+    public GameObject starSpawner;
 
     protected override void Activate()
     {
-        Vector3 spawnPos = guiCamera.ScreenToWorldPoint(playerCamera.WorldToScreenPoint(transform.position));
+        GameObject spawner = Instantiate(starSpawner, transform.position, Quaternion.identity) as GameObject;
 
-        float delay = 0.1f;
-        float delayIncrement = (0.75f + (float)stars * 0.05f) / (float)stars;
-
-        for (int j = 0; j < stars; j++)
-        {
-            GameObject star = Instantiate(starPrefab, spawnPos, Quaternion.identity) as GameObject;
-
-            EarnedStar starGiver = star.GetComponent<EarnedStar>();
-
-            starGiver.delay = delay;
-            starGiver.Go();
-
-            delay += delayIncrement;
-        }
+        spawner.GetComponent<StarSpawner>().Go(stars, guiCamera, playerCamera);
     }
 }

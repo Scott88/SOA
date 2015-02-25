@@ -9,20 +9,40 @@ public class LevelQueue
 	private static int levelToLoadInt;
 	private static string levelToLoadString;
 
+    private static int previousLevel;
+
 	private static bool usesInt;
 
-	public static void LoadLevel(int nextLevel)
+	public static void LoadLevel(int nextLevel, bool immediate = false)
 	{
-		levelToLoadInt = nextLevel;
-		usesInt = true;
-		Application.LoadLevel(2);
+        previousLevel = Application.loadedLevel;
+
+        if (immediate)
+        {
+            Application.LoadLevel(nextLevel);
+        }
+        else
+        {
+            levelToLoadInt = nextLevel;
+            usesInt = true;
+            Application.LoadLevel(2);
+        }
 	}
 
-	public static void LoadLevel(string nextLevel)
+    public static void LoadLevel(string nextLevel, bool immediate = false)
 	{
-		levelToLoadString = nextLevel;
-		usesInt = false;
-		Application.LoadLevel(2);
+        previousLevel = Application.loadedLevel;
+
+        if (immediate)
+        {
+            Application.LoadLevel(nextLevel);
+        }
+        else
+        {
+            levelToLoadString = nextLevel;
+            usesInt = false;
+            Application.LoadLevel(2);
+        }
 	}
 
 	public static bool UsesInt()
@@ -39,5 +59,10 @@ public class LevelQueue
 	{
 		return levelToLoadString;
 	}
+
+    public static void LoadPreviousLevel()
+    {
+        Application.LoadLevel(previousLevel);
+    }
 }
 
