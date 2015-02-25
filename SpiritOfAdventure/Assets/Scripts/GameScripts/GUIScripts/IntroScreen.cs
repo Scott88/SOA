@@ -17,6 +17,8 @@ public class IntroScreen : MonoBehaviour
 
 	void Start()
 	{
+        Input.multiTouchEnabled = false;
+
 		translateVel = new Vector3 ();
 		scaleVel = new Vector3 ();
 

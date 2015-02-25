@@ -3,6 +3,8 @@ using System.Collections;
 
 public class YourTurnState : GameState
 {
+    public float turnLength = 20f;
+
     public CashBasherManager manager;
 
     public NetworkedCannon serverCannon, clientCannon;
@@ -33,6 +35,10 @@ public class YourTurnState : GameState
 
     bool airGrabbed = false, cameraGrabbed = false;
     bool cameraFocusLeft;
+
+    bool turnStarted;
+
+    bool cannonFired;
 
     Vector3 lastTouchPos;
 
@@ -68,6 +74,13 @@ public class YourTurnState : GameState
 
     IEnumerator Preshow()
     {
+        yourCannon.collider2D.enabled = false;
+
+        turnStarted = false;
+        cannonFired = false;
+
+        timer = turnLength;
+
         if (manager.HasEffects(Network.isServer))
         {
             if (Network.isServer)
@@ -104,27 +117,19 @@ public class YourTurnState : GameState
         yourCannon.Activate();
 
         showButtons = true;
+
+        turnStarted = true;
     }
 
     public void ReadyNextTurn()
     {
         nextTurn = true;
+        timer = 1f;
         manager.networkView.RPC("UpdateEffectStatus", RPCMode.Others);
     }
 
     public override void UpdateState()
     {
-        if (nextTurn)
-        {
-            timer -= Time.deltaTime;
-
-            if (timer <= 0.0f)
-            {
-                manager.networkView.RPC("SwitchToState", RPCMode.Others, (int)GamePhase.GP_YOUR_TURN);
-                manager.SwitchToState((int)GamePhase.GP_THEIR_TURN);
-            }
-        }
-
         if (showButtons)
         {
             spiritButtons.transform.position = Vector3.SmoothDamp(spiritButtons.transform.position, buttonDownPos, ref velocityRef, 1f);
@@ -134,20 +139,46 @@ public class YourTurnState : GameState
             spiritButtons.transform.position = Vector3.SmoothDamp(spiritButtons.transform.position, buttonUpPos, ref velocityRef, 1f);
         }
 
-        if (!manager.paused)
-        {
-            if (Input.GetMouseButtonDown(0))
-            {
-                GetClickedOn();
-            }
-            else if (Input.GetMouseButton(0))
-            {
-                GetHeldOn();
-            }
+        timer -= Time.deltaTime;
 
-            if (Input.GetMouseButtonUp(0))
+        if (nextTurn)
+        {
+            if (timer <= 0.0f)
             {
-                GetReleasedOn();
+                manager.networkView.RPC("SwitchToState", RPCMode.Others, (int)GamePhase.GP_YOUR_TURN);
+                manager.SwitchToState((int)GamePhase.GP_THEIR_TURN);
+            }
+        }
+        else if(!cannonFired)
+        {
+            if (timer > 0f)
+            {
+                if (!manager.paused && turnStarted)
+                {
+                    if (Input.GetMouseButtonDown(0))
+                    {
+                        GetClickedOn();
+                    }
+                    else if (Input.GetMouseButton(0))
+                    {
+                        GetHeldOn();
+                    }
+
+                    if (Input.GetMouseButtonUp(0))
+                    {
+                        GetReleasedOn();
+                    }
+                }
+
+                if (timer < 10f)
+                {
+                    manager.gameText.text = "Time Left: " + timer.ToString("0");
+                }
+            }
+            else
+            {
+                yourCannon.ForceFire();
+                cannonFired = true;
             }
         }
     }
@@ -169,11 +200,12 @@ public class YourTurnState : GameState
                 {
                     if (showButtons)
                     {
-                        showButtons = !cannonListener.cannon.Press();
+                        cannonFired = cannonListener.cannon.Press();
+                        showButtons = !cannonFired;
                     }
                     else
                     {
-                        cannonListener.cannon.Press();
+                        cannonFired = cannonListener.cannon.Press();
                     }
 
                     return;
@@ -419,5 +451,7 @@ public class YourTurnState : GameState
 
         nextTurn = false; 
         timer = 1.0f;
+
+        yourCannon.collider2D.enabled = true;
     }
 }
