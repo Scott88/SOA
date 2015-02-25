@@ -94,21 +94,6 @@ public class NetworkedCannon : MonoBehaviour
         velocity = minVelocity;
 
         SetPowerIndicator();
-
-        if (transform.localEulerAngles.y > 90)
-        {
-            Vector3 pos = markerPivot.transform.localPosition;
-            pos.z += 2;
-            markerPivot.transform.localPosition = pos;
-
-            pos = powerIndicator.transform.localPosition;
-            pos.z += 2;
-            powerIndicator.transform.localPosition = pos;
-
-            Vector3 scale = baseAndWheels.transform.localScale;
-            scale.z *= -1;
-            baseAndWheels.transform.localScale = scale;
-        }
     }
 
     void OnCollisionEnter2D(Collision2D coll)

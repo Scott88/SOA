@@ -119,11 +119,14 @@ public class Breakable : MonoBehaviour
         if (health == 0)
         {
             manager.TransferSpirit(containedSpirit, transform.position, networkView.isMine);
-            manager.TransferStar(transform.position, starValue, networkView.isMine);
 
             if (networkView.isMine)
             {
                 SaveFile.Instance().ModifyBlockInventory(type, -1);
+            }
+            else
+            {
+                manager.TransferStar(transform.position, starValue);
             }
 
             if (fadeOutStatus)
@@ -162,11 +165,14 @@ public class Breakable : MonoBehaviour
         if (health == 0)
         {
             manager.TransferSpirit(containedSpirit, transform.position, networkView.isMine);
-            manager.TransferStar(transform.position, starValue, networkView.isMine);
 
             if (networkView.isMine)
             {
                 SaveFile.Instance().ModifyBlockInventory(type, -1);
+            }
+            else
+            {
+                manager.TransferStar(transform.position, starValue);
             }
 
             if (fadeOutStatus)

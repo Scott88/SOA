@@ -295,41 +295,9 @@ public class CashBasherManager : MonoBehaviour
         }
     }
 
-    public void TransferStar(Vector3 origin, int starCount, bool myBlock)
+    public void TransferStar(Vector3 origin, int starCount)
     {
-        
-        if (myBlock)
-        {
-            StartCoroutine(TransferStarsToEnemy(starCount, Network.isServer ? clientWaypoint.transform.position : serverWaypoint.transform.position));
-        }
-        else
-        {
-            StartCoroutine(CollectStars(starCount, origin));
-        }
-    }
-
-    IEnumerator TransferStarsToEnemy(int numStars, Vector3 enemyPos)
-    {
-        float delay = 0.1f;
-        float delayIncrement = (0.75f + (float)numStars * 0.05f) / (float)numStars;
-
-        for (int j = 0; j < numStars; j++)
-        {
-            Vector3 spawnPoint = playerCamera.ScreenToWorldPoint(guiCamera.WorldToScreenPoint(starInventory.transform.position));
-
-            GameObject transfer = Instantiate(starTransfer, spawnPoint, Quaternion.identity) as GameObject;
-
-            SmoothDamper damper = transfer.GetComponent<SmoothDamper>();
-
-            damper.delay = delay;
-            damper.duration = 0.25f;
-
-            damper.target = enemyPos;
-
-            starInventory.Remove(1);
-
-            yield return new WaitForSeconds(delayIncrement);
-        }
+        StartCoroutine(CollectStars(starCount, origin));
     }
 
     IEnumerator CollectStars(int numStars, Vector3 origin)
