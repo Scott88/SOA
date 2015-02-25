@@ -163,17 +163,17 @@ public class YourTurnState : GameState
         {
             if (playerHit2d)
             {
-                NetworkedCannon cannon = playerHit2d.collider.GetComponent<NetworkedCannon>();
+                CannonClickListener cannonListener = playerHit2d.collider.GetComponent<CannonClickListener>();
 
-                if (cannon)
+                if (cannonListener)
                 {
                     if (showButtons)
                     {
-                        showButtons = !cannon.Press();
+                        showButtons = !cannonListener.cannon.Press();
                     }
                     else
                     {
-                        cannon.Press();
+                        cannonListener.cannon.Press();
                     }
 
                     return;
