@@ -20,4 +20,14 @@ public class CannonBallBound : MonoBehaviour
         }
     }
 
+    void OnTriggerEnter2D(Collider2D coll)
+    {
+        if (coll.tag == "CannonBall")
+        {
+            cameraMan.StopFollowing();
+
+            coll.GetComponent<SelfDeleter>().lifeTime = 1f;
+        }
+    }
+
 }
