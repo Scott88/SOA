@@ -1,5 +1,5 @@
-﻿#define HOME_LAN
-#define RABBIT_HOLE_SERVER
+﻿//#define HOME_LAN
+//#define RABBIT_HOLE_SERVER
 
 using UnityEngine;
 using System.Collections;
