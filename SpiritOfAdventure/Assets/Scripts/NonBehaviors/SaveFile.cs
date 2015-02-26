@@ -138,9 +138,14 @@ public class SaveFile
             level.Attributes.Append(levelPath);
 
             levels.AppendChild(level);
+        
         }
 
+#if UNITY_EDITOR
+        doc.Save(Application.persistentDataPath + "/soa.xml");
+#else
         File.WriteAllText(Application.persistentDataPath + "/soa.xml", Encrypt(doc.OuterXml));
+#endif
 
         return doc;
     }
@@ -390,9 +395,11 @@ public class SaveFile
 
         starsNode.Attributes.Append(starsCount);
 
-        //doc.Save(Application.persistentDataPath + "/soa.xml");
-
+#if UNITY_EDITOR
+        doc.Save(Application.persistentDataPath + "/soa.xml");
+#else
         File.WriteAllText(Application.persistentDataPath + "/soa.xml", Encrypt(doc.OuterXml));
+#endif
     }
 
     public void SetLevelStars(string levelName, int stars)
@@ -557,6 +564,11 @@ public class SaveFile
         info.x = tile.GetX();
         info.y = tile.GetY();
         info.type = tile.GetBlockType();
+
+        if (tileSetInfo.Contains(info))
+        {
+            tileSetInfo.Remove(info);
+        }
 
         tileSetInfo.Add(info);
     }

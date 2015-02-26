@@ -5,6 +5,8 @@ public class StarInventory : MonoBehaviour
 {
     public TextMesh starDisplay;
 
+    public StarInventory childInventory;
+
     private int stars;
 
     void Start()
@@ -19,6 +21,12 @@ public class StarInventory : MonoBehaviour
         starDisplay.text = "x" + stars;
 
         SaveFile.Instance().ModifyStars(count);
+
+        if (childInventory)
+        {
+            childInventory.stars += count;
+            childInventory.starDisplay.text = "x" + stars;
+        }
     }
 
     public void Remove(int count)
@@ -27,6 +35,12 @@ public class StarInventory : MonoBehaviour
         starDisplay.text = "x" + stars;
 
         SaveFile.Instance().ModifyStars(-count);
+
+        if (childInventory)
+        {
+            childInventory.stars += count;
+            childInventory.starDisplay.text = "x" + stars;
+        }
     }
 
     public int GetStars()

@@ -4,6 +4,8 @@ using System.Collections;
 [RequireComponent(typeof(NetworkView))]
 public class Treasure : MonoBehaviour
 {
+    public float starMultiplier = 0.04f;
+
     public float minimumSpeed = 3f;
 
     public float speedDamper = 0.8f;
@@ -35,6 +37,7 @@ public class Treasure : MonoBehaviour
     {
         FindObjectOfType<CashBasherManager>().SwitchToState((int)GamePhase.GP_WIN);
         Instantiate(coinExplosion, transform.position + Vector3.back * 5, Quaternion.Euler(270f, 0f, 0f));
+        FindObjectOfType<CashBasherManager>().TransferStar(transform.position, (int)(FindObjectOfType<NetworkedLevelLoader>().othersCastleWorth * starMultiplier));
         Destroy(gameObject);
         networkView.RPC("NetDamage", RPCMode.Others);
     }

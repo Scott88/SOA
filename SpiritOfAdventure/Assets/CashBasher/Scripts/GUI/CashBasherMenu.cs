@@ -56,7 +56,7 @@ public class CashBasherMenu : MonoBehaviour
             }
 
             if (GUI.Button(new Rect(Screen.width * (0.85f), Screen.height * (0.7f), Screen.width * (0.12f), Screen.height * (0.1f)),
-                           "Start Your Own Game"))
+                           "Host"))
             {
                 mainCamera.transform.position = new Vector3(20f, 0f, -10f);
                 gameObject.SetActive(false);
@@ -65,7 +65,7 @@ public class CashBasherMenu : MonoBehaviour
             }
 
             if (GUI.Button(new Rect(Screen.width * (0.85f), Screen.height * (0.85f), Screen.width * (0.12f), Screen.height * (0.1f)),
-                           "Look For A Game"))
+                           "Join"))
             {
                 mainCamera.transform.position = new Vector3(20f, 0f, -10f);
                 gameObject.SetActive(false);
