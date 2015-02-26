@@ -1,4 +1,4 @@
-﻿#define HOME_LAN
+﻿//#define HOME_LAN
 //#define RABBIT_HOLE_SERVER
 
 using UnityEngine;
@@ -7,8 +7,6 @@ using System.Collections;
 public class ServerMenu : MonoBehaviour
 {
     public GUISkin mySkin;
-
-
 
     public TextMesh display;
 
