@@ -15,8 +15,6 @@ public class BlockEditor : MonoBehaviour
 
     public AudioSource placeWoodSound, placeStoneSound, placeMetalSound;
 
-    public TextMesh worthDisplay;
-
     public SpiritInventory greenInventory, blueInventory, redInventory;
     public SpiritCounter greenCounter, blueCounter, redCounter;
 
@@ -53,8 +51,6 @@ public class BlockEditor : MonoBehaviour
         TryTransfer(SaveFile.Instance().GetSpiritCount(SpiritType.ST_GREEN), greenInventory, greenCounter);
         TryTransfer(SaveFile.Instance().GetSpiritCount(SpiritType.ST_BLUE), blueInventory, blueCounter);
         TryTransfer(SaveFile.Instance().GetSpiritCount(SpiritType.ST_RED), redInventory, redCounter);
-
-        worthDisplay.text = "Value:\n" + castleWorth;
     }
 
     bool TryLoad(int x, int y, BlockInventory inventory, BlockCounter counter)
@@ -275,8 +271,6 @@ public class BlockEditor : MonoBehaviour
 
         inventory.Deselect(true);
         selectedInventory = null;
-
-        worthDisplay.text = "Value:\n" + castleWorth;
     }
 
     void RemoveBlock(Breakable block)
@@ -302,8 +296,6 @@ public class BlockEditor : MonoBehaviour
 
         tileSet.RemoveBlock(block.gameObject);
         Destroy(block.gameObject);
-
-        worthDisplay.text = "Value:\n" + castleWorth;
     }
 
     void AddSpiritToPool(SpiritType type)
@@ -322,7 +314,6 @@ public class BlockEditor : MonoBehaviour
         }
 
         castleWorth += spiritWorth;
-        worthDisplay.text = "Value:\n" + castleWorth;
     }
 
     void AddSpiritToPool(SpiritInventory inventory, SpiritCounter counter, GameObject transfer)
@@ -352,7 +343,6 @@ public class BlockEditor : MonoBehaviour
         }
 
         castleWorth -= spiritWorth;
-        worthDisplay.text = "Value:\n" + castleWorth;
     }
 
     void RemoveSpiritFromPool(SpiritInventory inventory, SpiritCounter counter, GameObject transfer)

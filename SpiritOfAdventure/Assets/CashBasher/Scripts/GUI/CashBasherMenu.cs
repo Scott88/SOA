@@ -3,6 +3,10 @@ using System.Collections;
 
 public class CashBasherMenu : MonoBehaviour
 {
+    public float pingServerDelay;
+
+    public TextMesh hostDisplay;
+
     public GUISkin mySkin;
 
     public ServerMenu serverMenu;
@@ -10,6 +14,26 @@ public class CashBasherMenu : MonoBehaviour
     public BlockStore blockStore;
 
     public Camera mainCamera;
+
+    private float timer;
+
+    private bool hostListRequested = false;
+
+    void Start()
+    {
+        timer = 1f;
+    }
+
+    void Update()
+    {
+        timer -= Time.deltaTime;
+
+        if (timer <= 0f && !hostListRequested)
+        {
+            MasterServer.RequestHostList("CashBasher");
+            hostListRequested = true;
+        }
+    }
 
     void OnGUI()
     {
@@ -49,5 +73,21 @@ public class CashBasherMenu : MonoBehaviour
                 clientMenu.SearchForServers();
             }
         }
+    }
+
+    void OnMasterServerEvent(MasterServerEvent msEvent)
+    {
+        if (msEvent == MasterServerEvent.HostListReceived)
+        {
+            hostDisplay.text = "Games: " + MasterServer.PollHostList().Length;
+
+            timer = pingServerDelay;
+            hostListRequested = false;
+        }
+    }
+
+    void OnEnable()
+    {
+        timer = 1f;
     }
 }

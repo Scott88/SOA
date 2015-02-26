@@ -23,8 +23,9 @@ public class BlockInventory : MonoBehaviour
     void Awake()
     {
         blockCount = SaveFile.Instance().GetBlockInventory(type);
+
         blockCounter.text = "x" + blockCount.ToString();
-    }
+    } 
 
     public bool Empty()
     {
@@ -63,34 +64,32 @@ public class BlockInventory : MonoBehaviour
     public void TakeBlock()
     {
         blockCount--;
-        blockCounter.text = "x" + blockCount.ToString();
 
-        if (childInventory)
-        {
-            childInventory.TakeBlock();
-        }
+        UpdateDisplay();
     }
 
     public void ReturnBlock()
     {
         blockCount++;
-        blockCounter.text = "x" + blockCount.ToString();
 
-        if (childInventory)
-        {
-            childInventory.ReturnBlock();
-        }
+        UpdateDisplay();
     }
 
     public void GiveBlocks(int count)
     {
         blockCount += count;
-        blockCounter.text = "x" + blockCount.ToString();
+
+        UpdateDisplay();
 
         if (childInventory)
         {
             childInventory.GiveBlocks(count);
         }
+    }
+
+    void UpdateDisplay()
+    {
+        blockCounter.text = "x" + blockCount.ToString();
     }
 
     public bool IsSelected()

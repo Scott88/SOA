@@ -23,8 +23,7 @@ public class Treasure : MonoBehaviour
 
             Vector2 normal = coll.contacts[0].normal;
 
-            if (Mathf.Abs(normal.x) > Mathf.Abs(normal.y) && Mathf.Abs(coll.relativeVelocity.x) > minimumSpeed ||
-                Mathf.Abs(normal.y) > Mathf.Abs(normal.x) && Mathf.Abs(coll.relativeVelocity.y) > minimumSpeed)
+            if (Vector3.Dot(normal, -coll.relativeVelocity) > minimumSpeed)
             {
                 Damage();
                 ball.DamageAndSlow(-coll.relativeVelocity, coll.contacts[0].normal, speedDamper);             

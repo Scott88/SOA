@@ -447,6 +447,22 @@ public class SaveFile
         }
     }
 
+    public void SetSpiritInventory(SpiritType type, int count)
+    {
+        switch (type)
+        {
+            case SpiritType.ST_GREEN:
+                greenSpiritInv = count;
+                break;
+            case SpiritType.ST_BLUE:
+                blueSpiritInv = count;
+                break;
+            case SpiritType.ST_RED:
+                redSpiritInv = count;
+                break;
+        }
+    }
+
     public void ModifyBlockInventory(BlockType type, int change)
     {
         switch (type)
@@ -459,6 +475,22 @@ public class SaveFile
                 break;
             case BlockType.BT_METAL:
                 metalBlockInv += change;
+                break;
+        }
+    }
+
+    public void SetBlockInventory(BlockType type, int count)
+    {
+        switch (type)
+        {
+            case BlockType.BT_WOOD:
+                woodBlockInv = count;
+                break;
+            case BlockType.BT_STONE:
+                stoneBlockInv = count;
+                break;
+            case BlockType.BT_METAL:
+                metalBlockInv = count;
                 break;
         }
     }

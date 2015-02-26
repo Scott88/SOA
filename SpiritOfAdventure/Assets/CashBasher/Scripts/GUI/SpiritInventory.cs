@@ -17,7 +17,7 @@ public class SpiritInventory : MonoBehaviour
     void Awake()
     {
         spiritCount = SaveFile.Instance().GetSpiritInventory(type);
-        spiritCounter.text = "x" + spiritCount.ToString();
+        spiritCounter.text = "x" + spiritCount.ToString(); 
     }
 
     public bool Empty()
@@ -31,13 +31,17 @@ public class SpiritInventory : MonoBehaviour
         {
             int total = spiritCount;
             spiritCount = 0;
-            spiritCounter.text = "x" + spiritCount.ToString();
+
+            UpdateDisplay();
+
             return total;
         }
         else
         {
             spiritCount -= count;
-            spiritCounter.text = "x" + spiritCount.ToString();
+
+            UpdateDisplay();
+
             return count;
         }   
     }
@@ -47,7 +51,8 @@ public class SpiritInventory : MonoBehaviour
         if (spiritCount > 0)
         {
             spiritCount--;
-            spiritCounter.text = "x" + spiritCount.ToString();
+
+            UpdateDisplay();
 
             if (audio)
             {
@@ -59,11 +64,12 @@ public class SpiritInventory : MonoBehaviour
     public void AddSpirit()
     {
         spiritCount++;
-        spiritCounter.text = "x" + spiritCount.ToString();
+
+        UpdateDisplay();
     }
 
-    public void Save()
+    void UpdateDisplay()
     {
-        PlayerPrefs.SetInt(spiritName, spiritCount);
+        spiritCounter.text = "x" + spiritCount.ToString();
     }
 }

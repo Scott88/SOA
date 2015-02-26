@@ -68,7 +68,7 @@ public class ServerMenu : MonoBehaviour
 
         int myPoints = PlayerPrefs.GetInt("Blocks") * 5;
 
-        MasterServer.RegisterHost("SorryUnityIWillGiveYouBackYourServerWhenTheBlizzardClears", "SpiritOfAdventure", myPoints.ToString());
+        MasterServer.RegisterHost("CashBasher", "SpiritOfAdventure", myPoints.ToString());
 
         Screen.sleepTimeout = SleepTimeout.NeverSleep;
     }

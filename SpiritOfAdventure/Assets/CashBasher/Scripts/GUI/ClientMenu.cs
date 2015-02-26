@@ -16,6 +16,8 @@ public class ClientMenu : MonoBehaviour
 
     private bool clientFailed = false;
 
+    private bool hostListRequested = false;
+
     void OnGUI()
     {
         GUI.skin = mySkin;
@@ -45,9 +47,10 @@ public class ClientMenu : MonoBehaviour
     {
         timer -= Time.deltaTime;
 
-        if (timer <= 0f)
+        if (timer <= 0f && !hostListRequested)
         {
-            MasterServer.RequestHostList("SorryUnityIWillGiveYouBackYourServerWhenTheBlizzardClears");
+            MasterServer.RequestHostList("CashBasher");
+            hostListRequested = true;
         }
     }
 
@@ -94,6 +97,8 @@ public class ClientMenu : MonoBehaviour
             }
 
             timer = recheckDelay;
+
+            hostListRequested = false;
         }
     }
 

@@ -21,6 +21,11 @@ public class BlockCounter : MonoBehaviour
         display.text = "x" + blockCount.ToString();
     }
 
+    public int GetBlocks()
+    {
+        return blockCount;
+    }
+
     public void Finalize()
     {
         startBlockCount = blockCount;

@@ -39,8 +39,9 @@ public class BlockStore : MonoBehaviour
             if (GUI.Button(new Rect(Screen.width * (0.05f), Screen.height * (0.4f), Screen.width * (0.25f), Screen.height * (0.2f)),
                                    "BUY WOOD:\n" + woodPrice + " STARS"))
             {
-                woodInventory.ReturnBlock();
+                woodInventory.GiveBlocks(1);
                 starInventory.Remove(woodPrice);
+                SaveFile.Instance().ModifyBlockInventory(BlockType.BT_WOOD, 1);            
             }
         }
 
@@ -49,8 +50,9 @@ public class BlockStore : MonoBehaviour
             if (GUI.Button(new Rect(Screen.width * (0.375f), Screen.height * (0.4f), Screen.width * (0.25f), Screen.height * (0.2f)),
                                    "BUY STONE:\n" + stonePrice + " STARS"))
             {
-                stoneInventory.ReturnBlock();
+                stoneInventory.GiveBlocks(1);
                 starInventory.Remove(stonePrice);
+                SaveFile.Instance().ModifyBlockInventory(BlockType.BT_STONE, 1);
             }
         }
 
@@ -59,8 +61,9 @@ public class BlockStore : MonoBehaviour
             if (GUI.Button(new Rect(Screen.width * (0.70f), Screen.height * (0.4f), Screen.width * (0.25f), Screen.height * (0.2f)),
                                    "BUY METAL:\n" + metalPrice + " STARS"))
             {
-                metalInventory.ReturnBlock();
+                metalInventory.GiveBlocks(1);
                 starInventory.Remove(metalPrice);
+                SaveFile.Instance().ModifyBlockInventory(BlockType.BT_METAL, 1);
             }
         }
     }
