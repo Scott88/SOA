@@ -10,6 +10,10 @@ public class ClientMenu : MonoBehaviour
 
     public Camera mainCamera;
 
+    public float recheckDelay = 5f;
+
+    private float timer;
+
     private bool clientFailed = false;
 
     void OnGUI()
@@ -19,6 +23,7 @@ public class ClientMenu : MonoBehaviour
         if (GUI.Button(new Rect(Screen.width * (0.8f), Screen.height * (0.8f), Screen.width * (0.18f), Screen.height * (0.18f)),
                            "Back"))
         {
+            Screen.sleepTimeout = SleepTimeout.SystemSetting;
             mainCamera.transform.position = new Vector3(0f, 0f, -10f);
             gameObject.SetActive(false);
             minigameMenu.SetActive(true);
@@ -36,10 +41,21 @@ public class ClientMenu : MonoBehaviour
         }
     }
 
+    void Update()
+    {
+        timer -= Time.deltaTime;
+
+        if (timer <= 0f)
+        {
+            MasterServer.RequestHostList("SorryUnityIWillGiveYouBackYourServerWhenTheBlizzardClears");
+        }
+    }
+
     public void SearchForServers()
     {
+        Screen.sleepTimeout = SleepTimeout.NeverSleep;
         display.text = "Looking for servers...";
-        MasterServer.RequestHostList("SorryUnityIWillGiveYouBackYourServerWhenTheBlizzardClears");
+        timer = 0f;
     }
 
     void OnMasterServerEvent(MasterServerEvent msEvent)
@@ -71,16 +87,13 @@ public class ClientMenu : MonoBehaviour
                 }
             }
 
-            if (closestServer == -1)
-            {
-                display.text = "No valid server to connect to!";
-                clientFailed = true;
-            }
-            else
+            if (closestServer != -1)
             {
                 display.text = "Found a server!\nConnecting now...";
                 Network.Connect(hostList[closestServer]);
             }
+
+            timer = recheckDelay;
         }
     }
 

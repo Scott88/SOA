@@ -169,9 +169,11 @@ public class GameWin : MonoBehaviour
 
 				if (GUI.Button(new Rect(Screen.width * (1f / 1.9f), Screen.height * (0.84f), Screen.width * (1f / 6f), Screen.height * (1f / 8f)), "Level Select"))
 				{
+                    Screen.sleepTimeout = SleepTimeout.SystemSetting;
 					gameManager.effectManager.PlayButtonSound();
+                    Time.timeScale = 1;
 					Application.LoadLevel("MainMenu");
-					Time.timeScale = 1;
+					
 				}
 			}
 

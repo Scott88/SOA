@@ -30,6 +30,8 @@ public class BlockEditor : MonoBehaviour
 
     void Start()
     {
+        Screen.sleepTimeout = SleepTimeout.SystemSetting;
+
         IEnumerator<SaveFile.TileInfo> tileList = SaveFile.Instance().GetTileList();
 
         while (tileList.MoveNext())

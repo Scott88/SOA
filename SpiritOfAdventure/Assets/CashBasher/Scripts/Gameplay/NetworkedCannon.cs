@@ -289,6 +289,11 @@ public class NetworkedCannon : MonoBehaviour
         return false;
     }
 
+    public void ForceFire()
+    {
+        networkView.RPC("LightTheFuse", RPCMode.All, minVelocity);
+    }
+
     [RPC]
     void PointCannonAt(Quaternion direction)
     {
@@ -303,6 +308,9 @@ public class NetworkedCannon : MonoBehaviour
     [RPC]
     void LightTheFuse(float vel)
     {
+        power.SetActive(false);
+        angle.SetActive(false);
+
         cannonAnimator.SetFloat("Power", (vel - minVelocity) / velocityRange);
         cannonAnimator.SetTrigger("Fire");
 

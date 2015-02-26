@@ -33,6 +33,8 @@ public class PauseButton : MonoBehaviour
 			//GUI.Box(new Rect(Screen.width * (1f/1.15f),Screen.height * (0.1f/6.55f),Screen.width * (0.12f/1f), Screen.height * (0.85f/6.3f)), "Pause Game");
 			if (GUI.Button(new Rect(Screen.width * (1f / 60f), Screen.height * (0.1f / 6.55f), Screen.width * (1f / 6f), Screen.height * (1f / 8f)), "Pause"))
 			{
+                Screen.sleepTimeout = SleepTimeout.SystemSetting;
+
 				gameManager.effectManager.PlayButtonSound();
 				Time.timeScale = 0;
 
@@ -57,6 +59,8 @@ public class PauseButton : MonoBehaviour
 			//GUI.Box(new Rect(200,10,100,90), "Pause Menu");
 			if (GUI.Button(new Rect(Screen.width * (1f / 2.5f), Screen.height * (1f / 5f), Screen.width * (1f / 6f), Screen.height * (1f / 8f)), "Resume"))
 			{
+                Screen.sleepTimeout = SleepTimeout.NeverSleep;
+
 				gameManager.effectManager.PlayButtonSound();
 				Time.timeScale = 1;
 

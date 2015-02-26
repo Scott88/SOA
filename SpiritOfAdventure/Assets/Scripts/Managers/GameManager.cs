@@ -35,6 +35,8 @@ public class GameManager : MonoBehaviour
 
 	void Start()
 	{
+        Screen.sleepTimeout = SleepTimeout.NeverSleep;
+
 		currentSpirit = SpiritType.ST_NULL;
 		spiritGUIClicked = false;
 		spiritHeld = false;
