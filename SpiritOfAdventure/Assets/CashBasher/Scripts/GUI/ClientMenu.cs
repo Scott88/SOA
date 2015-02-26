@@ -10,6 +10,8 @@ public class ClientMenu : MonoBehaviour
 
     public Camera mainCamera;
 
+    public BlockEditor editor;
+
     public float recheckDelay = 5f;
 
     private float timer;
@@ -17,6 +19,8 @@ public class ClientMenu : MonoBehaviour
     private bool clientFailed = false;
 
     private bool hostListRequested = false;
+
+    private int otherCastleWorth;
 
     void OnGUI()
     {
@@ -72,7 +76,7 @@ public class ClientMenu : MonoBehaviour
                 PlayerPrefs.SetInt("Blocks", 3);
             }
 
-            int myPoints = PlayerPrefs.GetInt("Blocks") * 5;
+            int myPoints = editor.GetCastleWorth();
             int closestServer = -1;
             int closestPoints = -100;
 
@@ -93,6 +97,7 @@ public class ClientMenu : MonoBehaviour
             if (closestServer != -1)
             {
                 display.text = "Found a server!\nConnecting now...";
+                otherCastleWorth = closestPoints;
                 Network.Connect(hostList[closestServer]);
             }
 
@@ -105,6 +110,10 @@ public class ClientMenu : MonoBehaviour
     void OnConnectedToServer()
     {
         display.text = "Connected!\nWaiting for the\ngame to start...";
+        NetworkedLevelLoader loader = FindObjectOfType<NetworkedLevelLoader>();
+
+        loader.othersCastleWorth = otherCastleWorth;
+        loader.networkView.RPC("ReceiveOtherCastleWorth", RPCMode.Others, editor.GetCastleWorth());
     }
 
     void OnFailedToConnect(NetworkConnectionError info)

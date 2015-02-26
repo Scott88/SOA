@@ -74,6 +74,8 @@ public class BlockEditor : MonoBehaviour
         castleWorth += spiritWorth * count;
         counter.Add(inventory.RemoveSpirits(count));
     }
+
+    public int GetCastleWorth() { return castleWorth; }
     
     // Update is called once per frame
     void Update()

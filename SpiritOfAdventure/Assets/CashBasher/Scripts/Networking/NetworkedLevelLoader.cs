@@ -4,6 +4,7 @@ using System.Collections;
 [RequireComponent(typeof(NetworkView))]
 public class NetworkedLevelLoader : MonoBehaviour {
 
+    public int othersCastleWorth { get; set; }
     public int othersCostume { get; set; }
 
     private static bool created = false;
@@ -70,6 +71,12 @@ public class NetworkedLevelLoader : MonoBehaviour {
     {
         otherLoaded = true;
         othersCostume = enemyCostume;
+    }
+
+    [RPC]
+    void ReceiveOtherCastleWorth(int castleWorth)
+    {
+        othersCastleWorth = castleWorth;
     }
 
     public bool IsReady()

@@ -14,6 +14,8 @@ public class ServerMenu : MonoBehaviour
 
     public Camera mainCamera;
 
+    public BlockEditor editor;
+
     private bool readyToStart = false;
     private bool serverFailed = false;
 
@@ -61,12 +63,7 @@ public class ServerMenu : MonoBehaviour
         display.text = "Initializing the server...";
         Network.InitializeServer(1, 25311, !Network.HavePublicAddress());
 
-        if (!PlayerPrefs.HasKey("Blocks"))
-        {
-            PlayerPrefs.SetInt("Blocks", 3);
-        }
-
-        int myPoints = PlayerPrefs.GetInt("Blocks") * 5;
+        int myPoints = editor.GetCastleWorth();
 
         MasterServer.RegisterHost("CashBasher", "SpiritOfAdventure", myPoints.ToString());
 
