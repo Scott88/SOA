@@ -387,11 +387,11 @@ public class YourTurnState : GameState
             {
                 if (hit2d)
                 {
-                    NetworkedCannon cannon = hit2d.collider.GetComponent<NetworkedCannon>();
+                    CannonClickListener cannonListener = hit2d.collider.GetComponent<CannonClickListener>();
 
-                    if (cannon == yourCannon && cannon.CanApplyBuff(selectedSpirit.type))
+                    if (cannonListener.cannon == yourCannon && cannonListener.cannon.CanApplyBuff(selectedSpirit.type))
                     {
-                        selectedSpirit.MoveHereAndTrigger(cannon.team == 0);
+                        selectedSpirit.MoveHereAndTrigger(cannonListener.cannon.team == 0);
 
                         showButtons = false;
 
