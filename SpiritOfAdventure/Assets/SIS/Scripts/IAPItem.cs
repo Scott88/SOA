@@ -170,8 +170,17 @@ namespace SIS
 			{
 				//purchases for virtual currency could have more than one price value,
 				//so we loop over all entries and set the corresponding price label
-				for (int i = 0; i < price.Length; i++)
-					if (price[i]) price[i].text = prod.virtualPrice[i].amount.ToString();
+                for (int i = 0; i < price.Length; i++)
+                {
+                    if (price[i] && prod.virtualPrice[i].amount != 0)
+                    {
+                        price[i].text = prod.virtualPrice[i].amount.ToString();
+                    }
+                    else
+                    {
+                        price[i].gameObject.SetActive(false);
+                    }
+                }
 			}
 			
 			//set locked label text in case a requirement has been set
