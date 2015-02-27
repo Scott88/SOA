@@ -40,6 +40,7 @@ public class SaveFile
     private List<LevelState> levelStates;
 
     private List<TileInfo> tileSetInfo;
+    private List<TileInfo> tilesToRemove;
 
     private int costumeID;
 
@@ -62,7 +63,7 @@ public class SaveFile
             instance = new SaveFile();
         }
 
-		return instance;
+        return instance;
     }
 
     private SaveFile()
@@ -79,7 +80,7 @@ public class SaveFile
             {
                 saveFile.Load(Application.persistentDataPath + "/soa.xml");
             }
-            catch(XmlException)
+            catch (XmlException)
             {
                 try
                 {
@@ -138,7 +139,7 @@ public class SaveFile
             level.Attributes.Append(levelPath);
 
             levels.AppendChild(level);
-        
+
         }
 
 #if UNITY_EDITOR
@@ -179,6 +180,7 @@ public class SaveFile
         }
 
         tileSetInfo = new List<TileInfo>();
+        tilesToRemove = new List<TileInfo>();
 
         XmlElement tileNode = saveNode["Tiles"];
 
@@ -217,6 +219,12 @@ public class SaveFile
             blueSpiritInv = int.Parse(spiritInvNode.GetAttribute("blue"));
             redSpiritInv = int.Parse(spiritInvNode.GetAttribute("red"));
         }
+        else
+        {
+            greenSpiritInv = 5;
+            blueSpiritInv = 5;
+            redSpiritInv = 5;
+        }
 
         XmlElement blockInvNode = saveNode["BlockInventory"];
 
@@ -228,9 +236,9 @@ public class SaveFile
         }
         else
         {
-            woodBlockInv = 10;
-            stoneBlockInv = 10;
-            metalBlockInv = 10;
+            woodBlockInv = 5;
+            stoneBlockInv = 5;
+            metalBlockInv = 5;
         }
 
         XmlElement starsNode = saveNode["Stars"];
@@ -476,6 +484,7 @@ public class SaveFile
         {
             case BlockType.BT_WOOD:
                 woodBlockInv += change;
+                if (woodBlockInv < 5) woodBlockInv = 5;
                 break;
             case BlockType.BT_STONE:
                 stoneBlockInv += change;
@@ -584,6 +593,26 @@ public class SaveFile
         tileSetInfo.Remove(dummy);
     }
 
+    public void RemoveLater(int x, int y)
+    {
+        TileInfo info = new TileInfo();
+
+        info.x = x;
+        info.y = y;
+
+        tilesToRemove.Add(info);
+    }
+
+    public void ExecuteRemovals()
+    {
+        for (int j = 0; j < tilesToRemove.Count; j++)
+        {
+            tileSetInfo.Remove(tilesToRemove[j]);
+        }
+
+        tilesToRemove.Clear();
+    }
+
     public int GetLevelStars(string levelName)
     {
         return GetLevelState(levelName).stars;
@@ -664,5 +693,5 @@ public class SaveFile
         byte[] resultArray = cTransform.TransformFinalBlock(toEncryptArray, 0, toEncryptArray.Length);
         return UTF8Encoding.UTF8.GetString(resultArray);
     }
-    
+
 }

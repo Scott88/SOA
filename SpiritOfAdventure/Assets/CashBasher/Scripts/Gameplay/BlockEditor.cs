@@ -37,16 +37,18 @@ public class BlockEditor : MonoBehaviour
             switch (tileList.Current.type)
             {
                 case BlockType.BT_WOOD:
-                    if(TryLoad(tileList.Current.x, tileList.Current.y, woodInventory, woodCounter)) castleWorth += woodWorth;
+                    if (TryLoad(tileList.Current.x, tileList.Current.y, woodInventory, woodCounter)) castleWorth += woodWorth;
                     break;
                 case BlockType.BT_STONE:
-                    if(TryLoad(tileList.Current.x, tileList.Current.y, stoneInventory, stoneCounter)) castleWorth += stoneWorth;
+                    if (TryLoad(tileList.Current.x, tileList.Current.y, stoneInventory, stoneCounter)) castleWorth += stoneWorth;
                     break;
                 case BlockType.BT_METAL:
-                    if(TryLoad(tileList.Current.x, tileList.Current.y, metalInventory, metalCounter)) castleWorth += metalWorth;
+                    if (TryLoad(tileList.Current.x, tileList.Current.y, metalInventory, metalCounter)) castleWorth += metalWorth;
                     break;
             }
         }
+
+        SaveFile.Instance().ExecuteRemovals();
 
         TryTransfer(SaveFile.Instance().GetSpiritCount(SpiritType.ST_GREEN), greenInventory, greenCounter);
         TryTransfer(SaveFile.Instance().GetSpiritCount(SpiritType.ST_BLUE), blueInventory, blueCounter);
@@ -64,6 +66,10 @@ public class BlockEditor : MonoBehaviour
             counter.Add();
 
             return true;
+        }
+        else
+        {
+            SaveFile.Instance().RemoveLater(x, y);
         }
 
         return false;
