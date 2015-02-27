@@ -1,4 +1,4 @@
-﻿#define HOME_LAN
+﻿//#define HOME_LAN
 //#define RABBIT_HOLE_SERVER
 
 using UnityEngine;

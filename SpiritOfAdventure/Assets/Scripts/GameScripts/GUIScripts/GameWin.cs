@@ -6,7 +6,6 @@ public class GameWin : MonoBehaviour
 	public GUISkin mySkin;
 	public float transitionDelay = 7f;
 	public string levelName;
-	public Camera[] camerasToTurnOff;
 	public bool canContinue = true;
 
     public int nextLevelPath;
@@ -127,13 +126,15 @@ public class GameWin : MonoBehaviour
 
 		gameManager.scoreManager.CalculateFinalScore(timer.GetTimeLeft());
 
-		for (int j = 0; j < camerasToTurnOff.Length; j++)
-		{
-			camerasToTurnOff[j].enabled = false;
-		}
+        ScaleToResolution[] spiritGUI = FindObjectsOfType<ScaleToResolution>();
+
+        for (int j = 0; j < spiritGUI.Length; j++)
+        {
+            spiritGUI[j].gameObject.SetActive(false);
+        }
 	}
-	
-	void OnGUI() 
+
+    void OnGUI() 
 	{
 		GUI.skin = mySkin;
 
@@ -179,16 +180,16 @@ public class GameWin : MonoBehaviour
 
 			if (!skippedScore)
 			{
-				GUI.Label(new Rect(Screen.width * (2f / 8.5f), Screen.height * (3f / 5.9f), Screen.width * (5f / 9.5f), Screen.height * (0.15f)),
+                GUI.Label(new Rect(Screen.width * (2f / 8.5f), Screen.height * (0.353f), Screen.width * (5f / 9.5f), Screen.height * (0.15f)),
 						  "Points: " + gameManager.scoreManager.GetFinalScore().ToString() + " Time Left: " + gameManager.scoreManager.GetDisplayTimer().ToString());
 			}
 			else
 			{
-				GUI.Label(new Rect(Screen.width * (2f / 8.5f), Screen.height * (3f / 5.9f), Screen.width * (5f / 9.5f), Screen.height * (0.15f)),
+				GUI.Label(new Rect(Screen.width * (2f / 8.5f), Screen.height * (0.353f), Screen.width * (5f / 9.5f), Screen.height * (0.15f)),
 						  "Points: " + gameManager.scoreManager.GetActualFinalScore().ToString() + " Time Left: 0");
 			}
 
-			GUI.Label(new Rect(Screen.width * (2f / 8.5f), Screen.height * (3f / 8.5f), Screen.width * (5f / 9.5f), Screen.height * (0.15f)), levelName);
+			GUI.Label(new Rect(Screen.width * (0.135f), Screen.height * (0.053f), Screen.width * (0.726f), Screen.height * (0.2f)), levelName);
 		}
 		
 	}

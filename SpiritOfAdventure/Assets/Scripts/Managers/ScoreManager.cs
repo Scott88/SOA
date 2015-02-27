@@ -6,11 +6,13 @@ public class ScoreManager : MonoBehaviour
 	public GameObject pointFloaterPref;
 	public GameObject firstStar, secondStar, thirdStar;
 	public ParticleSystem greenSaved, blueSaved, redSaved;
-    public ParticleSystem starEarned;
 	public int greenFailsAllowed, blueFailsAllowed, redFailsAllowed;
 	public int pointsLostPerUse, pointsGainedPerSaved;
 	public int pointsPerSecond;
 	public int silverScore, goldScore;
+
+    public StarCounter starCounter;
+    public StarInventory starInventory;
 
 	private int levelScore = 0, spiritGainScore = 0, timerScore = 0;
 	private int greenFails = 0, blueFails = 0, redFails = 0;
@@ -48,33 +50,18 @@ public class ScoreManager : MonoBehaviour
 			{
 				firstStar.SetActive(true);
 				starCount = 1;
-
-                if (starCount > previousStarCount)
-                {
-                    starEarned.Emit(1);
-                }
 			}
 
 			if (!secondStar.activeSelf && GetFinalScore() > silverScore)
 			{
 				secondStar.SetActive(true);
 				starCount = 2;
-
-                if (starCount > previousStarCount)
-                {
-                    starEarned.Emit(1);
-                }
 			}
 
 			if (!thirdStar.activeSelf && GetFinalScore() > goldScore)
 			{
 				thirdStar.SetActive(true);
 				starCount = 3;
-
-                if (starCount > previousStarCount)
-                {
-                    starEarned.Emit(1);
-                }
 			}
 		}
 	}
@@ -185,6 +172,10 @@ public class ScoreManager : MonoBehaviour
 		yield return new WaitForSeconds(1f);
 		yield return StartCoroutine(AnimateTimeSaved());
 
+        starCounter.TransferStars();
+
+        yield return new WaitForSeconds(starCounter.GetStarGiveDuration() + 0.5f);
+
 		if (animatingScore)
 		{
             int previousStars = SaveFile.Instance().GetLevelStars(Application.loadedLevelName);
@@ -197,7 +188,6 @@ public class ScoreManager : MonoBehaviour
             }
             else
             {
-                starEarned.Emit(1);
                 SaveFile.Instance().ModifyStars(1);
             }       
 
@@ -283,18 +273,40 @@ public class ScoreManager : MonoBehaviour
 			starCount = 3;
 		}
 
+        StarSpawner spawner = FindObjectOfType<StarSpawner>();
+
+        if (spawner)
+        {
+            Destroy(spawner.gameObject);
+        }
+
+        EarnedStar[] stars = FindObjectsOfType<EarnedStar>();
+
+        for (int j = 0; j < stars.Length; j++)
+        {
+            Destroy(stars[j].gameObject);
+        }
+
+        if (!starCounter.TransferStarted())
+        {
+            starInventory.Add(starCounter.GetStars());
+            
+        }
+
+        starInventory.MatchDisplay();
+
+        starCounter.Clear();
+
         int previousStars = SaveFile.Instance().GetLevelStars(Application.loadedLevelName);
 
         if (previousStars < starCount)
         {
             SaveFile.Instance().SetLevelStars(Application.loadedLevelName, starCount);
 
-            starEarned.Emit(starCount - previousStars);
             SaveFile.Instance().ModifyStars(starCount - previousStars);
         }
         else
         {
-            starEarned.Emit(1);
             SaveFile.Instance().ModifyStars(1);
         }
 

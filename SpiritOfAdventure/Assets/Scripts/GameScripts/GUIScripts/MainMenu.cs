@@ -59,7 +59,7 @@ public class MainMenu : FocusPoint
 			{
 				focus.PlayButtonSound();
 				LevelQueue.LoadLevel("HorizontalTabs", true);
-				PlayerPrefs.DeleteAll();
+				//PlayerPrefs.DeleteAll();
 			}
 
 #if UNITY_EDITOR
@@ -74,9 +74,9 @@ public class MainMenu : FocusPoint
                 SaveFile.Instance().ModifyBlockInventory(BlockType.BT_METAL, 10);
             }
 
-            if (GUI.Button(new Rect(Screen.width * (0.85f), Screen.height * (0.17f), Screen.width * (0.1f), Screen.height * (0.11f)), "STARS"))
+            if (GUI.Button(new Rect(Screen.width * (0.85f), Screen.height * (0.17f), Screen.width * (0.1f), Screen.height * (0.11f)), "COINS"))
             {
-                SaveFile.Instance().ModifyStars(100);
+                SIS.DBManager.IncreaseFunds("coins", 100);
             }
 #endif
 

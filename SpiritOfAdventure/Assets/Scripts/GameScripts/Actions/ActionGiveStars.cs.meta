@@ -3,9 +3,9 @@ guid: 3ee38ebc424be1c4f9f8c402a76086e1
 MonoImporter:
   serializedVersion: 2
   defaultReferences:
-  - playerCamera: {instanceID: 0}
-  - guiCamera: {instanceID: 0}
-  - starSpawner: {fileID: 11417022, guid: 7e75ea0ecdfe0344286a238d7d538bea, type: 2}
+  - objectCamera: {instanceID: 0}
+  - inventoryCamera: {instanceID: 0}
+  - starSpawner: {fileID: 117022, guid: 7e75ea0ecdfe0344286a238d7d538bea, type: 2}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

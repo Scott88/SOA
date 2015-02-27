@@ -46,8 +46,7 @@ public class CashBasherManager : MonoBehaviour
     public GameObject treasure;
     public GameObject treasureSupport;
 
-    public GameObject starTransfer;
-    public GameObject earnedStar;
+    public GameObject starSpawner;
 
     public GameObject splashScreen;
 
@@ -297,28 +296,32 @@ public class CashBasherManager : MonoBehaviour
 
     public void TransferStar(Vector3 origin, int starCount)
     {
-        StartCoroutine(CollectStars(starCount, origin));
+        GameObject spawner = Instantiate(starSpawner, origin, Quaternion.identity) as GameObject;
+
+        spawner.GetComponent<StarSpawner>().Go(starCount, guiCamera, playerCamera, false);
+
+        //StartCoroutine(CollectStars(starCount, origin));
     }
 
-    IEnumerator CollectStars(int numStars, Vector3 origin)
-    {
-        float delay = 0.1f;
-        float delayIncrement = (0.75f + (float)numStars * 0.05f) / (float)numStars;
+    //IEnumerator CollectStars(int numStars, Vector3 origin)
+    //{
+    //    float delay = 0.1f;
+    //    float delayIncrement = (0.75f + (float)numStars * 0.05f) / (float)numStars;
 
-        for (int j = 0; j < numStars; j++)
-        {
-            Vector3 spawnPoint = guiCamera.ScreenToWorldPoint(playerCamera.WorldToScreenPoint(origin));
+    //    for (int j = 0; j < numStars; j++)
+    //    {
+    //        Vector3 spawnPoint = guiCamera.ScreenToWorldPoint(playerCamera.WorldToScreenPoint(origin));
 
-            GameObject star = Instantiate(earnedStar, spawnPoint, Quaternion.identity) as GameObject;
+    //        GameObject star = Instantiate(earnedStar, spawnPoint, Quaternion.identity) as GameObject;
 
-            EarnedStar starGiver = star.GetComponent<EarnedStar>();
+    //        EarnedStar starGiver = star.GetComponent<EarnedStar>();
 
-            starGiver.delay = delay;
-            starGiver.Go();
+    //        starGiver.delay = delay;
+    //        starGiver.Go();
 
-            yield return new WaitForSeconds(delayIncrement);
-        }
-    }
+    //        yield return new WaitForSeconds(delayIncrement);
+    //    }
+    //}
 
     public void RandomizeTreasure()
     {

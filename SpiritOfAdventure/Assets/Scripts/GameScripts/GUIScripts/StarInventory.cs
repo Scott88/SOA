@@ -10,35 +10,26 @@ public class StarInventory : MonoBehaviour
 
     public StarInventory childInventory;
 
-    public DBManager database;
-
     private int stars;
 
     void Start()
     {
-        if (database)
-        {
-            database.Init();
-        }
-
-#if USE_SIS_STARS
-        stars = DBManager.GetFunds("stars");       
-#else
-        stars = SaveFile.Instance().GetStars();
-#endif
-        starDisplay.text = "x" + stars;
+        MatchDisplay();
     }
 
     public void Add(int count)
     {
-        stars += count;
-        starDisplay.text = "x" + stars;
-
 #if USE_SIS_STARS
-        DBManager.IncreaseFunds("stars", 1);
+        DBManager.IncreaseFunds("stars", count);
 #else
         SaveFile.Instance().ModifyStars(count);
-#endif
+#endif    
+    }
+
+    public void DisplayAdd(int count)
+    {
+        stars += count;
+        starDisplay.text = "x" + stars;
 
         if (childInventory)
         {
@@ -49,20 +40,35 @@ public class StarInventory : MonoBehaviour
 
     public void Remove(int count)
     {
-        stars -= count;
-        starDisplay.text = "x" + stars;
-
 #if USE_SIS_STARS
         Debug.LogError("Cannot remove SIS stars without an SIS purchase!");
 #else
         SaveFile.Instance().ModifyStars(-count);
 #endif
 
+        DisplayRemove(count);
+    }
+
+    public void DisplayRemove(int count)
+    {
+        stars -= count;
+        starDisplay.text = "x" + stars;
+
         if (childInventory)
         {
             childInventory.stars += count;
             childInventory.starDisplay.text = "x" + stars;
         }
+    }
+
+    public void MatchDisplay()
+    {
+#if USE_SIS_STARS
+        stars = DBManager.GetFunds("stars");
+#else
+        stars = SaveFile.Instance().GetStars();
+#endif
+        starDisplay.text = "x" + stars;
     }
 
     public int GetStars()

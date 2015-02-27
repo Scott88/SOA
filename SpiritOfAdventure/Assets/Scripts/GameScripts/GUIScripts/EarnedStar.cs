@@ -5,7 +5,10 @@ public class EarnedStar : MonoBehaviour
 {
     public float delay { get; set; }
 
+    public bool goToInventory { get; set; }
+
     private StarInventory inventory;
+    private StarCounter counter;
 
     private Vector3 velocityRef;
 
@@ -13,12 +16,26 @@ public class EarnedStar : MonoBehaviour
 
     void Start()
     {
-        inventory = FindObjectOfType<StarInventory>();
+        if (goToInventory)
+        {
+            inventory = FindObjectOfType<StarInventory>();
+        }
+        else
+        {
+            counter = FindObjectOfType<StarCounter>();
+        }
     }
 
     public void Go()
     {
-        StartCoroutine(GoToInventory());
+        if (goToInventory)
+        {
+            StartCoroutine(GoToInventory());
+        }
+        else
+        {
+            StartCoroutine(GoToCounter());
+        }
     }
 
     IEnumerator GoToInventory()
@@ -31,7 +48,24 @@ public class EarnedStar : MonoBehaviour
             yield return 0;
         }
 
-        inventory.Add(1);
+        inventory.DisplayAdd(1);
+
+        starAdded = true;
+
+        Destroy(gameObject);
+    }
+
+    IEnumerator GoToCounter()
+    {
+        yield return new WaitForSeconds(delay);
+
+        while ((counter.transform.position - transform.position).sqrMagnitude > 0.01f)
+        {
+            transform.position = Vector3.SmoothDamp(transform.position, counter.transform.position, ref velocityRef, 0.25f);
+            yield return 0;
+        }
+
+        counter.Add(1);
 
         starAdded = true;
 

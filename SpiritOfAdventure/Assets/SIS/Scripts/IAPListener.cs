@@ -95,6 +95,21 @@ namespace SIS
                     ShowMessage("Total Metal Blocks: " + SaveFile.Instance().GetBlockInventory(BlockType.BT_METAL));
                     break;
 
+                case "woodBlock":
+                    SaveFile.Instance().ModifyBlockInventory(BlockType.BT_WOOD, 1);
+                    ShowMessage("Total Wood Blocks: " + SaveFile.Instance().GetBlockInventory(BlockType.BT_WOOD));
+                    break;
+
+                case "stoneBlock":
+                    SaveFile.Instance().ModifyBlockInventory(BlockType.BT_STONE, 1);
+                    ShowMessage("Total Stone Blocks: " + SaveFile.Instance().GetBlockInventory(BlockType.BT_STONE));
+                    break;
+
+                case "metalBlock":
+                    SaveFile.Instance().ModifyBlockInventory(BlockType.BT_METAL, 1);
+                    ShowMessage("Total Metal Blocks: " + SaveFile.Instance().GetBlockInventory(BlockType.BT_METAL));
+                    break;
+
                 case "greenSpirts":
                     SaveFile.Instance().ModifySpiritInventory(SpiritType.ST_GREEN, 10);
                     ShowMessage("Total Earth Spirits: " + SaveFile.Instance().GetSpiritInventory(SpiritType.ST_GREEN));
