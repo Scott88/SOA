@@ -20,7 +20,10 @@ public class StarInventory : MonoBehaviour
     public void Add(int count)
     {
 #if USE_SIS_STARS
-        DBManager.IncreaseFunds("stars", count);
+        if (DBManager.GetInstance())
+        {
+            DBManager.IncreaseFunds("stars", count);
+        }
 #else
         SaveFile.Instance().ModifyStars(count);
 #endif    
@@ -64,7 +67,10 @@ public class StarInventory : MonoBehaviour
     public void MatchDisplay()
     {
 #if USE_SIS_STARS
-        stars = DBManager.GetFunds("stars");
+        if (DBManager.GetInstance())
+        {
+            stars = DBManager.GetFunds("stars");
+        }
 #else
         stars = SaveFile.Instance().GetStars();
 #endif

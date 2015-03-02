@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class TileSet : MonoBehaviour
 {
@@ -102,48 +103,6 @@ public class TileSet : MonoBehaviour
     public void RemoveBlock(GameObject block)
     {
         SaveFile.Instance().RemoveTile(tiles[GetXCoord(block.transform.position.x), GetYCoord(block.transform.position.y)]);
-    }
-
-    public void DetachAdjacentBlocks(int x, int y)
-    {
-        //if (x > 0)
-        //{
-        //    if (IsGrounded(x - 1, y))
-        //    {
-
-        //    }
-        //}
-    }
-
-    //bool IsGrounded(int x, int y)
-    //{
-    //    ResetTilesChecked();
-
-    //    if (y == 0 && !tiles[x, y].Empty())
-    //    {
-    //        return true;
-    //    }
-
-    //    if (y > 0)
-    //    {
-    //        InternalIsGrounded
-    //    }
-    //}
-
-    //bool InternalIsGrounded(int x, int y)
-    //{
-
-    //}
-
-    void ResetTilesChecked()
-    {
-        for (int j = 0; j < width; j++)
-        {
-            for (int k = 0; k < height; k++)
-            {
-                tilesChecked[j, k] = false;
-            }
-        }
     }
 
     void OnDrawGizmosSelected()

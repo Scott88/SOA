@@ -3,8 +3,6 @@ using System.Collections;
 
 public class Tile 
 {
-    public bool grounded { get; set; }
-
     int x, y;
 
     float blockSize;
@@ -20,7 +18,6 @@ public class Tile
         y = yCoord;
         block = null;
         blockSize = size;
-        grounded = false;
     }
 
     public Tile(TileSet p, Breakable b, int xCoord, int yCoord, float size)
@@ -30,7 +27,6 @@ public class Tile
         x = xCoord;
         y = yCoord;
         blockSize = size;
-        grounded = true;
     }
 
     public int GetX() { return x; }
@@ -140,7 +136,11 @@ public class Tile
     {
         block = b;
         block.SetTile(this);
-        grounded = true;
+    }
+
+    public void DestroyBlock()
+    {
+        GameObject.Destroy(block.gameObject);
     }
 
     public bool Empty()

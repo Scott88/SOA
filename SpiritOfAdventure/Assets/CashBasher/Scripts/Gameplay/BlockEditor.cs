@@ -189,12 +189,33 @@ public class BlockEditor : MonoBehaviour
 
             if (tileSet.CanPlace(position) && breakable == null)
             {
-                selectedInventory.spawnIndicator.SetActive(true);
-                selectedInventory.spawnIndicator.transform.position = tileSet.CenterOn(position);
+                //selectedInventory.spawnIndicator.SetActive(true);
+                //selectedInventory.spawnIndicator.transform.position = tileSet.CenterOn(position);
+
+                PlaceBlock(mainCamera.ScreenToWorldPoint(Input.mousePosition), selectedInventory);
             }
             else
             {
                 selectedInventory.spawnIndicator.SetActive(false);
+            }
+        }
+        else if (blockBroken)
+        {
+            Vector2 rayOrigin = (Vector2)(mainCamera.ScreenToWorldPoint(Input.mousePosition));
+            Vector2 rayDirection = new Vector2();
+
+            RaycastHit2D hit = Physics2D.Raycast(rayOrigin, rayDirection);
+
+            Breakable breakable = null;
+
+            if (hit)
+            {
+                breakable = hit.collider.gameObject.GetComponent<Breakable>();
+
+                if (breakable)
+                {
+                    RemoveBlock(breakable);
+                }
             }
         }
     }
@@ -249,7 +270,7 @@ public class BlockEditor : MonoBehaviour
     {
         if (inventory.selectable)
         {
-            inventory.Deselect(false);
+            inventory.Deselect();
             selectedInventory = null;
         }
     }
@@ -277,8 +298,13 @@ public class BlockEditor : MonoBehaviour
                 break;
         }
 
-        inventory.Deselect(true);
-        selectedInventory = null;
+        inventory.TakeBlock();
+
+        if (inventory.Empty())
+        {
+            inventory.Deselect();
+            selectedInventory = null;
+        }
     }
 
     void RemoveBlock(Breakable block)
@@ -362,6 +388,25 @@ public class BlockEditor : MonoBehaviour
 
         SmoothDamper damper = t.GetComponent<SmoothDamper>();
         damper.target = inventory.transform.position;
+    }
+
+    public void Clear()
+    {
+        tileSet.Clear();
+
+        int blocks = woodCounter.RemoveAll();
+        castleWorth -= woodWorth * blocks;
+        woodInventory.GiveBlocks(blocks);
+
+        blocks = stoneCounter.RemoveAll();
+        castleWorth -= stoneWorth * blocks;
+        stoneInventory.GiveBlocks(blocks);
+
+        blocks = metalCounter.RemoveAll();
+        castleWorth -= metalWorth * blocks;
+        metalInventory.GiveBlocks(blocks);
+
+        SaveFile.Instance().ClearTileList();
     }
 
 #if UNITY_EDITOR

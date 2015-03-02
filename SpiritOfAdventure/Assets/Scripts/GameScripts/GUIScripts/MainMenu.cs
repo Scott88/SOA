@@ -72,11 +72,22 @@ public class MainMenu : FocusPoint
                 SaveFile.Instance().ModifyBlockInventory(BlockType.BT_WOOD, 10);
                 SaveFile.Instance().ModifyBlockInventory(BlockType.BT_STONE, 10);
                 SaveFile.Instance().ModifyBlockInventory(BlockType.BT_METAL, 10);
-            }
+            }    
 
             if (GUI.Button(new Rect(Screen.width * (0.85f), Screen.height * (0.17f), Screen.width * (0.1f), Screen.height * (0.11f)), "COINS"))
             {
                 SIS.DBManager.IncreaseFunds("coins", 100);
+            }
+
+            if (GUI.Button(new Rect(Screen.width * (0.85f), Screen.height * (0.30f), Screen.width * (0.1f), Screen.height * (0.11f)), "RESET"))
+            {
+                SaveFile.Instance().SetSpiritInventory(SpiritType.ST_GREEN, 10);
+                SaveFile.Instance().SetSpiritInventory(SpiritType.ST_BLUE, 10);
+                SaveFile.Instance().SetSpiritInventory(SpiritType.ST_RED, 10);
+
+                SaveFile.Instance().SetBlockInventory(BlockType.BT_WOOD, 10);
+                SaveFile.Instance().SetBlockInventory(BlockType.BT_STONE, 10);
+                SaveFile.Instance().SetBlockInventory(BlockType.BT_METAL, 10);
             }
 #endif
 

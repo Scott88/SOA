@@ -13,6 +13,8 @@ public class CashBasherMenu : MonoBehaviour
     public ClientMenu clientMenu;
     public BlockStore blockStore;
 
+    public BlockEditor editor;
+
     public Camera mainCamera;
 
     private float timer;
@@ -48,8 +50,8 @@ public class CashBasherMenu : MonoBehaviour
         if (Network.peerType == NetworkPeerType.Disconnected)
         {
             if (GUI.Button(new Rect(Screen.width * (0.85f), Screen.height * (0.2f), Screen.width * (0.12f), Screen.height * (0.1f)),
-                           "Buy Blocks"))
-            {
+                           "Buy"))
+            { 
                 //mainCamera.transform.position = new Vector3(-30f, 0f, -10f);
                 //gameObject.SetActive(false);
                 //blockStore.gameObject.SetActive(true);
@@ -57,7 +59,7 @@ public class CashBasherMenu : MonoBehaviour
                 LevelQueue.LoadLevel("HorizontalTabs", true);
             }
 
-            if (GUI.Button(new Rect(Screen.width * (0.85f), Screen.height * (0.7f), Screen.width * (0.12f), Screen.height * (0.1f)),
+            if (GUI.Button(new Rect(Screen.width * (0.83f), Screen.height * (0.62f), Screen.width * (0.16f), Screen.height * (0.1f)),
                            "Host"))
             {
                 mainCamera.transform.position = new Vector3(20f, 0f, -10f);
@@ -66,13 +68,19 @@ public class CashBasherMenu : MonoBehaviour
                 serverMenu.CreateServer();
             }
 
-            if (GUI.Button(new Rect(Screen.width * (0.85f), Screen.height * (0.85f), Screen.width * (0.12f), Screen.height * (0.1f)),
+            if (GUI.Button(new Rect(Screen.width * (0.83f), Screen.height * (0.735f), Screen.width * (0.16f), Screen.height * (0.1f)),
                            "Join"))
             {
                 mainCamera.transform.position = new Vector3(20f, 0f, -10f);
                 gameObject.SetActive(false);
                 clientMenu.gameObject.SetActive(true);
                 clientMenu.SearchForServers();
+            }
+
+            if (GUI.Button(new Rect(Screen.width * (0.03f), Screen.height * (0.86f), Screen.width * (0.1f), Screen.height * (0.1f)),
+                           "Clear"))
+            {
+                editor.Clear();
             }
         }
     }

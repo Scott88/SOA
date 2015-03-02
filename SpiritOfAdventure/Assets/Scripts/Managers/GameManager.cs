@@ -52,8 +52,21 @@ public class GameManager : MonoBehaviour
 
 		//We get our spirit buttons and the camera for the raycasting
 		greenGUI = GameObject.Find("SpiritGUICamera/GUIContainer/Green Spirit Button").GetComponent<SpiritGUI>();
-		redGUI = GameObject.Find("SpiritGUICamera/GUIContainer/Red Spirit Button").GetComponent<SpiritGUI>();
-		blueGUI = GameObject.Find("SpiritGUICamera/GUIContainer/Blue Spirit Button").GetComponent<SpiritGUI>();
+
+        GameObject redGUIObject = GameObject.Find("SpiritGUICamera/GUIContainer/Red Spirit Button");
+
+        if (redGUIObject)
+        {
+            redGUI = redGUIObject.GetComponent<SpiritGUI>();
+        }
+
+        GameObject blueGUIObject = GameObject.Find("SpiritGUICamera/GUIContainer/Blue Spirit Button");
+
+        if (blueGUIObject)
+        {
+            blueGUI = blueGUIObject.GetComponent<SpiritGUI>();
+        }
+
 		spiritGUICamera = GameObject.Find("SpiritGUICamera").GetComponent<Camera>();
 
         PlayerSpawn[] spawns = FindObjectsOfType<PlayerSpawn>() as PlayerSpawn[];

@@ -41,21 +41,15 @@ public class BlockInventory : MonoBehaviour
     {
         if (blockCount > 0)
         {
-            TakeBlock();
             selected = true;
             selectionIndicator.SetActive(true);
         }
     }
 
-    public void Deselect(bool blockPlaced)
+    public void Deselect()
     {
         if (selected)
         {
-            if (!blockPlaced)
-            {
-                ReturnBlock();
-            }
-
             selected = false;
             selectionIndicator.SetActive(false);
         }

@@ -18,6 +18,20 @@ public class EditorTileSet : TileSet
         return breakable.type;
     }
 
+    public void Clear()
+    {
+        for (int j = 0; j < width; j++)
+        {
+            for (int k = 0; k < height; k++)
+            {
+                if (!tiles[j, k].Empty())
+                {
+                    tiles[j, k].DestroyBlock();   
+                }
+            }
+        }
+    }
+
     public void Save()
     {
         SaveFile.Instance().ClearTileList();

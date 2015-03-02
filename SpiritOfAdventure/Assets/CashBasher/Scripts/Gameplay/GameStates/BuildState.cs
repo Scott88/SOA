@@ -210,13 +210,13 @@ public class BuildState : GameState
 
         GameObject block = Network.Instantiate(inventory.GetBlock(), position, new Quaternion(), 0) as GameObject;
 
-        inventory.Deselect(true);
+        inventory.Deselect();
         selectedInventory = null;
     }
 
     void DeselectInventory(BlockInventory inventory)
     {
-        inventory.Deselect(false);
+        inventory.Deselect();
         selectedInventory = null;
     }
 
