@@ -71,14 +71,9 @@ public class ClientMenu : MonoBehaviour
         {
             HostData[] hostList = MasterServer.PollHostList();
 
-            if (!PlayerPrefs.HasKey("Blocks"))
-            {
-                PlayerPrefs.SetInt("Blocks", 3);
-            }
-
             int myPoints = editor.GetCastleWorth();
             int closestServer = -1;
-            int closestPoints = -100;
+            int closestPoints = 10000;
 
             for (int j = 0; j < hostList.Length; j++)
             {

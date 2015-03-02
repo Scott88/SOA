@@ -9,6 +9,10 @@ public class WinState : GameState
 
     public CashBasherPlayer serverPlayer, clientPlayer;
 
+    public GameObject endGameDialogue, winScreen;
+
+    public float targetX = -70f;
+
     private float timer = 1.5f;
 
     private bool treasureExplosion = true;
@@ -18,11 +22,15 @@ public class WinState : GameState
 
     private CashBasherPlayer myPlayer;
 
+    private Vector3 targetPos, dialogueRef;
+
     void Start()
     {
         buttonsPos = spiritButtons.transform.position;
 
         myPlayer = Network.isServer ? serverPlayer : clientPlayer;
+
+        targetPos = new Vector3(targetX, endGameDialogue.transform.position.y);
     }
 
     public override void Prepare()
@@ -33,6 +41,8 @@ public class WinState : GameState
         manager.cameraMan.ShakeCamera(0.75f, 0.52f);
         manager.cameraMan.ZoomTo(4f);
         manager.connectionRequired = false;
+
+        winScreen.SetActive(true);
 
         myPlayer.Win();
     }
@@ -49,6 +59,10 @@ public class WinState : GameState
             {
                 TreasureExploded();
             }
+        }
+        else
+        {
+            endGameDialogue.transform.position = Vector3.SmoothDamp(endGameDialogue.transform.position, targetPos, ref dialogueRef, 0.3f);
         }
     }
 
@@ -83,6 +97,8 @@ public class WinState : GameState
         timer = 2.0f;
 
         Time.timeScale = 1.0f;
+
+        FindObjectOfType<StarCounter>().TransferStars();
 
         if (Network.isServer)
         {

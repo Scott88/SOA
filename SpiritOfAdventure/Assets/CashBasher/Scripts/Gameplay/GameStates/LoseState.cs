@@ -7,6 +7,10 @@ public class LoseState : GameState {
 
     public GameObject spiritButtons;
 
+    public GameObject endGameDialogue, loseScreen;
+
+    public float targetX = -70f;
+
     private float timer = 1.5f;
 
     private bool treasureExplosion = true;
@@ -14,9 +18,13 @@ public class LoseState : GameState {
     private Vector3 buttonsPos;
     private Vector3 velocityRef;
 
+    private Vector3 targetPos, dialogueRef;
+
     void Start()
     {
         buttonsPos = spiritButtons.transform.position;
+
+        targetPos = new Vector3(targetX, endGameDialogue.transform.position.y);
     }
 
     public override void Prepare()
@@ -27,6 +35,8 @@ public class LoseState : GameState {
         manager.cameraMan.ShakeCamera(0.75f, 0.52f);
         manager.cameraMan.ZoomTo(4f);
         manager.connectionRequired = false;
+
+        loseScreen.SetActive(true);
     }
 
     public override void UpdateState()
@@ -41,6 +51,10 @@ public class LoseState : GameState {
             {
                 TreasureExploded();
             }
+        }
+        else
+        {
+            endGameDialogue.transform.position = Vector3.SmoothDamp(endGameDialogue.transform.position, targetPos, ref dialogueRef, 0.3f);
         }
     }
 
@@ -75,6 +89,8 @@ public class LoseState : GameState {
         timer = 2.0f;
 
         Time.timeScale = 1.0f;
+
+        FindObjectOfType<StarCounter>().TransferStars();
 
         if (Network.isServer)
         {
