@@ -100,7 +100,7 @@ public class NetworkedCannonBall : MonoBehaviour
 
         rigidbody2D.velocity = velocity;
 
-        networkView.RPC("NetDamageAndSlow", RPCMode.Others, velocity);
+        networkView.RPC("NetDamageAndSlow", RPCMode.Others, (Vector3)velocity);
     }
 
     [RPC]
