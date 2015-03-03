@@ -104,7 +104,7 @@ public class NetworkedCannonBall : MonoBehaviour
     }
 
     [RPC]
-    public void NetDamageAndSlow(Vector3 velocity)
+    void NetDamageAndSlow(Vector3 velocity)
     {
         health--;
 
