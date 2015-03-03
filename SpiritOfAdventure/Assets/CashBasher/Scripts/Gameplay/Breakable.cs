@@ -218,9 +218,16 @@ public class Breakable : MonoBehaviour
 
     public bool IsDebuffedBy(SpiritType spiritType)
     {
-        return type == BlockType.BT_WOOD && spiritType == SpiritType.ST_RED ||
-               type == BlockType.BT_STONE && spiritType == SpiritType.ST_GREEN ||
-               type == BlockType.BT_METAL && spiritType == SpiritType.ST_BLUE;
+        if (statusEffect == SpiritType.ST_NULL)
+        {
+            return type == BlockType.BT_WOOD && spiritType == SpiritType.ST_RED ||
+                   type == BlockType.BT_STONE && spiritType == SpiritType.ST_GREEN ||
+                   type == BlockType.BT_METAL && spiritType == SpiritType.ST_BLUE;
+        }
+        else
+        {
+            return false;
+        }
     }
 
     public bool IsHealedBy(SpiritType spiritType)
