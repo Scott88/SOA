@@ -36,11 +36,11 @@ public class StarCounter : MonoBehaviour
         return stars;
     }
 
-    public void TransferStars()
+    public void TransferStars(float delay = 0.1f)
     {
         GameObject s = Instantiate(starSpawner, transform.position, Quaternion.identity) as GameObject;
 
-        s.GetComponent<StarSpawner>().Go(stars, inventoryCam, myCam, true);
+        s.GetComponent<StarSpawner>().Go(stars, inventoryCam, myCam, true, delay);
 
         transferStarted = true;
     }

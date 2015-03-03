@@ -9,7 +9,8 @@ enum GamePhase
     GP_YOUR_TURN = 3,
     GP_THEIR_TURN = 4,
     GP_WIN = 5,
-    GP_LOSE = 6
+    GP_LOSE = 6,
+    GP_END_EARLY = 7
 }
 
 public class CashBasherManager : MonoBehaviour
@@ -57,6 +58,7 @@ public class CashBasherManager : MonoBehaviour
     public TheirTurnState theirTurnState;
     public WinState winState;
     public LoseState loseState;
+    public EndEarlyState endEarlyState;
 
     public GameObject pauseScreen;
 
@@ -74,6 +76,8 @@ public class CashBasherManager : MonoBehaviour
     private GamePhase currentPhase = GamePhase.GP_STARTING;
 
     private NetworkedLevelLoader loader;
+
+    private bool leaveImmediate = false;
 
     void Awake()
     {
@@ -111,6 +115,11 @@ public class CashBasherManager : MonoBehaviour
 
     void Update()
     {
+        if (leaveImmediate)
+        {
+            Application.LoadLevel("MiniGameMenu");
+        }
+
         if (state != null)
         {
             state.UpdateState();
@@ -299,29 +308,7 @@ public class CashBasherManager : MonoBehaviour
         GameObject spawner = Instantiate(starSpawner, origin, Quaternion.identity) as GameObject;
 
         spawner.GetComponent<StarSpawner>().Go(starCount, guiCamera, playerCamera, false);
-
-        //StartCoroutine(CollectStars(starCount, origin));
     }
-
-    //IEnumerator CollectStars(int numStars, Vector3 origin)
-    //{
-    //    float delay = 0.1f;
-    //    float delayIncrement = (0.75f + (float)numStars * 0.05f) / (float)numStars;
-
-    //    for (int j = 0; j < numStars; j++)
-    //    {
-    //        Vector3 spawnPoint = guiCamera.ScreenToWorldPoint(playerCamera.WorldToScreenPoint(origin));
-
-    //        GameObject star = Instantiate(earnedStar, spawnPoint, Quaternion.identity) as GameObject;
-
-    //        EarnedStar starGiver = star.GetComponent<EarnedStar>();
-
-    //        starGiver.delay = delay;
-    //        starGiver.Go();
-
-    //        yield return new WaitForSeconds(delayIncrement);
-    //    }
-    //}
 
     public void RandomizeTreasure()
     {
@@ -427,6 +414,10 @@ public class CashBasherManager : MonoBehaviour
                 state = loseState;
                 gameText.text = "You lose...";
                 break;
+            case GamePhase.GP_END_EARLY:
+                state = endEarlyState;
+                gameText.text = "The other player has left.";
+                break;
         }
 
         if (state != null)
@@ -445,8 +436,13 @@ public class CashBasherManager : MonoBehaviour
     {
         if (connectionRequired)
         {
-            networkView.RPC("NetworkedPause", RPCMode.Others, pauseState);
+            networkView.RPC("SwitchToState", RPCMode.Others, (int)GamePhase.GP_END_EARLY);
+            connectionRequired = false;
+
+            leaveImmediate = true;
         }
+
+        Network.Disconnect();
 
 #if UNITY_EDITOR
         if (pauseState)
@@ -468,21 +464,26 @@ public class CashBasherManager : MonoBehaviour
     {
         if (connectionRequired)
         {
-            Application.LoadLevel("MiniGameMenu");
+            if (info == NetworkDisconnection.LostConnection)
+            {
+                SwitchToState((int)GamePhase.GP_END_EARLY);
+            }
+            else
+            {
+                leaveImmediate = true;
+            }
         }
     }
 
-    void OnPlayerDisconnected()
+    void OnPlayerDisconnected(NetworkPlayer player)
     {
         Network.Disconnect();
 
         if (connectionRequired)
-        {         
-            Application.LoadLevel("MiniGameMenu");
+        {
+            SwitchToState((int)GamePhase.GP_END_EARLY);
         }
     }
-
-    
 
 #if UNITY_EDITOR
     void OnApplicationQuit()

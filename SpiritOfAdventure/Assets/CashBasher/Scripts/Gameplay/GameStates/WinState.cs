@@ -98,7 +98,7 @@ public class WinState : GameState
 
         Time.timeScale = 1.0f;
 
-        FindObjectOfType<StarCounter>().TransferStars();
+        FindObjectOfType<StarCounter>().TransferStars(0.5f);
 
         if (Network.isServer)
         {

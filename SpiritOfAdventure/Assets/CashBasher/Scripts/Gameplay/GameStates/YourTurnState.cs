@@ -389,16 +389,19 @@ public class YourTurnState : GameState
                 {
                     CannonClickListener cannonListener = hit2d.collider.GetComponent<CannonClickListener>();
 
-                    if (cannonListener.cannon == yourCannon && cannonListener.cannon.CanApplyBuff(selectedSpirit.type))
+                    if (cannonListener)
                     {
-                        selectedSpirit.MoveHereAndTrigger(cannonListener.cannon.team == 0);
+                        if (cannonListener.cannon == yourCannon && cannonListener.cannon.CanApplyBuff(selectedSpirit.type))
+                        {
+                            selectedSpirit.MoveHereAndTrigger(cannonListener.cannon.team == 0);
 
-                        showButtons = false;
+                            showButtons = false;
 
-                        holdingSpirit = false;
-                        selectedSpirit = null;
+                            holdingSpirit = false;
+                            selectedSpirit = null;
 
-                        return;
+                            return;
+                        }
                     }
                 }
 
