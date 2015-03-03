@@ -70,23 +70,11 @@ public class WinState : GameState
     {
         if (timer < 0.0f && !treasureExplosion)
         {
-            if (Network.isServer)
+            if (GUI.Button(new Rect(Screen.width * (0.05f), Screen.height * (0.05f), Screen.width * (0.22f), Screen.height * (0.2f)),
+                           "Continue"))
             {
-                if (GUI.Button(new Rect(Screen.width * (0.75f), Screen.height * (0.05f), Screen.width * (0.22f), Screen.height * (0.2f)),
-                               "Continue"))
-                {
-                    Network.Disconnect();
-                    Application.LoadLevel("MiniGameMenu");
-                }
-            }
-            else
-            {
-                if (GUI.Button(new Rect(Screen.width * (0.05f), Screen.height * (0.05f), Screen.width * (0.22f), Screen.height * (0.2f)),
-                               "Continue"))
-                {
-                    Network.Disconnect();
-                    Application.LoadLevel("MiniGameMenu");
-                }
+                Network.Disconnect();
+                Application.LoadLevel("MiniGameMenu");
             }
         }
     }

@@ -100,11 +100,11 @@ public class NetworkedCannonBall : MonoBehaviour
 
         rigidbody2D.velocity = velocity;
 
-        networkView.RPC("NetDamageAndSlow", RPCMode.Others, startSpeed, normal, speedDamper);
+        networkView.RPC("NetDamageAndSlow", RPCMode.Others, velocity);
     }
 
     [RPC]
-    public void NetDamageAndSlow(Vector3 startSpeed, Vector3 blockPos, float speedDamper)
+    public void NetDamageAndSlow(Vector3 velocity)
     {
         health--;
 
@@ -112,19 +112,6 @@ public class NetworkedCannonBall : MonoBehaviour
         {
             Destroy(gameObject);
             return;
-        }
-
-        Vector3 direction = blockPos - transform.position;
-
-        Vector2 velocity = startSpeed;
-
-        if (Mathf.Abs(direction.x) >= Mathf.Abs(direction.y))
-        {
-            velocity.x *= speedDamper;
-        }
-        else
-        {
-            velocity.y *= speedDamper;
         }
 
         rigidbody2D.velocity = velocity;
