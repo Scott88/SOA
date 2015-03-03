@@ -81,7 +81,7 @@ public class NetworkedCannonBall : MonoBehaviour
 
         if (health == 0)
         {
-            networkView.RPC("NetDamageAndSlow", RPCMode.Others, startSpeed, normal, speedDamper);
+            networkView.RPC("NetDamageAndSlow", RPCMode.Others, Vector3.zero);
             Destroy(gameObject);
 
             return;
