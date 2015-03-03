@@ -470,9 +470,10 @@ public class CashBasherManager : MonoBehaviour
     {
         if (connectionRequired)
         {
-            if (info == NetworkDisconnection.LostConnection)
+            if (info == NetworkDisconnection.Disconnected)
             {
                 SwitchToState((int)GamePhase.GP_END_EARLY);
+                connectionRequired = false;
             }
             else
             {
@@ -483,12 +484,13 @@ public class CashBasherManager : MonoBehaviour
 
     void OnPlayerDisconnected(NetworkPlayer player)
     {
-        Network.Disconnect();
-
         if (connectionRequired)
         {
             SwitchToState((int)GamePhase.GP_END_EARLY);
+            connectionRequired = false;
         }
+
+        Network.Disconnect();
     }
 
 #if UNITY_EDITOR
