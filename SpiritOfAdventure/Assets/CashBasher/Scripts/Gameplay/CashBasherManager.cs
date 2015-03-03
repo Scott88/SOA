@@ -436,7 +436,7 @@ public class CashBasherManager : MonoBehaviour
     {
         if (connectionRequired)
         {
-            networkView.RPC("SwitchToState", RPCMode.Others, (int)GamePhase.GP_END_EARLY);
+            networkView.RPC("NetworkedPause", RPCMode.Others, pauseState);
             connectionRequired = false;
 
             leaveImmediate = true;
@@ -455,9 +455,15 @@ public class CashBasherManager : MonoBehaviour
     [RPC]
     void NetworkedPause(bool pauseState)
     {
-        Time.timeScale = pauseState ? 0f : 1f;
-        paused = pauseState;
-        pauseScreen.SetActive(pauseState);
+        //Time.timeScale = pauseState ? 0f : 1f;
+        //paused = pauseState;
+        //pauseScreen.SetActive(pauseState);
+
+        SwitchToState((int)GamePhase.GP_END_EARLY);
+
+        connectionRequired = false;
+
+        Network.Disconnect();
     }
 
     void OnDisconnectedFromServer(NetworkDisconnection info)
