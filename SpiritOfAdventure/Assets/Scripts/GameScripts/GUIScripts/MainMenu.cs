@@ -89,14 +89,15 @@ public class MainMenu : FocusPoint
                 SaveFile.Instance().SetBlockInventory(BlockType.BT_STONE, 10);
                 SaveFile.Instance().SetBlockInventory(BlockType.BT_METAL, 10);
             }
+
+            
 #endif
 
-            //if (GUI.Button(new Rect(Screen.width * (0.53f), Screen.height * (0.32f), Screen.width * (0.25f), Screen.height * (1f / 7f)), "DESTRUCTORNATOR"))
-            //{
-
-            //    focus.PlayButtonSound();
-            //    Application.LoadLevel("MiniGameMenu");
-            //}
+            if (GUI.Button(new Rect(Screen.width * (0.02f), Screen.height * (0.32f), Screen.width * (0.25f), Screen.height * (1f / 7f)), "DESTRUCTORNATOR"))
+            {
+                focus.PlayButtonSound();
+                Application.LoadLevel("MiniGameMenu");
+            }
 
 	}
 }

@@ -16,6 +16,8 @@ public class ServerMenu : MonoBehaviour
 
     public BlockEditor editor;
 
+    public static readonly string GAME_NAME = "CashBasher";
+
     private bool readyToStart = false;
     private bool serverFailed = false;
 
@@ -65,7 +67,7 @@ public class ServerMenu : MonoBehaviour
 
         int myPoints = editor.GetCastleWorth();
 
-        MasterServer.RegisterHost("CashBasher", "SpiritOfAdventure", myPoints.ToString());
+        MasterServer.RegisterHost(GAME_NAME, "SpiritOfAdventure", myPoints.ToString());
 
         Screen.sleepTimeout = SleepTimeout.NeverSleep;
     }

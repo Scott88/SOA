@@ -32,7 +32,7 @@ public class CashBasherMenu : MonoBehaviour
 
         if (timer <= 0f && !hostListRequested)
         {
-            MasterServer.RequestHostList("CashBasher");
+            MasterServer.RequestHostList(ServerMenu.GAME_NAME);
             hostListRequested = true;
         }
     }
