@@ -141,7 +141,8 @@ public class NetworkedCannonBall : MonoBehaviour
             {
                 for (int j = 0; j < splitCount; j++)
                 {
-                    GameObject ball = Network.Instantiate(splitBall, transform.position, Quaternion.identity, 0) as GameObject;
+                    Vector3 randomPosition = new Vector3(Random.Range(-0.1f, 0.1f), Random.Range(-0.1f, 0.1f));
+                    GameObject ball = Network.Instantiate(splitBall, transform.position + randomPosition, Quaternion.identity, 0) as GameObject;
 
                     Vector3 velocity = new Vector3(Random.Range(-speedVariance, speedVariance), Random.Range(-speedVariance, speedVariance));
 
