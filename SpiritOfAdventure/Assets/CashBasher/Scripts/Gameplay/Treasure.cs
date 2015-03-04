@@ -37,7 +37,7 @@ public class Treasure : MonoBehaviour
     {
         FindObjectOfType<CashBasherManager>().SwitchToState((int)GamePhase.GP_WIN);
         Instantiate(coinExplosion, transform.position + Vector3.back * 5, Quaternion.Euler(270f, 0f, 0f));
-        FindObjectOfType<CashBasherManager>().TransferStar(transform.position, (int)(FindObjectOfType<NetworkedLevelLoader>().othersCastleWorth * starMultiplier));
+        FindObjectOfType<CashBasherManager>().TransferStar(transform.position, (int)(FindObjectOfType<NetworkedLevelLoader>().othersCastleWorth * starMultiplier), 0.1f);
         Destroy(gameObject);
         networkView.RPC("NetDamage", RPCMode.Others);
     }

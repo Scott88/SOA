@@ -303,11 +303,11 @@ public class CashBasherManager : MonoBehaviour
         }
     }
 
-    public void TransferStar(Vector3 origin, int starCount)
+    public void TransferStar(Vector3 origin, int starCount, float gapFactor = 0.75f)
     {
         GameObject spawner = Instantiate(starSpawner, origin, Quaternion.identity) as GameObject;
 
-        spawner.GetComponent<StarSpawner>().Go(starCount, guiCamera, playerCamera, false);
+        spawner.GetComponent<StarSpawner>().Go(starCount, guiCamera, playerCamera, false, 0.1f, gapFactor);
     }
 
     public void RandomizeTreasure()

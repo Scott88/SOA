@@ -70,7 +70,7 @@ public class WinState : GameState
     {
         if (timer < 0.0f && !treasureExplosion)
         {
-            if (GUI.Button(new Rect(Screen.width * (0.05f), Screen.height * (0.05f), Screen.width * (0.22f), Screen.height * (0.2f)),
+            if (GUI.Button(new Rect(Screen.width * (0.75f), Screen.height * (0.05f), Screen.width * (0.22f), Screen.height * (0.2f)),
                            "Continue"))
             {
                 Network.Disconnect();

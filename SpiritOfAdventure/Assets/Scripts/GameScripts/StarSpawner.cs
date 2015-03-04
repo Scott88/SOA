@@ -7,19 +7,19 @@ public class StarSpawner : MonoBehaviour
 
     public bool goToInventory;
 
-    public void Go(int numStars, Camera inventoryCam, Camera objectCam, bool takeFromCounter, float delay = 0.1f)
+    public void Go(int numStars, Camera inventoryCam, Camera objectCam, bool takeFromCounter, float delay = 0.1f, float gapFactor = 0.75f)
     {
         if (goToInventory)
         {
             FindObjectOfType<StarInventory>().Add(numStars);
         }
 
-        StartCoroutine(CollectStars(numStars, inventoryCam, objectCam, takeFromCounter, delay));
+        StartCoroutine(CollectStars(numStars, inventoryCam, objectCam, takeFromCounter, delay, gapFactor));
     }
 
-    IEnumerator CollectStars(int numStars, Camera inventoryCam, Camera objectCam, bool takeFromCounter, float delay)
+    IEnumerator CollectStars(int numStars, Camera inventoryCam, Camera objectCam, bool takeFromCounter, float delay, float gapFactor)
     {
-        float delayIncrement = (0.75f + (float)numStars * 0.05f) / (float)numStars;
+        float delayIncrement = (gapFactor + (float)numStars * 0.05f) / (float)numStars;
 
         StarCounter counter = FindObjectOfType<StarCounter>();
 

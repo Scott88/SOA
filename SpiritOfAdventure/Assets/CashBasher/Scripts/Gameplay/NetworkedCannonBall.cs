@@ -11,6 +11,8 @@ public class NetworkedCannonBall : MonoBehaviour
 
     public GameObject splitBall;
 
+    public GameObject splitPoof;
+
     private SpiritType enchantment = SpiritType.ST_NULL;
 
     private CashBasherManager manager;
@@ -135,6 +137,8 @@ public class NetworkedCannonBall : MonoBehaviour
 
     void OnDestroy()
     {
+        Instantiate(splitPoof, transform.position, Quaternion.identity);
+
         if (networkView.isMine)
         {
             if (splitCount > 0)
