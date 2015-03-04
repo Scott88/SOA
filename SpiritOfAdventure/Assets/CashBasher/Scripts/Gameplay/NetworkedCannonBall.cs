@@ -5,6 +5,12 @@ public class NetworkedCannonBall : MonoBehaviour
 {
     public int health;
 
+    public int splitCount;
+
+    public float speedVariance;
+
+    public GameObject splitBall;
+
     private SpiritType enchantment = SpiritType.ST_NULL;
 
     private CashBasherManager manager;
@@ -119,7 +125,23 @@ public class NetworkedCannonBall : MonoBehaviour
 
     void OnDestroy()
     {
-        if (networkView.isMine)
+        if (splitCount > 0)
+        {
+            for (int j = 0; j < splitCount; j++)
+            {
+                GameObject ball = Network.Instantiate(splitBall, transform.position, Quaternion.identity, 0) as GameObject;
+
+                Vector3 velocity = new Vector3(Random.Range(-speedVariance, speedVariance), Random.Range(speedVariance, speedVariance));
+
+                ball.networkView.RPC("SetVelocity", RPCMode.All, velocity + (Vector3)rigidbody2D.velocity);
+
+                if (enchantment != SpiritType.ST_NULL)
+                {
+                    ball.networkView.RPC("Enchant", RPCMode.All, (int)enchantment);
+                }
+            }
+        }
+        else if (networkView.isMine)
         {         
             manager.ReadyNextTurn();
         }
