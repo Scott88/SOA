@@ -76,6 +76,8 @@ public class YourTurnState : GameState
     {
         yourCannon.collider2D.enabled = false;
 
+        nextTurn = false;
+
         turnStarted = false;
         cannonFired = false;
 
