@@ -15,11 +15,21 @@ public class NetworkedCannonBall : MonoBehaviour
 
     private CashBasherManager manager;
 
+    private Vector3 previousVel;
+
     void Start()
     {
         manager = FindObjectOfType<CashBasherManager>() as CashBasherManager;
 
         manager.cameraMan.FollowObject(gameObject);
+    }
+
+    void Update()
+    {
+        if (networkView.isMine)
+        {
+            previousVel = rigidbody2D.velocity;
+        }
     }
 
     [RPC]
@@ -125,25 +135,28 @@ public class NetworkedCannonBall : MonoBehaviour
 
     void OnDestroy()
     {
-        if (splitCount > 0)
+        if (networkView.isMine)
         {
-            for (int j = 0; j < splitCount; j++)
+            if (splitCount > 0)
             {
-                GameObject ball = Network.Instantiate(splitBall, transform.position, Quaternion.identity, 0) as GameObject;
-
-                Vector3 velocity = new Vector3(Random.Range(-speedVariance, speedVariance), Random.Range(speedVariance, speedVariance));
-
-                ball.networkView.RPC("SetVelocity", RPCMode.All, velocity + (Vector3)rigidbody2D.velocity);
-
-                if (enchantment != SpiritType.ST_NULL)
+                for (int j = 0; j < splitCount; j++)
                 {
-                    ball.networkView.RPC("Enchant", RPCMode.All, (int)enchantment);
-                }
+                    GameObject ball = Network.Instantiate(splitBall, transform.position, Quaternion.identity, 0) as GameObject;
+
+                    Vector3 velocity = new Vector3(Random.Range(-speedVariance, speedVariance), Random.Range(-speedVariance, speedVariance));
+
+                    ball.networkView.RPC("SetVelocity", RPCMode.All, velocity + previousVel);
+
+                    if (enchantment != SpiritType.ST_NULL)
+                    {
+                        ball.networkView.RPC("Enchant", RPCMode.All, (int)enchantment);
+                    }
+                } 
             }
-        }
-        else if (networkView.isMine)
-        {         
-            manager.ReadyNextTurn();
+            else
+            {
+                manager.ReadyNextTurn();
+            }
         }
     }
 }
