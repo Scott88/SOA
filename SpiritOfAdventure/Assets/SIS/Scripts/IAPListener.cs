@@ -71,6 +71,7 @@ namespace SIS
                     //increase coins by 1000 and show appropriate feedback
                     DBManager.IncreaseFunds("coins", 100);
                     ShowMessage("100 Lily bucks were added to your balance!");
+                    SaveFile.Instance().DisableAds();
                     break;
 
                 case "lilly_bucks3003.":
@@ -78,6 +79,23 @@ namespace SIS
                     //increase coins by 1000 and show appropriate feedback
                     DBManager.IncreaseFunds("coins", 300);
                     ShowMessage("300 Lily bucks were added to your balance!");
+                    SaveFile.Instance().DisableAds();
+                    break;
+
+                case "lily_bucks500":
+                    //the user bought the item "coins",
+                    //increase coins by 1000 and show appropriate feedback
+                    DBManager.IncreaseFunds("coins", 500);
+                    ShowMessage("500 Lily bucks were added to your balance!");
+                    SaveFile.Instance().DisableAds();
+                    break;
+
+                case "lily_bucks1000":
+                    //the user bought the item "coins",
+                    //increase coins by 1000 and show appropriate feedback
+                    DBManager.IncreaseFunds("coins", 1000);
+                    ShowMessage("1000 Lily bucks were added to your balance!");
+                    SaveFile.Instance().DisableAds();
                     break;
 
                 case "woodBlockStack":

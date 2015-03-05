@@ -52,6 +52,8 @@ public class SaveFile
 
     private int stars;
 
+    private bool showAds;
+
     private static SaveFile instance;
 
     private XmlDocument saveFile;
@@ -256,6 +258,17 @@ public class SaveFile
                 stars += levelStates[j].stars;
             }
         }
+
+        XmlElement adsNode = saveNode["ShowAds"];
+
+        if (adsNode != null)
+        {
+            showAds = bool.Parse(adsNode.GetAttribute("value"));
+        }
+        else
+        {
+            showAds = true;
+        }
     }
 
     public void SaveToXML()
@@ -402,6 +415,14 @@ public class SaveFile
         starsCount.Value = stars.ToString();
 
         starsNode.Attributes.Append(starsCount);
+
+        XmlElement adsNode = doc.CreateElement("ShowAds");
+        save.AppendChild(adsNode);
+
+        XmlAttribute showAdsValue = doc.CreateAttribute("value");
+        showAdsValue.Value = showAds.ToString();
+
+        adsNode.Attributes.Append(showAdsValue);
 
 #if UNITY_EDITOR
         doc.Save(Application.persistentDataPath + "/soa.xml");
@@ -564,6 +585,16 @@ public class SaveFile
             default:
                 return 0;
         }
+    }
+
+    public bool ShowAds()
+    {
+        return showAds;
+    }
+
+    public void DisableAds()
+    {
+        showAds = false;
     }
 
     public void AddTile(Tile tile)

@@ -47,7 +47,7 @@ public class EndEarlyState : GameState
                            "Continue"))
             {
                 Network.Disconnect();
-                Application.LoadLevel("MiniGameMenu");
+                LevelQueue.LoadLevel("MiniGameMenu");
             }
         }
     }

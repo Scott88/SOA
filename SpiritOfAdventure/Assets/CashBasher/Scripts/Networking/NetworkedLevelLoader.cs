@@ -44,7 +44,7 @@ public class NetworkedLevelLoader : MonoBehaviour {
         otherLoaded = false;
 
         Network.SetLevelPrefix(prefix);
-        LevelQueue.LoadLevel(levelName);
+        LevelQueue.LoadLevel(levelName, false, false);
     }
 
     public void Ready(int enemyCostume)

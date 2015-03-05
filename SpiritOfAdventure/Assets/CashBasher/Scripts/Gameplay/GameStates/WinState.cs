@@ -74,7 +74,7 @@ public class WinState : GameState
                            "Continue"))
             {
                 Network.Disconnect();
-                Application.LoadLevel("MiniGameMenu");
+                LevelQueue.LoadLevel("MiniGameMenu");
             }
         }
     }

@@ -66,7 +66,7 @@ public class LoseState : GameState {
                            "Continue"))
             {
                 Network.Disconnect();
-                Application.LoadLevel("MiniGameMenu");
+                LevelQueue.LoadLevel("MiniGameMenu");
             }
         }
     }

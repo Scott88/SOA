@@ -9,13 +9,30 @@ public class LevelLoader : MonoBehaviour
 	{
         hintDisplay.text = FindObjectOfType<HintList>().GetRandomHint();
 
-		if (LevelQueue.UsesInt())
-		{
-			Application.LoadLevel(LevelQueue.GetNextLevel());
-		}
-		else
-		{
-			Application.LoadLevel(LevelQueue.GetNextLevelString());
-		}
+        if (LevelQueue.ShowAds())
+        {
+            AdPlayer player = FindObjectOfType<AdPlayer>();
+
+            if (player)
+            {
+                player.TryShowAd();
+            }
+        }
+        else
+        {
+            Load();
+        }
 	}
+
+    public void Load()
+    {
+        if (LevelQueue.UsesInt())
+        {
+            Application.LoadLevel(LevelQueue.GetNextLevel());
+        }
+        else
+        {
+            Application.LoadLevel(LevelQueue.GetNextLevelString());
+        }
+    }
 }

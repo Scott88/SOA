@@ -19,6 +19,8 @@ public class NetworkedCannonBall : MonoBehaviour
 
     private Vector3 previousVel;
 
+    private bool applicationIsQuitting = false;
+
     void Start()
     {
         manager = FindObjectOfType<CashBasherManager>() as CashBasherManager;
@@ -135,8 +137,15 @@ public class NetworkedCannonBall : MonoBehaviour
         rigidbody2D.velocity = velocity;
     }
 
+    void OnApplicationQuit() { applicationIsQuitting = true; } 
+
     void OnDestroy()
     {
+        if (applicationIsQuitting)
+        {
+            return;
+        }
+
         Instantiate(splitPoof, transform.position, Quaternion.identity);
 
         if (networkView.isMine)

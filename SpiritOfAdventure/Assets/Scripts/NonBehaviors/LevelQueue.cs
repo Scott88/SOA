@@ -13,7 +13,9 @@ public class LevelQueue
 
 	private static bool usesInt;
 
-	public static void LoadLevel(int nextLevel, bool immediate = false)
+    private static bool ads;
+
+	public static void LoadLevel(int nextLevel, bool immediate = false, bool showAds = true)
 	{
         previousLevel = Application.loadedLevel;
 
@@ -23,13 +25,14 @@ public class LevelQueue
         }
         else
         {
+            ads = showAds;
             levelToLoadInt = nextLevel;
             usesInt = true;
-            Application.LoadLevel(2);
+            Application.LoadLevel("LoadingScreen");
         }
 	}
 
-    public static void LoadLevel(string nextLevel, bool immediate = false)
+    public static void LoadLevel(string nextLevel, bool immediate = false, bool showAds = true)
 	{
         previousLevel = Application.loadedLevel;
 
@@ -39,9 +42,10 @@ public class LevelQueue
         }
         else
         {
+            ads = showAds;
             levelToLoadString = nextLevel;
             usesInt = false;
-            Application.LoadLevel(2);
+            Application.LoadLevel("LoadingScreen");
         }
 	}
 
@@ -59,6 +63,11 @@ public class LevelQueue
 	{
 		return levelToLoadString;
 	}
+
+    public static bool ShowAds()
+    {
+        return ads;
+    }
 
     public static void LoadPreviousLevel()
     {
