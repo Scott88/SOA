@@ -17,6 +17,10 @@ public class LevelLoader : MonoBehaviour
             {
                 player.TryShowAd();
             }
+            else
+            {
+                Load();
+            }
         }
         else
         {

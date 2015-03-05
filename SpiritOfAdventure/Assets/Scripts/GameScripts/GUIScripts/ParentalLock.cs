@@ -32,8 +32,8 @@ public class ParentalLock : MonoBehaviour
 
             int firstNumber, secondNumber;
 
-            firstNumber = Random.Range(4, 9);
-            secondNumber = Random.Range(11, 15);
+            firstNumber = Random.Range(4, 10);
+            secondNumber = Random.Range(11, 16);
 
             mathText.text = firstNumber + " x " + secondNumber + " =";
 
@@ -49,7 +49,7 @@ public class ParentalLock : MonoBehaviour
                 {
                     good = true;
 
-                    answers[j] = Random.Range(44, 135);
+                    answers[j] = Random.Range(44, 136);
 
                     if (answers[j] == correctAnswer)
                     {

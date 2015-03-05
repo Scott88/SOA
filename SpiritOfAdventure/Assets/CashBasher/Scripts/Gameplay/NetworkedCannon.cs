@@ -33,6 +33,8 @@ public class NetworkedCannon : MonoBehaviour
 
     public GameObject cannonSmoke;
 
+    public TextMesh angleIndicator;
+
     public Animator cannonAnimator;
 
     public Renderer cannonRenderer;
@@ -303,6 +305,8 @@ public class NetworkedCannon : MonoBehaviour
         startRotation = cannonPivot.transform.localRotation;
 
         markerPivot.transform.localRotation = direction;
+
+        angleIndicator.text = direction.eulerAngles.z.ToString("0") + "°";
     }
 
     [RPC]
@@ -317,6 +321,8 @@ public class NetworkedCannon : MonoBehaviour
         velocity = vel;
 
         currentState = CannonState.CS_FIRING;
+
+        angleIndicator.text = "";
     }
 
     public bool CanApplyBuff(SpiritType type)
@@ -429,6 +435,7 @@ public class NetworkedCannon : MonoBehaviour
 
     public void Activate()
     {
+
         timer = 0f;
         markerPivot.transform.eulerAngles = new Vector3(0f, 0f, GetAngle());
         currentState = CannonState.CS_ROTATING;
