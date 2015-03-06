@@ -425,6 +425,8 @@ public class NetworkedCannon : MonoBehaviour
 
         audio.Play();
 
+        manager.cameraMan.ShakeCamera(1.0f, 2.5f);
+
         buff = SpiritType.ST_NULL;
         debuff = SpiritType.ST_NULL;
         cannonRenderer.material.color = Color.white;

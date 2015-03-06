@@ -110,6 +110,8 @@ public class Breakable : MonoBehaviour
         health--;
         blockAnimator.SetInteger("Health", health);
 
+        manager.cameraMan.ShakeCamera(0.6f, 2.0f);
+
         if (statusAnimator)
         {
             statusAnimator.SetInteger("Health", health);
@@ -155,6 +157,8 @@ public class Breakable : MonoBehaviour
     {
         health--;
         blockAnimator.SetInteger("Health", health);
+
+        manager.cameraMan.ShakeCamera(0.6f, 2.0f);
 
         if (statusAnimator)
         {
