@@ -223,9 +223,9 @@ public class SaveFile
         }
         else
         {
-            greenSpiritInv = 5;
-            blueSpiritInv = 5;
-            redSpiritInv = 5;
+            greenSpiritInv = 0;
+            blueSpiritInv = 0;
+            redSpiritInv = 0;
         }
 
         XmlElement blockInvNode = saveNode["BlockInventory"];
@@ -239,8 +239,8 @@ public class SaveFile
         else
         {
             woodBlockInv = 5;
-            stoneBlockInv = 5;
-            metalBlockInv = 5;
+            stoneBlockInv = 0;
+            metalBlockInv = 0;
         }
 
         XmlElement starsNode = saveNode["Stars"];

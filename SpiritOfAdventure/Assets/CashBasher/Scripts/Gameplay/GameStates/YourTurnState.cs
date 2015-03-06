@@ -13,6 +13,8 @@ public class YourTurnState : GameState
 
     public NetworkedTileSet serverTileSet, clientTileSet;
 
+    public TextMesh timerText;
+
     NetworkedCannon yourCannon;
 
     Vector3 spiritWaypoint;
@@ -65,6 +67,8 @@ public class YourTurnState : GameState
 
         moveLeftPos = manager.clientCamFocus.transform.position.x - manager.playerCamera.orthographicSize;
         moveRightPos = manager.serverCamFocus.transform.position.x + manager.playerCamera.orthographicSize;
+
+        timerText.text = "";
     }
 
     public override void Prepare()
@@ -151,7 +155,7 @@ public class YourTurnState : GameState
                 manager.SwitchToState((int)GamePhase.GP_THEIR_TURN);
             }
         }
-        else if(!cannonFired)
+        else if (!cannonFired)
         {
             if (timer > 0f)
             {
@@ -172,16 +176,18 @@ public class YourTurnState : GameState
                     }
                 }
 
-                if (timer < 10f)
-                {
-                    manager.gameText.text = "Time Left: " + timer.ToString("0");
-                }
+                timerText.text = timer.ToString("0");
             }
             else
             {
+                timerText.text = "";
                 yourCannon.ForceFire();
                 cannonFired = true;
             }
+        }
+        else
+        {
+            timerText.text = "";
         }
     }
 

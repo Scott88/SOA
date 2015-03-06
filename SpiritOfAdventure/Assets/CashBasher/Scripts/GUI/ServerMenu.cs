@@ -1,5 +1,5 @@
 ﻿//#define HOME_LAN
-//#define RABBIT_HOLE_SERVER
+#define RABBIT_HOLE_SERVER
 
 using UnityEngine;
 using System.Collections;
@@ -16,7 +16,7 @@ public class ServerMenu : MonoBehaviour
 
     public BlockEditor editor;
 
-    public static readonly string GAME_NAME = "CashBasher";
+    public static readonly string GAME_NAME = "CashBasher2";
 
     private bool readyToStart = false;
     private bool serverFailed = false;
