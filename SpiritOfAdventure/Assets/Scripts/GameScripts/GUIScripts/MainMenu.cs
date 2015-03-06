@@ -52,14 +52,14 @@ public class MainMenu : FocusPoint
 			{
 				focus.PlayButtonSound();
 				focus.SetTarget(credits);
-				//PlayerPrefs.DeleteAll();
+				
 			}
 			
 			if(GUI.Button(new Rect(Screen.width * (0.53f),Screen.height * (0.55f),Screen.width * (0.25f), Screen.height * (1f/7f)), "Costumes")) 
 			{
 				focus.PlayButtonSound();
 				Application.LoadLevel("HorizontalTabs");
-				PlayerPrefs.DeleteAll();
+
 			}
 
 #if UNITY_EDITOR
