@@ -33,7 +33,7 @@ public class NetworkedCannon : MonoBehaviour
 
     public GameObject cannonSmoke;
 
-    public TextMesh angleIndicator;
+    public TextMesh indicator;
 
     public Animator cannonAnimator;
 
@@ -78,6 +78,9 @@ public class NetworkedCannon : MonoBehaviour
 
     private SpiritType buff, debuff;
 
+    private float fadeOutTimer;
+    private Color indicatorColor;
+
     void Start()
     {
         manager = FindObjectOfType<CashBasherManager>();
@@ -96,6 +99,8 @@ public class NetworkedCannon : MonoBehaviour
         velocity = minVelocity;
 
         SetPowerIndicator();
+
+        indicatorColor = indicator.renderer.material.color;
     }
 
     void OnCollisionEnter2D(Collision2D coll)
@@ -120,6 +125,14 @@ public class NetworkedCannon : MonoBehaviour
 
     void Update()
     {
+        if (fadeOutTimer > 0f)
+        {
+            fadeOutTimer -= Time.deltaTime;
+
+            indicatorColor.a = Mathf.Lerp(0.0f, 1.0f, fadeOutTimer);
+            indicator.renderer.material.color = indicatorColor;
+        }
+
         if (currentState == CannonState.CS_ROTATING)
         {
             float angle = GetAngle();
@@ -306,7 +319,7 @@ public class NetworkedCannon : MonoBehaviour
 
         markerPivot.transform.localRotation = direction;
 
-        angleIndicator.text = direction.eulerAngles.z.ToString("0") + "°";
+        StartCoroutine(DisplayMessage(direction.eulerAngles.z.ToString("0") + "°"));
     }
 
     [RPC]
@@ -322,7 +335,7 @@ public class NetworkedCannon : MonoBehaviour
 
         currentState = CannonState.CS_FIRING;
 
-        angleIndicator.text = "";
+        StartCoroutine(DisplayMessage(((vel - minVelocity) / velocityRange * 100f).ToString("0") + "%"));
     }
 
     public bool CanApplyBuff(SpiritType type)
@@ -433,6 +446,28 @@ public class NetworkedCannon : MonoBehaviour
 
         currentState = CannonState.CS_FIRED;
         knockbackTimer = knockbackDuration;
+    }
+
+    IEnumerator DisplayMessage(string message)
+    {
+        indicatorColor.a = 1f;
+        indicator.renderer.material.color = indicatorColor;
+
+        fadeOutTimer = -1f;
+
+        indicator.text = message;
+
+        float timer = 2.0f;
+
+        while (timer > 0f)
+        {
+            fadeOutTimer = -1f;
+
+            timer -= Time.deltaTime;
+            yield return 0;
+        }
+
+        fadeOutTimer = 1f;
     }
 
     public void Activate()

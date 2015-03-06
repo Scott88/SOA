@@ -303,6 +303,8 @@ public class CashBasherManager : MonoBehaviour
                 damper.target = clientWaypoint.transform.position;
             }
         }
+
+        damper.duration = 1.0f;
     }
 
     public void TransferStar(Vector3 origin, int starCount, float gapFactor = 0.75f)
@@ -314,8 +316,8 @@ public class CashBasherManager : MonoBehaviour
 
     public void RandomizeTreasure()
     {
-        int x = Random.Range(0, 3);
-        int y = Random.Range(0, 4);
+        int x = Random.Range(0, serverSet.treasureWidth);
+        int y = Random.Range(0, serverSet.treasureHeight);
 
         networkView.RPC("PlaceTreasureAndLoad", RPCMode.All, x, y);
     }
