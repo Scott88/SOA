@@ -5,6 +5,15 @@ public class TheirTurnState : GameState
 {
     public CashBasherManager manager;
 
+    //public NetworkedTileSet serverTileSet, clientTileSet;
+
+    //private NetworkedTileSet myTileSet;
+
+    //void Start()
+    //{
+    //    myTileSet = Network.isServer ? serverTileSet : clientTileSet;
+    //}
+
     public override void Prepare()
     {
         manager.StartCoroutine(Preshow());

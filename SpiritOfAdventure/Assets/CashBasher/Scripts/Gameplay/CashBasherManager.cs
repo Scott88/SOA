@@ -218,7 +218,7 @@ public class CashBasherManager : MonoBehaviour
     }
 
     [RPC]
-    void UpdateEffectStatus()
+    public void UpdateEffectStatus()
     {
         if (Network.isServer)
         {
