@@ -201,24 +201,24 @@ public class NetworkedCannon : MonoBehaviour
             timer -= anglePeriod * 2f;
         }
 
-        float resultingAngle;
+        float timePoint;
 
         if (timer < anglePeriod)
         {
-            resultingAngle = (timer / anglePeriod) * angleRange + minAngle;
+            timePoint = timer;
         }
         else
         {
-            resultingAngle = ((2f * anglePeriod - timer) / anglePeriod) * angleRange + minAngle;
+            timePoint = 2f * anglePeriod - timer;
         }
 
         if (debuff == SpiritType.ST_GREEN)
         {
-            return resultingAngle * greenDebuffCap;
+            return (timePoint / anglePeriod) * angleRange * greenDebuffCap + minAngle;
         }
         else
         {
-            return resultingAngle;
+            return (timePoint / anglePeriod) * angleRange + minAngle;
         }
     }
 
@@ -238,24 +238,24 @@ public class NetworkedCannon : MonoBehaviour
             timer -= velocityPeriod * 2f;
         }
 
-        float resultingPower;
+        float timePoint;
 
         if (timer < velocityPeriod)
         {
-            resultingPower = (timer / velocityPeriod) * velocityRange + minVelocity;
+            timePoint = timer;
         }
         else
         {
-            resultingPower = ((2f * velocityPeriod - timer) / velocityPeriod) * velocityRange + minVelocity;
+            timePoint = 2f * velocityPeriod - timer;
         }
 
         if (debuff == SpiritType.ST_BLUE)
         {
-            return resultingPower * blueDebuffCap;
+            return (timePoint / velocityPeriod) * velocityRange * greenDebuffCap + minVelocity;
         }
         else
         {
-            return resultingPower;
+            return (timePoint / velocityPeriod) * velocityRange + minVelocity;
         }
     }
 
