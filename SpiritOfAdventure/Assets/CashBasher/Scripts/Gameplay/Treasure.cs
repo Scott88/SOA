@@ -12,6 +12,16 @@ public class Treasure : MonoBehaviour
 
     public GameObject coinExplosion;
 
+    private int stars;
+
+    private CashBasherManager manager;
+
+    void Start()
+    {
+        stars = (int)(FindObjectOfType<NetworkedLevelLoader>().othersCastleWorth * starMultiplier);
+        manager = FindObjectOfType<CashBasherManager>();
+    }
+
     void OnCollisionEnter2D(Collision2D coll)
     {
         if (coll.collider.tag == "CannonBall")
@@ -35,9 +45,9 @@ public class Treasure : MonoBehaviour
 
     public void Damage()
     {
-        FindObjectOfType<CashBasherManager>().SwitchToState((int)GamePhase.GP_WIN);
+        manager.SwitchToState((int)GamePhase.GP_WIN);
         Instantiate(coinExplosion, transform.position + Vector3.back * 5, Quaternion.Euler(270f, 0f, 0f));
-        FindObjectOfType<CashBasherManager>().TransferStar(transform.position, (int)(FindObjectOfType<NetworkedLevelLoader>().othersCastleWorth * starMultiplier), 0.1f);
+        manager.TransferStar(transform.position, stars);
         Destroy(gameObject);
         networkView.RPC("NetDamage", RPCMode.Others);
     }
@@ -45,8 +55,8 @@ public class Treasure : MonoBehaviour
     [RPC]
     public void NetDamage()
     {
-        FindObjectOfType<CashBasherManager>().SwitchToState((int)GamePhase.GP_LOSE);
+        manager.SwitchToState((int)GamePhase.GP_LOSE);
         Instantiate(coinExplosion, transform.position + Vector3.back * 5, Quaternion.Euler(270f, 0f, 0f));
         Destroy(gameObject);
-    }
+    } 
 }

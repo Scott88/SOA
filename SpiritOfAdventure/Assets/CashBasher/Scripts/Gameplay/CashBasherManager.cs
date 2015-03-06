@@ -325,6 +325,7 @@ public class CashBasherManager : MonoBehaviour
         yourTurnState.ReadyNextTurn();
     }
 
+
     [RPC]
     void PlaceTreasureAndLoad(int x, int y)
     {
