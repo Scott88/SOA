@@ -125,12 +125,8 @@ public class YourTurnState : GameState
 
     public void ReadyNextTurn()
     {
-        if (!nextTurn)
-        {
-            timer = 1f;
-            manager.networkView.RPC("UpdateEffectStatus", RPCMode.Others);
-        }
-
+        timer = 1f;
+        manager.networkView.RPC("UpdateEffectStatus", RPCMode.Others);
         nextTurn = true;
     }
 

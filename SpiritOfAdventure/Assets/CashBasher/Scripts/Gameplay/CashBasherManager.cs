@@ -18,6 +18,8 @@ public class CashBasherManager : MonoBehaviour
     public float blockSpiritChance = 0.1f;
     public int minimumSpirits = 1;
 
+    public bool quitOnPause = true;
+
     public bool startLookingAtTarget;
 
     public Camera playerCamera, guiCamera;
@@ -434,15 +436,18 @@ public class CashBasherManager : MonoBehaviour
 
     void OnApplicationPause(bool pauseState)
     {
-        if (connectionRequired)
+        if (quitOnPause)
         {
-            networkView.RPC("NetworkedPause", RPCMode.Others, pauseState);
-            connectionRequired = false;
+            if (connectionRequired)
+            {
+                networkView.RPC("NetworkedPause", RPCMode.Others, pauseState);
+                connectionRequired = false;
 
-            leaveImmediate = true;
+                leaveImmediate = true;
+            }
+
+            Network.Disconnect();
         }
-
-        Network.Disconnect();
 
 #if UNITY_EDITOR
         if (pauseState)
