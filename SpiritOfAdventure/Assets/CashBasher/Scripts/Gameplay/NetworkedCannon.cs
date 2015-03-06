@@ -425,7 +425,7 @@ public class NetworkedCannon : MonoBehaviour
 
         audio.Play();
 
-        manager.cameraMan.ShakeCamera(1.0f, 2.5f);
+        manager.cameraMan.ShakeCamera(0.75f, 1.0f);
 
         buff = SpiritType.ST_NULL;
         debuff = SpiritType.ST_NULL;
@@ -437,7 +437,6 @@ public class NetworkedCannon : MonoBehaviour
 
     public void Activate()
     {
-
         timer = 0f;
         markerPivot.transform.eulerAngles = new Vector3(0f, 0f, GetAngle());
         currentState = CannonState.CS_ROTATING;

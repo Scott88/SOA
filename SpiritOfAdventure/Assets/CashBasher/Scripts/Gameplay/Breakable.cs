@@ -70,6 +70,8 @@ public class Breakable : MonoBehaviour
                     collisionSound.Play();
                 }
 
+                manager.cameraMan.ShakeCamera(0.4f, 1.0f);
+
                 NetworkedCannonBall ball = coll.gameObject.GetComponent<NetworkedCannonBall>() as NetworkedCannonBall;
 
                 if (!ball.networkView.isMine || networkView.isMine)
@@ -110,7 +112,7 @@ public class Breakable : MonoBehaviour
         health--;
         blockAnimator.SetInteger("Health", health);
 
-        manager.cameraMan.ShakeCamera(0.6f, 2.0f);
+        
 
         if (statusAnimator)
         {
@@ -157,8 +159,6 @@ public class Breakable : MonoBehaviour
     {
         health--;
         blockAnimator.SetInteger("Health", health);
-
-        manager.cameraMan.ShakeCamera(0.6f, 2.0f);
 
         if (statusAnimator)
         {
