@@ -1,0 +1,183 @@
+fileFormatVersion: 2
+guid: c917df6277d43734ab4dca64b407bffa
+TextureImporter:
+  fileIDToRecycleName:
+    21300000: PirateFortAttachements01_0
+    21300002: PirateFortAttachements01_1
+    21300004: PirateFortAttachements01_2
+    21300006: PirateFortAttachements01_3
+    21300008: PirateFortAttachements01_4
+    21300010: PirateFortAttachements01_5
+    21300012: PirateFortAttachements01_6
+    21300014: PirateFortAttachements01_7
+    21300016: PirateFortAttachements01_8
+    21300018: PirateFortAttachements01_9
+    21300020: PirateFortAttachements01_10
+    21300022: PirateFortAttachements01_11
+  serializedVersion: 2
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 1
+    linearTexture: 0
+    correctGamma: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: .25
+    normalMapFilter: 0
+  isReadable: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 0
+  seamlessCubemap: 0
+  textureFormat: -1
+  maxTextureSize: 1024
+  textureSettings:
+    filterMode: 0
+    aniso: 16
+    mipBias: -1
+    wrapMode: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: .5, y: .5}
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spritePixelsToUnits: 100
+  alphaIsTransparency: 1
+  textureType: 8
+  buildTargetSettings:
+  - buildTarget: Android
+    maxTextureSize: 1024
+    textureFormat: -1
+    compressionQuality: 50
+  spriteSheet:
+    sprites:
+    - name: PirateFortAttachements01_0
+      rect:
+        serializedVersion: 2
+        x: 99
+        y: 403
+        width: 208
+        height: 585
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: PirateFortAttachements01_1
+      rect:
+        serializedVersion: 2
+        x: 428
+        y: 397
+        width: 206
+        height: 593
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: PirateFortAttachements01_2
+      rect:
+        serializedVersion: 2
+        x: 719
+        y: 403
+        width: 206
+        height: 585
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: PirateFortAttachements01_3
+      rect:
+        serializedVersion: 2
+        x: 935
+        y: 431
+        width: 4
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: PirateFortAttachements01_4
+      rect:
+        serializedVersion: 2
+        x: 6
+        y: 228
+        width: 266
+        height: 150
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: PirateFortAttachements01_5
+      rect:
+        serializedVersion: 2
+        x: 342
+        y: 251
+        width: 90
+        height: 55
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: PirateFortAttachements01_6
+      rect:
+        serializedVersion: 2
+        x: 515
+        y: 247
+        width: 89
+        height: 79
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: PirateFortAttachements01_7
+      rect:
+        serializedVersion: 2
+        x: 9
+        y: 20
+        width: 389
+        height: 59
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: PirateFortAttachements01_8
+      rect:
+        serializedVersion: 2
+        x: 416
+        y: 20
+        width: 89
+        height: 99
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: PirateFortAttachements01_9
+      rect:
+        serializedVersion: 2
+        x: 534
+        y: 20
+        width: 64
+        height: 71
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: PirateFortAttachements01_10
+      rect:
+        serializedVersion: 2
+        x: 612
+        y: 12
+        width: 210
+        height: 215
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: PirateFortAttachements01_11
+      rect:
+        serializedVersion: 2
+        x: 832
+        y: 12
+        width: 186
+        height: 127
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+  spritePackingTag: 
+  userData: 
