@@ -275,36 +275,41 @@ public class CashBasherManager : MonoBehaviour
 
     void TransferSpirit(CashBasherSpiritGUI gui, GameObject transferPref, Vector3 position, bool myBlock)
     {
-        GameObject transferedSpirit = Instantiate(transferPref, position, Quaternion.identity) as GameObject;
-
-        SmoothDamper damper = transferedSpirit.GetComponent<SmoothDamper>();
-
-        if (myBlock)
+        if (!myBlock)
         {
-            if (Network.isServer)
-            {
-                damper.target = clientWaypoint.transform.position;
-            }
-            else
-            {
-                damper.target = serverWaypoint.transform.position;
-            }
-        }
-        else
-        {
+            GameObject transferedSpirit = Instantiate(transferPref, position + Vector3.up, Quaternion.identity) as GameObject;
+
             gui.Add();
-
-            if (Network.isServer)
-            {
-                damper.target = serverWaypoint.transform.position;
-            }
-            else
-            {
-                damper.target = clientWaypoint.transform.position;
-            }
         }
 
-        damper.duration = 1.0f;
+        //SmoothDamper damper = transferedSpirit.GetComponent<SmoothDamper>();
+
+        //if (myBlock)
+        //{
+        //    if (Network.isServer)
+        //    {
+        //        damper.target = clientWaypoint.transform.position;
+        //    }
+        //    else
+        //    {
+        //        damper.target = serverWaypoint.transform.position;
+        //    }
+        //}
+        //else
+        //{
+        //    gui.Add();
+
+        //    if (Network.isServer)
+        //    {
+        //        damper.target = serverWaypoint.transform.position;
+        //    }
+        //    else
+        //    {
+        //        damper.target = clientWaypoint.transform.position;
+        //    }
+        //}
+
+        //damper.duration = 1.0f;
     }
 
     public void TransferStar(Vector3 origin, int starCount, float gapFactor = 0.75f)

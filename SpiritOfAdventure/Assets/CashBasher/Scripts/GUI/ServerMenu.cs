@@ -1,5 +1,5 @@
-﻿//#define HOME_LAN
-#define RABBIT_HOLE_SERVER
+﻿#define HOME_LAN
+//#define RABBIT_HOLE_SERVER
 
 using UnityEngine;
 using System.Collections;
@@ -27,8 +27,8 @@ public class ServerMenu : MonoBehaviour
     void Start()
     {
 #if HOME_LAN
-        MasterServer.ipAddress = "192.168.2.18";
-        Network.natFacilitatorIP = "192.168.2.18";
+        MasterServer.ipAddress = "192.168.2.12";
+        Network.natFacilitatorIP = "192.168.2.12";
         Network.natFacilitatorPort = 50005;
 #elif RABBIT_HOLE_SERVER
         MasterServer.ipAddress = "rabbitholestudios.ca";
