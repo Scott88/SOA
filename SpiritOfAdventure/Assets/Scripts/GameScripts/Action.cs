@@ -11,6 +11,7 @@ public abstract class SOAAction : MonoBehaviour
 {
 	public float delay;
 	public AudioClip[] activationSounds;
+    public AudioSource targetSource;
 	public SOAAction[] resultingActions = null;
 
 	public bool triggered { get; set; }
@@ -63,8 +64,16 @@ public abstract class SOAAction : MonoBehaviour
 
 				if (activationSounds.Length > 0)
 				{
-					audio.clip = activationSounds[Random.Range(0, activationSounds.Length - 1)];
-					audio.Play();
+                    if (targetSource)
+                    {
+                        targetSource.clip = activationSounds[Random.Range(0, activationSounds.Length - 1)];
+                        targetSource.Play();
+                    }
+                    else
+                    {
+                        audio.clip = activationSounds[Random.Range(0, activationSounds.Length - 1)];
+                        audio.Play();
+                    }
 				}
 
                 primed = false;

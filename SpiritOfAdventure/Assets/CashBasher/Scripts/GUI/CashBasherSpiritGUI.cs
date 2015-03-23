@@ -9,6 +9,8 @@ public class CashBasherSpiritGUI : MonoBehaviour
 
     public TextMesh display;
 
+    public GameObject spiritSpent;
+
     private int count;
 
     void Start()
@@ -36,5 +38,7 @@ public class CashBasherSpiritGUI : MonoBehaviour
         display.text = "x" + count;
 
         SaveFile.Instance().ModifySpiritInventory(type, -1);
+
+        Instantiate(spiritSpent, transform.position + Vector3.down, Quaternion.identity);
     }  
 }

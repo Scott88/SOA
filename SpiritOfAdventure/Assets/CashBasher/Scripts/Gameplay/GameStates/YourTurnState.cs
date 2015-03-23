@@ -33,6 +33,7 @@ public class YourTurnState : GameState
 
     Vector3 buttonDownPos, buttonUpPos;
 
+    bool spiritUsed = false;
     bool showButtons = true;
 
     bool airGrabbed = false, cameraGrabbed = false;
@@ -123,6 +124,7 @@ public class YourTurnState : GameState
         yourCannon.Activate();
 
         showButtons = true;
+        spiritUsed = false;
 
         turnStarted = true;
     }
@@ -226,7 +228,7 @@ public class YourTurnState : GameState
 
         RaycastHit2D hit2d = Physics2D.Raycast(rayOrigin, rayDirection);
 
-        if (hit2d && showButtons)
+        if (hit2d && !spiritUsed)
         {
             CashBasherSpiritGUI spiritGUI = hit2d.collider.GetComponent<CashBasherSpiritGUI>();
 
@@ -403,7 +405,7 @@ public class YourTurnState : GameState
                         {
                             selectedSpirit.MoveHereAndTrigger(cannonListener.cannon.team == 0);
 
-                            showButtons = false;
+                            StartCoroutine(UseSpirit());
 
                             holdingSpirit = false;
                             selectedSpirit = null;
@@ -418,7 +420,7 @@ public class YourTurnState : GameState
                     selectedSpirit.healAOE.SetActive(false);
                     selectedSpirit.MoveHereAndHeal(manager.playerCamera.ScreenToWorldPoint(Input.mousePosition), Network.isServer);
 
-                    showButtons = false;
+                    StartCoroutine(UseSpirit());
 
                     holdingSpirit = false;
                     selectedSpirit = null;
@@ -434,6 +436,13 @@ public class YourTurnState : GameState
                 return;
             }
         }
+    }
+
+    IEnumerator UseSpirit()
+    {
+        spiritUsed = true;
+        yield return new WaitForSeconds(0.8f);
+        showButtons = false;
     }
 
     void SummonSpirit(CashBasherSpiritGUI spiritGUI, bool holding)
