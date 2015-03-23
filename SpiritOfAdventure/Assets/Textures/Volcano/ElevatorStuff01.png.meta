@@ -1,7 +1,10 @@
 fileFormatVersion: 2
 guid: 77453f73de456e34b81dfc16c8b9b36a
 TextureImporter:
-  fileIDToRecycleName: {}
+  fileIDToRecycleName:
+    21300000: ElevatorStuff01_0
+    21300002: ElevatorStuff01_1
+    21300004: ElevatorStuff01_2
   serializedVersion: 2
   mipmaps:
     mipMapMode: 0
@@ -24,14 +27,14 @@ TextureImporter:
   textureFormat: -1
   maxTextureSize: 1024
   textureSettings:
-    filterMode: -1
-    aniso: -1
+    filterMode: 0
+    aniso: 16
     mipBias: -1
-    wrapMode: -1
+    wrapMode: 1
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
-  spriteMode: 1
+  spriteMode: 2
   spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
@@ -40,8 +43,42 @@ TextureImporter:
   spritePixelsToUnits: 100
   alphaIsTransparency: 1
   textureType: 8
-  buildTargetSettings: []
+  buildTargetSettings:
+  - buildTarget: Android
+    maxTextureSize: 1024
+    textureFormat: -1
+    compressionQuality: 50
   spriteSheet:
-    sprites: []
+    sprites:
+    - name: ElevatorStuff01_0
+      rect:
+        serializedVersion: 2
+        x: 32
+        y: 316
+        width: 439
+        height: 698
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: ElevatorStuff01_1
+      rect:
+        serializedVersion: 2
+        x: 11
+        y: 142
+        width: 490
+        height: 149
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: ElevatorStuff01_2
+      rect:
+        serializedVersion: 2
+        x: 11
+        y: 1
+        width: 490
+        height: 126
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
   spritePackingTag: 
   userData: 
