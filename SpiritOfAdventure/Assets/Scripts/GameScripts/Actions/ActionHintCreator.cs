@@ -37,7 +37,7 @@ public class ActionHintCreator : SOAAction
 		{
 			GUI.skin = skin;
 
-			if (GUI.Button(new Rect(Screen.width * (0.85f), Screen.height * (0.85f), Screen.width * (0.1f), Screen.height * (0.1f)), "HINT"))
+			if (GUI.Button(new Rect(Screen.width * (0.80f), Screen.height * (0.75f), Screen.width * (0.15f), Screen.height * (0.12f)), "HINT"))
 			{
 				gameManager.hintManager.CreateHint(transform.position + offset, scale, type);
 				showButton = false;
