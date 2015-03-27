@@ -23,6 +23,7 @@ public class StarCounter : MonoBehaviour
     {
         stars += count;
         starDisplay.text = "x" + stars;
+        audio.Play();
     }
 
     public void Remove(int count)
