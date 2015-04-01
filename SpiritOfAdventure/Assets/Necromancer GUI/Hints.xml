@@ -1,11 +1,32 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <Hints>
-  <Hint>This is 
-  a hint</Hint>
-  <Hint>This is 
-  another hint</Hint>
-  <Hint>Wow, a 
-  third hint</Hint>
-  <Hint>SCOTT MADE 
-  A HINT YAY</Hint>
+  <Hint>Stars can be used in the store!</Hint>
+  
+  <Hint>Spirits can power up your cannon in versus</Hint>
+  
+  <Hint>Spirits can remove status effects in versus</Hint>
+  
+  <Hint>Wood blocks are weak to a fire power up</Hint>
+
+<Hint>Stone blocks are weak to a water power up</Hint>
+
+<Hint>Metal blocks are weak to a earth power up</Hint>
+
+<Hint>Chapter one has two paths</Hint>
+
+<Hint>Chapter two has two paths</Hint>
+
+<Hint>The earth spirit can grow plants</Hint>
+
+<Hint>The fire spirit can burn obstacles</Hint>
+
+<Hint>The water spirit can create water</Hint>
+
+<Hint>Remember to think outside the box</Hint>
+
+<Hint>The earth spirit can remove water from metal blocks</Hint>
+
+<Hint>The water spirit can remove fire from wood blocks</Hint>
+
+<Hint>The fire spirit can remove vines from stone blocks</Hint>
 </Hints>
