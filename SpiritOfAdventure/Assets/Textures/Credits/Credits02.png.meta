@@ -3,12 +3,12 @@ guid: 4cbce5892629011489985e52cb77dc60
 TextureImporter:
   fileIDToRecycleName:
     21300000: Credits02_0
-    21300002: Credits02_1
-    21300004: Credits02_2
-    21300006: Credits02_3
-    21300008: Credits02_4
-    21300010: Credits02_5
-    21300012: Credits02_6
+    21300002: 26
+    21300004: 30
+    21300006: 250
+    21300008: 300
+    21300010: 25
+    21300012: 50
   serializedVersion: 2
   mipmaps:
     mipMapMode: 0
@@ -57,70 +57,70 @@ TextureImporter:
     - name: Credits02_0
       rect:
         serializedVersion: 2
-        x: 264
-        y: 299
-        width: 196
-        height: 60
+        x: 528
+        y: 598
+        width: 393
+        height: 120
       alignment: 0
       pivot: {x: .5, y: .5}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: Credits02_1
+    - name: 26
       rect:
         serializedVersion: 2
-        x: 224
-        y: 453
-        width: 147
-        height: 48
+        x: 448
+        y: 905
+        width: 294
+        height: 97
       alignment: 0
       pivot: {x: .5, y: .5}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: Credits02_2
+    - name: 30
       rect:
         serializedVersion: 2
-        x: 231
-        y: 389
-        width: 118
-        height: 47
+        x: 463
+        y: 776
+        width: 235
+        height: 97
       alignment: 0
       pivot: {x: .5, y: .5}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: Credits02_3
+    - name: 250
       rect:
         serializedVersion: 2
-        x: 267
-        y: 164
-        width: 205
-        height: 111
+        x: 535
+        y: 328
+        width: 407
+        height: 224
       alignment: 0
       pivot: {x: .5, y: .5}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: Credits02_4
+    - name: 300
       rect:
         serializedVersion: 2
-        x: 265
-        y: 62
-        width: 206
-        height: 84
+        x: 531
+        y: 123
+        width: 411
+        height: 165
       alignment: 0
       pivot: {x: .5, y: .5}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: Credits02_5
+    - name: 25
       rect:
         serializedVersion: 2
-        x: 11
-        y: 348
-        width: 207
-        height: 153
+        x: 23
+        y: 696
+        width: 412
+        height: 306
       alignment: 0
       pivot: {x: .5, y: .5}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: Credits02_6
+    - name: 50
       rect:
         serializedVersion: 2
-        x: 15
-        y: 99
-        width: 181
-        height: 234
+        x: 29
+        y: 200
+        width: 368
+        height: 466
       alignment: 0
       pivot: {x: .5, y: .5}
       border: {x: 0, y: 0, z: 0, w: 0}

@@ -55,7 +55,7 @@ public class MainMenu : FocusPoint
                 Application.LoadLevel("MiniGameMenu");
             }
 
-            if (GUI.Button(new Rect(Screen.width * (0.35f), Screen.height * (0.50f), Screen.width * (0.25f), Screen.height * (0.14f)), "Free Lily Bucks"))
+            if (GUI.Button(new Rect(Screen.width * (0.325f), Screen.height * (0.50f), Screen.width * (0.3f), Screen.height * (0.14f)), "Free Lily Bucks"))
             {
                 focus.PlayButtonSound();
                 Application.LoadLevel("AdReward");

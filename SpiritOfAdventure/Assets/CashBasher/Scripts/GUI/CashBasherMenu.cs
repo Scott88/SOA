@@ -77,7 +77,7 @@ public class CashBasherMenu : MonoBehaviour
                 clientMenu.SearchForServers();
             }
 
-            if (GUI.Button(new Rect(Screen.width * (0.03f), Screen.height * (0.86f), Screen.width * (0.1f), Screen.height * (0.1f)),
+            if (GUI.Button(new Rect(Screen.width * (0.03f), Screen.height * (0.84f), Screen.width * (0.15f), Screen.height * (0.1f)),
                            "Clear"))
             {
                 editor.Clear();

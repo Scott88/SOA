@@ -2,16 +2,18 @@ fileFormatVersion: 2
 guid: cace60fecdfef7d4e904f3da183332b9
 TextureImporter:
   fileIDToRecycleName:
-    21300000: Trees01_0
-    21300002: Trees01_1
-    21300004: Trees01_2
-    21300006: Trees01_3
-    21300008: Trees01_4
-    21300010: Trees01_5
-    21300012: Trees01_6
-    21300014: Trees01_7
-    21300016: Trees01_8
-    21300018: Trees01_9
+    21300000: Barrel01
+    21300002: Trees01
+    21300004: Trees02
+    21300006: Trees03
+    21300008: Barrel02
+    21300010: Barrel03
+    21300012: COCONUT
+    21300014: Trees04
+    21300016: Trees05
+    21300018: Trees06
+    21300020: Grass01
+    21300022: Grass02
   serializedVersion: 2
   mipmaps:
     mipMapMode: 0
@@ -47,7 +49,7 @@ TextureImporter:
   alignment: 0
   spritePivot: {x: .5, y: .5}
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
-  spritePixelsToUnits: 100
+  spritePixelsToUnits: 200
   alphaIsTransparency: 1
   textureType: 8
   buildTargetSettings:
@@ -57,103 +59,123 @@ TextureImporter:
     compressionQuality: 50
   spriteSheet:
     sprites:
-    - name: Trees01_0
+    - name: Barrel01
+      rect:
+        serializedVersion: 2
+        x: 16
+        y: 1744
+        width: 210
+        height: 292
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Trees01
+      rect:
+        serializedVersion: 2
+        x: 394
+        y: 1060
+        width: 542
+        height: 874
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Trees02
+      rect:
+        serializedVersion: 2
+        x: 982
+        y: 1060
+        width: 570
+        height: 868
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Trees03
+      rect:
+        serializedVersion: 2
+        x: 1569
+        y: 1060
+        width: 461
+        height: 734
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Barrel02
+      rect:
+        serializedVersion: 2
+        x: 16
+        y: 1402
+        width: 210
+        height: 292
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Barrel03
+      rect:
+        serializedVersion: 2
+        x: 20
+        y: 1060
+        width: 210
+        height: 292
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: COCONUT
       rect:
         serializedVersion: 2
         x: 8
-        y: 872
-        width: 105
-        height: 146
+        y: 670
+        width: 166
+        height: 164
       alignment: 0
       pivot: {x: .5, y: .5}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: Trees01_1
+    - name: Trees04
       rect:
         serializedVersion: 2
-        x: 200
-        y: 530
-        width: 267
-        height: 437
+        x: 234
+        y: 8
+        width: 542
+        height: 874
       alignment: 0
       pivot: {x: .5, y: .5}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: Trees01_2
+    - name: Trees05
       rect:
         serializedVersion: 2
-        x: 491
-        y: 530
-        width: 284
-        height: 434
+        x: 775
+        y: 8
+        width: 679
+        height: 1020
       alignment: 0
       pivot: {x: .5, y: .5}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: Trees01_3
+    - name: Trees06
       rect:
         serializedVersion: 2
-        x: 783
-        y: 530
-        width: 232
-        height: 367
+        x: 1496
+        y: 9
+        width: 544
+        height: 863
       alignment: 0
       pivot: {x: .5, y: .5}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: Trees01_4
+    - name: Grass01
       rect:
         serializedVersion: 2
-        x: 8
-        y: 701
-        width: 105
-        height: 146
+        x: 1328
+        y: 1968
+        width: 274
+        height: 80
       alignment: 0
       pivot: {x: .5, y: .5}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: Trees01_5
+    - name: Grass02
       rect:
         serializedVersion: 2
-        x: 10
-        y: 530
-        width: 105
-        height: 146
-      alignment: 0
-      pivot: {x: .5, y: .5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-    - name: Trees01_6
-      rect:
-        serializedVersion: 2
-        x: 1
-        y: 335
-        width: 82
-        height: 82
-      alignment: 0
-      pivot: {x: .5, y: .5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-    - name: Trees01_7
-      rect:
-        serializedVersion: 2
-        x: 120
-        y: 4
-        width: 267
-        height: 437
-      alignment: 0
-      pivot: {x: .5, y: .5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-    - name: Trees01_8
-      rect:
-        serializedVersion: 2
-        x: 405
-        y: 4
-        width: 334
-        height: 510
-      alignment: 0
-      pivot: {x: .5, y: .5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-    - name: Trees01_9
-      rect:
-        serializedVersion: 2
-        x: 749
-        y: 4
-        width: 272
-        height: 431
+        x: 1643
+        y: 1970
+        width: 313
+        height: 64
       alignment: 0
       pivot: {x: .5, y: .5}
       border: {x: 0, y: 0, z: 0, w: 0}
