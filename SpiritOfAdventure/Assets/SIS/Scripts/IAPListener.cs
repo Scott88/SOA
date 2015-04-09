@@ -128,7 +128,7 @@ namespace SIS
                     ShowMessage("Total Metal Blocks: " + SaveFile.Instance().GetBlockInventory(BlockType.BT_METAL));
                     break;
 
-                case "greenSpirts":
+                case "greenSpirits":
                     SaveFile.Instance().ModifySpiritInventory(SpiritType.ST_GREEN, 10);
                     ShowMessage("Total Earth Spirits: " + SaveFile.Instance().GetSpiritInventory(SpiritType.ST_GREEN));
                     break;
