@@ -53,6 +53,7 @@ public class IntroScreen : MonoBehaviour
             yield return 0;
         }
 
+#if UNITY_ANDROID
 #if !UNITY_EDITOR
 
         if (!OBBReady())
@@ -99,7 +100,8 @@ public class IntroScreen : MonoBehaviour
             }
         }
 
-#endif           
+#endif
+#endif 
 
 		timer = fadeOutTime;
 
