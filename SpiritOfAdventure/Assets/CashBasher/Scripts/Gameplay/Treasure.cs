@@ -45,7 +45,6 @@ public class Treasure : MonoBehaviour
 
     public void Damage()
     {
-        audio.Play();
         manager.SwitchToState((int)GamePhase.GP_WIN);
         Instantiate(coinExplosion, transform.position + Vector3.back * 5, Quaternion.Euler(270f, 0f, 0f));
         manager.TransferStar(transform.position, stars);
@@ -56,7 +55,6 @@ public class Treasure : MonoBehaviour
     [RPC]
     public void NetDamage()
     {
-        audio.Play();
         manager.SwitchToState((int)GamePhase.GP_LOSE);
         Instantiate(coinExplosion, transform.position + Vector3.back * 5, Quaternion.Euler(270f, 0f, 0f));
         Destroy(gameObject);
