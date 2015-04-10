@@ -6,15 +6,18 @@ using System;
 public class GooglePlayDownloader
 {
 	private static string PUBLIC_KEY = "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAq3eyL6rNkw/+o/Urr9auW0x3qS1HRWvL+5AacZw4G7xZGeSeK08WQStmZmCT8Q+XlJhDI8Aq4dJfHa8Yl4GpWeGd1E+SiMUzmi572vooQaX+klwl7tLqN6HGa3nlW9Sw8JtRRCcuTkKVFj5tnhP2ZFIr0ljrkBcX601EPrg8v3angnYpDa7adHWkHAGHyyW0GkCl7Ch/G82K6PoEbGsLggwJDYsSjXxG6JfW/EFaHUEJaH93aiMua7CjIzxyRVh1LxsdusXf4yR0vA3S+j7K/gZF/e9Hwl9xhRRPehhJxkFYNEg7dvM8JGnlx7zv/l8vVrjezvxBNnE6H44/E/E7mwIDAQAB";
-	private static AndroidJavaClass detectAndroidJNI;
+#if UNITY_ANDROID
+    private static AndroidJavaClass detectAndroidJNI;
+
 	public static bool RunningOnAndroid()
 	{
 		if (detectAndroidJNI == null)
 			detectAndroidJNI = new AndroidJavaClass("android.os.Build");
 		return detectAndroidJNI.GetRawClass() != IntPtr.Zero;
 	}
-	
-	private static AndroidJavaClass Environment;
+
+
+    private static AndroidJavaClass Environment;
 	private const string Environment_MEDIA_MOUNTED = "mounted";
 
 	static GooglePlayDownloader()
@@ -114,4 +117,5 @@ public class GooglePlayDownloader
 			obb_version = package_info.Get<int>("versionCode");
 		}
 	}
+#endif
 }
