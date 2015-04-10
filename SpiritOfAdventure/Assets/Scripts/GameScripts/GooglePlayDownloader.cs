@@ -5,24 +5,17 @@ using System;
 
 public class GooglePlayDownloader
 {
-<<<<<<< HEAD
+#if UNITY_ANDROID
 	private static string PUBLIC_KEY = "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAnp5egCkXSSWcXHn0hZV5ay5/Ds0oEIHYuHYIy9dhE3kdgK0NXWHNNITgBZoLPfvu4QatutUKCViIi+bFLyNpML5JbMF4fQqHNKg5EcoXP43st8aCpwMsjvNhlHz+nEgcgBf5ujR34V++MpVz432Rm6g3IJEIKDEoJDNPaOf5OenmAyjlmM+N2HjLkwuyesKK57ebVvA2/2QEn6COGySyyxq+RLvg87m/1K/lQL+EpRcZZiyVETlIIbwqfWWpwGwQxbiRKkwW6ybdUsZROQYeKBVqbCldfV0dWFwZD2WQxOZvKCM6XC80BMkdXg9tGJ6vfqvoN3oWXntMnthHzu58lwIDAQAB";
 	private static AndroidJavaClass detectAndroidJNI;
-=======
-	private static string PUBLIC_KEY = "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAq3eyL6rNkw/+o/Urr9auW0x3qS1HRWvL+5AacZw4G7xZGeSeK08WQStmZmCT8Q+XlJhDI8Aq4dJfHa8Yl4GpWeGd1E+SiMUzmi572vooQaX+klwl7tLqN6HGa3nlW9Sw8JtRRCcuTkKVFj5tnhP2ZFIr0ljrkBcX601EPrg8v3angnYpDa7adHWkHAGHyyW0GkCl7Ch/G82K6PoEbGsLggwJDYsSjXxG6JfW/EFaHUEJaH93aiMua7CjIzxyRVh1LxsdusXf4yR0vA3S+j7K/gZF/e9Hwl9xhRRPehhJxkFYNEg7dvM8JGnlx7zv/l8vVrjezvxBNnE6H44/E/E7mwIDAQAB";
-#if UNITY_ANDROID
-    private static AndroidJavaClass detectAndroidJNI;
-
->>>>>>> a6a36cbfb246c555534b844747f69d6e5cff3fbb
 	public static bool RunningOnAndroid()
 	{
 		if (detectAndroidJNI == null)
 			detectAndroidJNI = new AndroidJavaClass("android.os.Build");
 		return detectAndroidJNI.GetRawClass() != IntPtr.Zero;
 	}
-
-
-    private static AndroidJavaClass Environment;
+	
+	private static AndroidJavaClass Environment;
 	private const string Environment_MEDIA_MOUNTED = "mounted";
 
 	static GooglePlayDownloader()
