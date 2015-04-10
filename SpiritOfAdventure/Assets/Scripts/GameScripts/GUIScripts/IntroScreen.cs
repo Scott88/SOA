@@ -116,6 +116,7 @@ public class IntroScreen : MonoBehaviour
 		Application.LoadLevel("CutScene");
 	}
 
+#if UNITY_ANDROID
     bool CheckExpPath()
     {
         if (!GooglePlayDownloader.RunningOnAndroid())
@@ -148,4 +149,5 @@ public class IntroScreen : MonoBehaviour
     {
         return !GooglePlayDownloader.RunningOnAndroid() || GooglePlayDownloader.GetMainOBBPath(GooglePlayDownloader.GetExpansionFilePath()) != null;
     }
+#endif
 }
