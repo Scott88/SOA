@@ -5,6 +5,7 @@ using System;
 
 public class GooglePlayDownloader
 {
+#if UNITY_ANDROID
 	private static string PUBLIC_KEY = "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAnp5egCkXSSWcXHn0hZV5ay5/Ds0oEIHYuHYIy9dhE3kdgK0NXWHNNITgBZoLPfvu4QatutUKCViIi+bFLyNpML5JbMF4fQqHNKg5EcoXP43st8aCpwMsjvNhlHz+nEgcgBf5ujR34V++MpVz432Rm6g3IJEIKDEoJDNPaOf5OenmAyjlmM+N2HjLkwuyesKK57ebVvA2/2QEn6COGySyyxq+RLvg87m/1K/lQL+EpRcZZiyVETlIIbwqfWWpwGwQxbiRKkwW6ybdUsZROQYeKBVqbCldfV0dWFwZD2WQxOZvKCM6XC80BMkdXg9tGJ6vfqvoN3oWXntMnthHzu58lwIDAQAB";
 	private static AndroidJavaClass detectAndroidJNI;
 	public static bool RunningOnAndroid()
@@ -114,4 +115,5 @@ public class GooglePlayDownloader
 			obb_version = package_info.Get<int>("versionCode");
 		}
 	}
+#endif
 }
