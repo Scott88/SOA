@@ -9,18 +9,46 @@ public class AdReward : MonoBehaviour
 
     public GUISkin mySkin;
 
-    public GameObject loadingAdText, rewardText;
-    public TextMesh lilyBucksText;
+    public GameObject rewardText;
+    public TextMesh lilyBucksText, loadingAdText;
 
     public bool allowBack { get; set; }
 
     public static bool viewed = false;
 
+    public float failTimer = 3f;
+
     void Start()
     {
-        allowBack = true;
+        //allowBack = true;
 
-        FindObjectOfType<AdPlayer>().TryShowRewardAd();
+        AdPlayer player = FindObjectOfType<AdPlayer>();
+
+        if (player)
+        {
+            if (player.initialized)
+            {
+                player.TryShowRewardAd();
+            }
+            else
+            {
+                loadingAdText.text = "Doesn't work\non IOS yet!";
+            }
+        }
+        else
+        {
+            loadingAdText.text = "Start game\nfrom intro\nscreen!";
+        }
+    }
+
+    void Update()
+    {
+        failTimer -= Time.deltaTime;
+
+        if (failTimer <= 0f)
+        {
+            allowBack = true;
+        }
     }
 
     void OnGUI()
@@ -38,7 +66,7 @@ public class AdReward : MonoBehaviour
 
     public void Reward()
     {
-        loadingAdText.SetActive(false);
+        loadingAdText.gameObject.SetActive(false);
         rewardText.SetActive(true);
 
         DBManager.IncreaseFunds("coins", lilyBucksReward);
@@ -48,6 +76,12 @@ public class AdReward : MonoBehaviour
         allowBack = true;
 
         viewed = true;
+    }
+
+    public void TooSoon()
+    {
+        loadingAdText.text = "Try again\nlater!";
+        allowBack = true;
     }
 
 }

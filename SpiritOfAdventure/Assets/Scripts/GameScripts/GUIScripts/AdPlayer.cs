@@ -1,5 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System;
+using System.Globalization;
 
 using UnityEngine.Advertisements;
 
@@ -11,9 +13,9 @@ public class AdPlayer : MonoBehaviour
 
     public int maxAdsPerSession = 5;
 
-    private static bool created = false;
+    public bool initialized { get; set; }
 
-    private float timeSinceLastAd;
+    private static bool created = false;
 
     private int adsShown;
 
@@ -32,22 +34,29 @@ public class AdPlayer : MonoBehaviour
 
     void Start()
     {
+        initialized = false;
+
         if (Advertisement.isSupported)
         {
             Advertisement.allowPrecache = true;
+#if UNITY_ANDROID
 #if UNITY_EDITOR
             Advertisement.Initialize("24667", true);
+            initialized = true;
 #else
             Advertisement.Initialize("24667");
+            initialized = true;
 #endif
-
-            timeSinceLastAd = minAdGap;
+#elif UNITY_IOS
+#if UNITY_EDITOR
+            //Advertisement.Initialize("PUT IOS NUMBER HERE", true);
+            //initialized = true;
+#else
+            //Advertisement.Initialize("PUT IOS NUMBER HERE");
+            //initialized = true;
+#endif
+#endif
         }
-    }
-
-    void Update()
-    {
-        timeSinceLastAd += Time.deltaTime;
     }
 
     public void TryShowAd()
@@ -57,7 +66,7 @@ public class AdPlayer : MonoBehaviour
 
     IEnumerator ShowAd()
     {
-        if (Advertisement.isSupported && timeSinceLastAd > minAdGap && adsShown <= maxAdsPerSession && SaveFile.Instance().ShowAds())
+        if (Advertisement.isSupported && PassedMinWatchTime() && adsShown <= maxAdsPerSession && SaveFile.Instance().ShowAds())
         {
             yield return new WaitForSeconds(minIdleTime);
 
@@ -91,7 +100,7 @@ public class AdPlayer : MonoBehaviour
 
     void AdResultCallback(ShowResult result)
     {
-        timeSinceLastAd = 0f;
+        SaveWatchTime();
         adsShown++;
 
         FindObjectOfType<LevelLoader>().Load();
@@ -104,7 +113,7 @@ public class AdPlayer : MonoBehaviour
 
     IEnumerator ShowRewardAd()
     {
-        if (Advertisement.isSupported && timeSinceLastAd > minAdGap && adsShown <= maxAdsPerSession)
+        if (Advertisement.isSupported && PassedMinWatchTime() && adsShown <= maxAdsPerSession)
         {
             yield return new WaitForSeconds(minIdleTime);
 
@@ -113,8 +122,6 @@ public class AdPlayer : MonoBehaviour
                 yield return 0;
             }
 
-            FindObjectOfType<AdReward>().allowBack = false;
-
             ShowOptions options = new ShowOptions();
 
             options.pause = false;
@@ -122,15 +129,39 @@ public class AdPlayer : MonoBehaviour
 
             Advertisement.Show("rewardedVideoZone", options);
         }
+        else
+        {
+            FindObjectOfType<AdReward>().TooSoon();
+        }
     }
 
     void RewardAdResultCallback(ShowResult result)
     {
-        timeSinceLastAd = 0f;
+        SaveWatchTime();
 
         if (result == ShowResult.Finished)
         {
             FindObjectOfType<AdReward>().Reward();
         }
+    }
+
+    void SaveWatchTime()
+    {
+        PlayerPrefs.SetString("adTime", DateTime.Now.ToString("o"));
+    }
+
+    bool PassedMinWatchTime()
+    {
+        if (!PlayerPrefs.HasKey("adTime"))
+        {
+            return true;
+        }
+
+        DateTime currentTime = DateTime.Now;
+        DateTime adTime = DateTime.Parse(PlayerPrefs.GetString("adTime"), null, DateTimeStyles.RoundtripKind);
+
+        float difference = (float)(currentTime - adTime).TotalSeconds;
+
+        return difference > minAdGap;
     }
 }
