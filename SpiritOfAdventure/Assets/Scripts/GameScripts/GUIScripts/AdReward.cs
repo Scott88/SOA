@@ -22,7 +22,23 @@ public class AdReward : MonoBehaviour
     {
         //allowBack = true;
 
-        FindObjectOfType<AdPlayer>().TryShowRewardAd();
+        AdPlayer player = FindObjectOfType<AdPlayer>();
+
+        if (player)
+        {
+            if (player.initialized)
+            {
+                player.TryShowRewardAd();
+            }
+            else
+            {
+                loadingAdText.text = "Doesn't work\non IOS yet!";
+            }
+        }
+        else
+        {
+            loadingAdText.text = "Start game\nfrom intro\nscreen!";
+        }
     }
 
     void Update()

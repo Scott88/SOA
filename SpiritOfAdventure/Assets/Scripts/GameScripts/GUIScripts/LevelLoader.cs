@@ -15,7 +15,14 @@ public class LevelLoader : MonoBehaviour
 
             if (player)
             {
-                player.TryShowAd();
+                if (player.initialized)
+                {
+                    player.TryShowAd();
+                }
+                else
+                {
+                    Load();
+                }
             }
             else
             {

@@ -13,6 +13,8 @@ public class AdPlayer : MonoBehaviour
 
     public int maxAdsPerSession = 5;
 
+    public bool initialized { get; set; }
+
     private static bool created = false;
 
     private int adsShown;
@@ -32,13 +34,27 @@ public class AdPlayer : MonoBehaviour
 
     void Start()
     {
+        initialized = false;
+
         if (Advertisement.isSupported)
         {
             Advertisement.allowPrecache = true;
+#if UNITY_ANDROID
 #if UNITY_EDITOR
             Advertisement.Initialize("24667", true);
+            initialized = true;
 #else
             Advertisement.Initialize("24667");
+            initialized = true;
+#endif
+#elif UNITY_IOS
+#if UNITY_EDITOR
+            //Advertisement.Initialize("PUT IOS NUMBER HERE", true);
+            //initialized = true;
+#else
+            //Advertisement.Initialize("PUT IOS NUMBER HERE");
+            //initialized = true;
+#endif
 #endif
         }
     }
