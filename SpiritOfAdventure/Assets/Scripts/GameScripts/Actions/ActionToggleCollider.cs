@@ -7,12 +7,12 @@ public class ActionToggleCollider : SOAAction
 	
 	void Start()
 	{
-		collider2D.enabled = startEnabled;
+		GetComponent<Collider2D>().enabled = startEnabled;
 	}
 
 	protected override void Activate()
 	{
-		collider2D.enabled = !collider2D.enabled;
+		GetComponent<Collider2D>().enabled = !GetComponent<Collider2D>().enabled;
 		ActionComplete ();
 	}
 	

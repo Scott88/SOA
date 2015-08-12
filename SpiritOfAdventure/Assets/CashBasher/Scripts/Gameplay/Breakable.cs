@@ -74,7 +74,7 @@ public class Breakable : MonoBehaviour
 
                 NetworkedCannonBall ball = coll.gameObject.GetComponent<NetworkedCannonBall>() as NetworkedCannonBall;
 
-                if (!ball.networkView.isMine || networkView.isMine)
+                if (!ball.GetComponent<NetworkView>().isMine || GetComponent<NetworkView>().isMine)
                 {
                     return;
                 }
@@ -121,9 +121,9 @@ public class Breakable : MonoBehaviour
 
         if (health == 0)
         {
-            manager.TransferSpirit(containedSpirit, transform.position, networkView.isMine);
+            manager.TransferSpirit(containedSpirit, transform.position, GetComponent<NetworkView>().isMine);
 
-            if (networkView.isMine)
+            if (GetComponent<NetworkView>().isMine)
             {
                 SaveFile.Instance().ModifyBlockInventory(type, -1);
             }
@@ -142,14 +142,14 @@ public class Breakable : MonoBehaviour
                 brokenSound.Play();
             }
 
-            collider2D.enabled = false;
+            GetComponent<Collider2D>().enabled = false;
 
-            networkView.RPC("NetDamage", RPCMode.Others); 
+            GetComponent<NetworkView>().RPC("NetDamage", RPCMode.Others); 
           
             return true;
         }
 
-        networkView.RPC("NetDamage", RPCMode.Others);
+        GetComponent<NetworkView>().RPC("NetDamage", RPCMode.Others);
 
         return false;
     }
@@ -167,9 +167,9 @@ public class Breakable : MonoBehaviour
 
         if (health == 0)
         {
-            manager.TransferSpirit(containedSpirit, transform.position, networkView.isMine);
+            manager.TransferSpirit(containedSpirit, transform.position, GetComponent<NetworkView>().isMine);
 
-            if (networkView.isMine)
+            if (GetComponent<NetworkView>().isMine)
             {
                 SaveFile.Instance().ModifyBlockInventory(type, -1);
             }
@@ -188,7 +188,7 @@ public class Breakable : MonoBehaviour
                 brokenSound.Play();
             }
 
-            collider2D.enabled = false;
+            GetComponent<Collider2D>().enabled = false;
         }
     }
 
@@ -276,7 +276,7 @@ public class Breakable : MonoBehaviour
             }
         }
 
-        networkView.RPC("NetSetStatusEffect", RPCMode.Others, (int)status, immediate);
+        GetComponent<NetworkView>().RPC("NetSetStatusEffect", RPCMode.Others, (int)status, immediate);
     }
 
     [RPC]
@@ -342,7 +342,7 @@ public class Breakable : MonoBehaviour
     {
         StartCoroutine(FallToAnim(position, acceleration, takeDamage));
 
-        networkView.RPC("NetFallTo", RPCMode.Others, position, acceleration);
+        GetComponent<NetworkView>().RPC("NetFallTo", RPCMode.Others, position, acceleration);
     }
 
     [RPC]

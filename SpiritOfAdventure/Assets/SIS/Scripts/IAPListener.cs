@@ -1,11 +1,12 @@
 ﻿/*  This file is part of the "Simple IAP System" project by Rebound Games.
  *  You are only allowed to use these resources if you've bought them directly or indirectly
  *  from Rebound Games. You shall not license, sublicense, sell, resell, transfer, assign,
- *  distribute or otherwise make available to any third party the Service or the Content. 
+ *  distribute or otherwise make available to any third party the Service or the Content.
  */
 
 using UnityEngine;
 using System.Collections;
+using itavio;
 
 namespace SIS
 {
@@ -48,6 +49,8 @@ namespace SIS
         /// </summary>
         public void HandleSuccessfulPurchase(string id)
         {
+            itavioManager.finalizeDebit(true);
+
             //differ between ids set in the IAP Settings editor
             if (debug) Debug.Log("HandleSuccessfulPurchase: " + id);
             //get instantiated shop item based on the IAP id
@@ -242,6 +245,8 @@ namespace SIS
         //we do the same here
         void HandleFailedPurchase(string error)
         {
+            itavioManager.finalizeDebit(false);
+
             if (ShopManager.GetInstance())
                 ShopManager.ShowMessage(error);
         }

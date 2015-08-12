@@ -7,7 +7,7 @@ public class CameraWaypoint : MonoBehaviour
 
     void OnDrawGizmosSelected()
     {
-        float aspect = FindObjectOfType<CameraMan>().camera.aspect;
+        float aspect = FindObjectOfType<CameraMan>().GetComponent<Camera>().aspect;
 
         Vector3 lowerLeft = new Vector3(transform.position.x - zoom * aspect,
                                   transform.position.y - zoom);

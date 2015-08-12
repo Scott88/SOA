@@ -34,7 +34,7 @@ public class StarInventory : MonoBehaviour
         stars += count;
         starDisplay.text = "x" + stars;
 
-        audio.Play();
+        GetComponent<AudioSource>().Play();
 
         if (childInventory)
         {

@@ -46,7 +46,7 @@ public class BuildState : GameState
         {
             if (Network.isClient)
             {
-                manager.networkView.RPC("OpponentReady", RPCMode.Server);
+                manager.GetComponent<NetworkView>().RPC("OpponentReady", RPCMode.Server);
             }
 
             //manager.SwitchToState((int)GamePhase.GP_WAITING);

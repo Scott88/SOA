@@ -25,7 +25,7 @@ public class CutScene : SOAAction
 	{
 		if (Input.GetMouseButtonDown (0)) 
 		{
-			Application.LoadLevel("MainMenu");
+			Application.LoadLevel("Level01");
 		}
 
 		if (fade == true)

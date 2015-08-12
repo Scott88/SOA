@@ -145,7 +145,7 @@ public class CashBasherManager : MonoBehaviour
 
     public void GenerateClientSpirits()
     {
-        networkView.RPC("NetGenerateClientSpirits", RPCMode.Others);
+        GetComponent<NetworkView>().RPC("NetGenerateClientSpirits", RPCMode.Others);
     }
 
     [RPC]
@@ -206,12 +206,12 @@ public class CashBasherManager : MonoBehaviour
 
     IEnumerator FadeSplash()
     {
-        Color color = splashScreen.renderer.material.color;
+        Color color = splashScreen.GetComponent<Renderer>().material.color;
 
         while (color.a > 0f)
         {
             color.a -= Time.deltaTime;
-            splashScreen.renderer.material.color = color;
+            splashScreen.GetComponent<Renderer>().material.color = color;
 
             yield return null;
         }
@@ -224,11 +224,11 @@ public class CashBasherManager : MonoBehaviour
     {
         if (Network.isServer)
         {
-            networkView.RPC("NetSetEffectStatus", RPCMode.All, true, serverSet.HasStatusEffects());
+            GetComponent<NetworkView>().RPC("NetSetEffectStatus", RPCMode.All, true, serverSet.HasStatusEffects());
         }
         else
         {
-            networkView.RPC("NetSetEffectStatus", RPCMode.All, false, clientSet.HasStatusEffects());
+            GetComponent<NetworkView>().RPC("NetSetEffectStatus", RPCMode.All, false, clientSet.HasStatusEffects());
         }
     }
 
@@ -324,7 +324,7 @@ public class CashBasherManager : MonoBehaviour
         int x = Random.Range(0, serverSet.treasureWidth);
         int y = Random.Range(0, serverSet.treasureHeight);
 
-        networkView.RPC("PlaceTreasureAndLoad", RPCMode.All, x, y);
+        GetComponent<NetworkView>().RPC("PlaceTreasureAndLoad", RPCMode.All, x, y);
     }
 
     public void ReadyNextTurn()
@@ -448,7 +448,7 @@ public class CashBasherManager : MonoBehaviour
         {
             if (connectionRequired)
             {
-                networkView.RPC("NetworkedPause", RPCMode.Others, pauseState);
+                GetComponent<NetworkView>().RPC("NetworkedPause", RPCMode.Others, pauseState);
                 connectionRequired = false;
 
                 leaveImmediate = true;

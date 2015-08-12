@@ -19,7 +19,7 @@ public class FollowPlayer : MonoBehaviour
 	void Awake()
 	{
 		player = GameObject.Find ("Player");
-		targetVolume = audio.volume;
+		targetVolume = GetComponent<AudioSource>().volume;
 	}
 
 	public void SetPlayer(GameObject p)
@@ -41,7 +41,7 @@ public class FollowPlayer : MonoBehaviour
 	void Start()
 	{
 		followingPlayer = false;
-		audio.volume = 0;
+		GetComponent<AudioSource>().volume = 0;
 	}
 
 	public void WarpOffscreen()
@@ -58,7 +58,7 @@ public class FollowPlayer : MonoBehaviour
 
 			Vector3 targetPos = player.transform.position + playerTarget;
 			transform.position = Vector3.SmoothDamp(transform.position, targetPos, ref velocityRef, 0.3f, Mathf.Infinity, Time.fixedDeltaTime);
-			audio.volume = Mathf.SmoothDamp(audio.volume, targetVolume, ref volumeRef, 0.2f, Mathf.Infinity, Time.fixedDeltaTime);
+			GetComponent<AudioSource>().volume = Mathf.SmoothDamp(GetComponent<AudioSource>().volume, targetVolume, ref volumeRef, 0.2f, Mathf.Infinity, Time.fixedDeltaTime);
 
 			if (transform.localScale.x < targetScale.x - 0.001f)
 			{
@@ -73,7 +73,7 @@ public class FollowPlayer : MonoBehaviour
 				transform.position = Vector3.SmoothDamp(transform.position, targetPos, ref velocityRef, timeToReturn, Mathf.Infinity, Time.fixedDeltaTime);
 				timeToReturn -= Time.deltaTime * 0.5f;
 
-				audio.volume = Mathf.SmoothDamp(audio.volume, 0f, ref volumeRef, 0.2f, Mathf.Infinity, Time.fixedDeltaTime);
+				GetComponent<AudioSource>().volume = Mathf.SmoothDamp(GetComponent<AudioSource>().volume, 0f, ref volumeRef, 0.2f, Mathf.Infinity, Time.fixedDeltaTime);
 				transform.localScale = Vector3.SmoothDamp(transform.localScale, new Vector3(), ref scaleRef, 0.3f, Mathf.Infinity, Time.fixedDeltaTime);
 			}
 			else

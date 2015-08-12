@@ -30,16 +30,16 @@ public class NetworkedCannonBall : MonoBehaviour
 
     void Update()
     {
-        if (networkView.isMine)
+        if (GetComponent<NetworkView>().isMine)
         {
-            previousVel = rigidbody2D.velocity;
+            previousVel = GetComponent<Rigidbody2D>().velocity;
         }
     }
 
     [RPC]
     public void SetVelocity(Vector3 velocity)
     {
-        rigidbody2D.velocity = velocity;
+        GetComponent<Rigidbody2D>().velocity = velocity;
     }
 
     public void Damage()
@@ -51,7 +51,7 @@ public class NetworkedCannonBall : MonoBehaviour
             Destroy(gameObject);
         }
 
-        networkView.RPC("NetDamage", RPCMode.Others);
+        GetComponent<NetworkView>().RPC("NetDamage", RPCMode.Others);
     }
 
     [RPC]
@@ -70,7 +70,7 @@ public class NetworkedCannonBall : MonoBehaviour
     {
         enchantment = (SpiritType)spiritType;
 
-        Color color = renderer.material.color;
+        Color color = GetComponent<Renderer>().material.color;
 
         if (enchantment != SpiritType.ST_GREEN)
         {
@@ -87,7 +87,7 @@ public class NetworkedCannonBall : MonoBehaviour
             color.r = 0.5f;
         }
 
-        renderer.material.color = color;
+        GetComponent<Renderer>().material.color = color;
     }
 
     public SpiritType GetEnchantment()
@@ -101,7 +101,7 @@ public class NetworkedCannonBall : MonoBehaviour
 
         if (health == 0)
         {
-            networkView.RPC("NetDamageAndSlow", RPCMode.Others, Vector3.zero);
+            GetComponent<NetworkView>().RPC("NetDamageAndSlow", RPCMode.Others, Vector3.zero);
             Destroy(gameObject);
 
             return;
@@ -118,9 +118,9 @@ public class NetworkedCannonBall : MonoBehaviour
             velocity.y *= speedDamper;
         }
 
-        rigidbody2D.velocity = velocity;
+        GetComponent<Rigidbody2D>().velocity = velocity;
 
-        networkView.RPC("NetDamageAndSlow", RPCMode.Others, (Vector3)velocity);
+        GetComponent<NetworkView>().RPC("NetDamageAndSlow", RPCMode.Others, (Vector3)velocity);
     }
 
     [RPC]
@@ -134,7 +134,7 @@ public class NetworkedCannonBall : MonoBehaviour
             return;
         }
 
-        rigidbody2D.velocity = velocity;
+        GetComponent<Rigidbody2D>().velocity = velocity;
     }
 
     void OnApplicationQuit() { applicationIsQuitting = true; } 
@@ -148,7 +148,7 @@ public class NetworkedCannonBall : MonoBehaviour
 
         Instantiate(splitPoof, transform.position, Quaternion.identity);
 
-        if (networkView.isMine)
+        if (GetComponent<NetworkView>().isMine)
         {
             if (splitCount > 0)
             {
@@ -159,11 +159,11 @@ public class NetworkedCannonBall : MonoBehaviour
 
                     Vector3 velocity = new Vector3(Random.Range(-speedVariance, speedVariance), Random.Range(-speedVariance, speedVariance));
 
-                    ball.networkView.RPC("SetVelocity", RPCMode.All, velocity + previousVel);
+                    ball.GetComponent<NetworkView>().RPC("SetVelocity", RPCMode.All, velocity + previousVel);
 
                     if (enchantment != SpiritType.ST_NULL)
                     {
-                        ball.networkView.RPC("Enchant", RPCMode.All, (int)enchantment);
+                        ball.GetComponent<NetworkView>().RPC("Enchant", RPCMode.All, (int)enchantment);
                     }
                 } 
             }

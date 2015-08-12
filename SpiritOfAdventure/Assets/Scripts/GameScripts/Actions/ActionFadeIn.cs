@@ -12,9 +12,9 @@ public class ActionFadeIn : SOAAction
 	void Start()
 	{
 		fade = false;
-		col = renderer.material.color;
+		col = GetComponent<Renderer>().material.color;
 		col.a = 0f;
-		renderer.material.color = col;
+		GetComponent<Renderer>().material.color = col;
 	}
 
 	protected override void Update()
@@ -23,7 +23,7 @@ public class ActionFadeIn : SOAAction
 		if (fade == true)
 		{
 			col.a += Time.deltaTime / time;
-			renderer.material.color = col;
+			GetComponent<Renderer>().material.color = col;
 			
 			if (col.a >= 1f)
 			{

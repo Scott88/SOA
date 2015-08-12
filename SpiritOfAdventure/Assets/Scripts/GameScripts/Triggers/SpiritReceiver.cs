@@ -26,9 +26,9 @@ public class SpiritReceiver : Triggerable
 	//We override Trigger here just so we can have a fancy particle effect play whenever a spirit is accepted
 	public override void Trigger(Vector3 position)
 	{
-		if (particleSystem)
+		if (GetComponent<ParticleSystem>())
 		{
-			particleSystem.Play();
+			GetComponent<ParticleSystem>().Play();
 		}
 		else if (effect == EffectSize.ST_SMALL)
 		{

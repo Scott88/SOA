@@ -23,11 +23,11 @@ public class MenuFocus : MonoBehaviour
 
 		if(LevelQueue.startZoomed)
 		{
-			camera.orthographicSize = 10f;
+			GetComponent<Camera>().orthographicSize = 10f;
 		}
 		else
 		{
-			camera.orthographicSize = targetMenu.zoom;
+			GetComponent<Camera>().orthographicSize = targetMenu.zoom;
 			targetMenu.gameObject.SetActive(true);
 		}
 	}
@@ -40,9 +40,9 @@ public class MenuFocus : MonoBehaviour
 		actualTarget.z = -35f;
 #endif
 		transform.position = Vector3.SmoothDamp(Camera.main.transform.position, actualTarget, ref posRef, 0.5f, 50f);
-		camera.orthographicSize = Mathf.SmoothDamp(camera.orthographicSize, targetMenu.zoom, ref zoomRef, 0.5f, 30f);
+		GetComponent<Camera>().orthographicSize = Mathf.SmoothDamp(GetComponent<Camera>().orthographicSize, targetMenu.zoom, ref zoomRef, 0.5f, 30f);
 
-		if (Vector3.Distance(transform.position, actualTarget) < 0.1f && Mathf.Abs(camera.orthographicSize - targetMenu.zoom) < 0.1f &&
+		if (Vector3.Distance(transform.position, actualTarget) < 0.1f && Mathf.Abs(GetComponent<Camera>().orthographicSize - targetMenu.zoom) < 0.1f &&
 		    !targetMenu.gameObject.activeSelf)
 		{
 			targetMenu.gameObject.SetActive(true);
@@ -62,6 +62,6 @@ public class MenuFocus : MonoBehaviour
 
 	public void PlayButtonSound()
 	{
-		audio.PlayOneShot(buttonSounds[Random.Range(0, buttonSounds.Length - 1)]);
+		GetComponent<AudioSource>().PlayOneShot(buttonSounds[Random.Range(0, buttonSounds.Length - 1)]);
 	}
 }

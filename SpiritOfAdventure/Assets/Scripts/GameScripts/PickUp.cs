@@ -17,7 +17,7 @@ public class PickUp : MonoBehaviour
 
 	void OnTriggerEnter2D(Collider2D other)
 	{
-		if (other == player.collider2D)
+		if (other == player.GetComponent<Collider2D>())
 		{
 
 			counter++;

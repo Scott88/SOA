@@ -108,7 +108,7 @@ public class ClientMenu : MonoBehaviour
         NetworkedLevelLoader loader = FindObjectOfType<NetworkedLevelLoader>();
 
         loader.othersCastleWorth = otherCastleWorth;
-        loader.networkView.RPC("ReceiveOtherCastleWorth", RPCMode.Others, editor.GetCastleWorth());
+        loader.GetComponent<NetworkView>().RPC("ReceiveOtherCastleWorth", RPCMode.Others, editor.GetCastleWorth());
     }
 
     void OnFailedToConnect(NetworkConnectionError info)

@@ -1,7 +1,7 @@
 /*  This file is part of the "Simple IAP System" project by Rebound Games.
  *  You are only allowed to use these resources if you've bought them directly or indirectly
  *  from Rebound Games. You shall not license, sublicense, sell, resell, transfer, assign,
- *  distribute or otherwise make available to any third party the Service or the Content. 
+ *  distribute or otherwise make available to any third party the Service or the Content.
  */
 
 using UnityEngine;
@@ -9,6 +9,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using OnePF;
+using itavio;
 
 namespace SIS
 {
@@ -22,7 +23,7 @@ namespace SIS
 		/// whether this script should print debug messages
 		/// </summary>
 		public bool debug;
-		
+
 		/// <summary>
 		/// your Google developer id
 		/// </summary>
@@ -82,7 +83,7 @@ namespace SIS
 		/// </summary>
 		private List<IAPArticle> productCache = new List<IAPArticle>();
 		#pragma warning restore 0414
-		
+
 		/// <summary>
 		/// In app products, set in the IAP Settings editor
 		/// </summary>
@@ -118,7 +119,7 @@ namespace SIS
 		/// fired when a purchase fails, delivering its product id
 		/// </summary>
 		public static event Action<string> purchaseFailedEvent;
-		
+
 		/// <summary>
 		/// fired when a server request fails, delivering the error message
 		/// </summary>
@@ -180,7 +181,7 @@ namespace SIS
             #elif UNITY_WP8
                 string currentStore = OpenIAB_WP8.STORE;
 			#endif
-		
+
 			//initializes the billing system
             #if !UNITY_STANDALONE && !UNITY_WEBPLAYER
                 for (int i = 0; i < ids.Length; i++)
@@ -211,7 +212,7 @@ namespace SIS
 		{
 			if(instance != this)
 				return;
-			
+
 			ShopManager shop = null;
 			GameObject shopGO = GameObject.Find("Shop Manager");
 			if (shopGO) shop = shopGO.GetComponent<ShopManager>();
@@ -293,7 +294,7 @@ namespace SIS
 			//don't add the restore button to the list of online purchases
 			if (ids.Contains("restore")) ids.Remove("restore");
 			//convert and store list of real money IAP ids as string array,
-			//this array is being used for initializing Google/Apple's billing system 
+			//this array is being used for initializing Google/Apple's billing system
 			this.ids = ids.ToArray();
 		}
 
@@ -315,7 +316,7 @@ namespace SIS
 		{
 			//store fetched inventory for later access
 			inventory = inv;
-			
+
 			//check for non-consumed consumables
 			List<Purchase> prods = inv.GetAllPurchases();
 			for(int i = 0; i < prods.Count; i++)
@@ -324,13 +325,13 @@ namespace SIS
 				if(obj != null && obj.type == IAPType.consumable)
 					OpenIAB.consumeProduct(prods[i]);
 			}
-			
+
 			#if UNITY_ANDROID
             if ((verificationType == VerificationType.onStart || verificationType == VerificationType.both)
                 && !string.IsNullOrEmpty(serverUrl))
 				VerifyReceipts();
 			#endif
-			
+
 			//build live cache
 			productCache = new List<IAPArticle>();
 			for (int i = 0; i < ids.Length; i++)
@@ -350,9 +351,16 @@ namespace SIS
 		public static void PurchaseConsumableProduct(string productId)
 		{
 			if (productId == "restore")
+			{
 				RestoreTransactions();
+			}
 			else
-				OpenIAB.purchaseProduct(GetIAPObject(productId).GetIdentifier());
+			{
+				string sku = GetIAPObject(productId).GetIdentifier();
+				SkuDetails skuDetails = inventory.GetSkuDetails(sku);
+
+				itavioManager.startDebit<Action<string>>(Convert.ToDouble(skuDetails.PriceValue), skuDetails.CurrencyCode, OpenIAB.purchaseProduct, sku);
+			}
 		}
 
 
@@ -360,7 +368,12 @@ namespace SIS
 		/// purchase non-consumable product based on its product id.
 		/// </summary>
 		public static void PurchaseNonconsumableProduct(string productId)
-		{   PurchaseConsumableProduct(productId);   }
+		{
+			string sku = GetIAPObject(productId).GetIdentifier();
+			SkuDetails skuDetails = inventory.GetSkuDetails(sku);
+
+			itavioManager.startDebit<Action<string>>(Convert.ToDouble(skuDetails.PriceValue), skuDetails.CurrencyCode, PurchaseConsumableProduct, productId);
+		}
 
 
 		/// <summary>
@@ -371,7 +384,12 @@ namespace SIS
 		public static void PurchaseSubscription(string productId)
 		{
 			if (OpenIAB.areSubscriptionsSupported())
-                OpenIAB.purchaseSubscription(GetIAPObject(productId).GetIdentifier());
+			{
+				string sku = GetIAPObject(productId).GetIdentifier();
+				SkuDetails skuDetails = inventory.GetSkuDetails(sku);
+
+				itavioManager.startDebit<Action<string>>(Convert.ToDouble(skuDetails.PriceValue), skuDetails.CurrencyCode, OpenIAB.purchaseSubscription, sku);
+			}
 			else
 				BillingNotSupported("Subscriptions not available.");
 		}
@@ -383,7 +401,7 @@ namespace SIS
 		{
             string id = GetIAPIdentifier(prod.Sku);
 			inventory.AddPurchase(prod);
-			
+
 			#if UNITY_ANDROID
 			if ((verificationType == VerificationType.onPurchase || verificationType == VerificationType.both)
                 && !string.IsNullOrEmpty(serverUrl))
@@ -392,10 +410,10 @@ namespace SIS
 				return;
 			}
 			#endif
-			
+
 			PurchaseVerified(id);
 		}
-	  
+
 
 		// fired after a successful consumption (see PurchaseVerified()).
 		// Method that fires the purchase succeeded action
@@ -405,14 +423,14 @@ namespace SIS
 			purchaseSucceededEvent(GetIAPIdentifier(prod.Sku));
 		}
 
-		
+
 		// online verification request
 		// here we build the POST request to our external server,
 		// that will forward the request to the verification server
 		private void MakeRequest(Purchase prod)
 		{
 			Dictionary<string, string> dic = new Dictionary<string, string>();
-			
+
 			#if UNITY_ANDROID
 				dic.Add("store", "Android");
 				dic.Add("pid", prod.Sku);
@@ -426,12 +444,12 @@ namespace SIS
 				dic.Add("pid", prod.Sku);
 				dic.Add("rec", prod.OriginalJson);
 			#endif
-			
+
 			StartCoroutine(WaitForRequest(dic));
 		}
 
 
-		// handles an online verification request and response from 
+		// handles an online verification request and response from
 		// our external server. www.text can returns true or false.
 		// true: purchase verified, false: not verified (fake?) purchase
 		IEnumerator WaitForRequest(Dictionary<string, string> dic)
@@ -479,7 +497,7 @@ namespace SIS
 			else
 			{
 				//we can't reach our external server, do nothing:
-				//in this case we handle the purchase as without verification 
+				//in this case we handle the purchase as without verification
 				if(debug) Debug.Log("Verification URL error: " + www.text);
 			}
 
@@ -588,14 +606,14 @@ namespace SIS
 						DBManager.SetToPurchased(id);
 				}
 				RestoreSucceeded();
-			#endif      
+			#endif
 
 			//update ShopManager GUI items
 			if(ShopManager.GetInstance())
 				ShopManager.SetItemState();
 		}
-		
-		
+
+
 		private void TransactionRestored(string productId)
 		{
 			#if UNITY_IPHONE
@@ -649,7 +667,7 @@ namespace SIS
 
 					//we haven't found a receipt for this item, yet it is
 					//set to purchased. This can't be, maybe our external server
-					//response or the database has been hacked with fake data 
+					//response or the database has been hacked with fake data
 					if (faked)
 					{
                         IAPItem item = null;
@@ -694,7 +712,7 @@ namespace SIS
                     DBManager.SaveRemoteConfig(request.text);
                     break;
                 case RemoteType.overwrite:
-                    //download new config 
+                    //download new config
                     yield return StartCoroutine(Download(url));
                     //parse string and overwrite virtual IAPs
                     DBManager.ConvertToIAPs(request.text);
@@ -727,7 +745,9 @@ namespace SIS
 
 		// method that fires a purchase error
 		private static void PurchaseFailed(string error)
-		{   PurchaseFailed(-1, error);  }
+		{
+			PurchaseFailed(-1, error);
+		}
 
         // method that fires a purchase error, with error code
         private static void PurchaseFailed(int code, string error)
@@ -739,7 +759,7 @@ namespace SIS
         }
 
 
-		// method that fires the restore succeed action 
+		// method that fires the restore succeed action
 		private static void RestoreSucceeded()
 		{
 			purchaseSucceededEvent("restore");
@@ -767,7 +787,7 @@ namespace SIS
 				if(obj.type == IAPType.consumableVirtual ||
 				   obj.type == IAPType.nonConsumableVirtual)
 					continue;
-				
+
                 if (obj.GetIdentifier() == id)
                     return obj.id;
             }
@@ -857,7 +877,7 @@ namespace SIS
         //Samsung = 4,
         //Nokia = 5
     }
-   
+
 
 	/// <summary>
 	/// supported IAP types enum
@@ -927,7 +947,7 @@ namespace SIS
 		public IAPRequirement req = new IAPRequirement();
 
         public bool platformFoldout = false;
-        
+
         public string GetIdentifier()
         {
             string local = null;

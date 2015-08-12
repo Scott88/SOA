@@ -18,7 +18,7 @@ public class NetworkedLevelLoader : MonoBehaviour {
         if (!created)
         {
             DontDestroyOnLoad(this);
-            networkView.group = 1;
+            GetComponent<NetworkView>().group = 1;
 
             created = true;
         }
@@ -30,7 +30,7 @@ public class NetworkedLevelLoader : MonoBehaviour {
 
     public void LoadLevel(string levelName)
     {
-        networkView.RPC("LoadNetworkedLevel", RPCMode.AllBuffered, ++levelPrefix, levelName);
+        GetComponent<NetworkView>().RPC("LoadNetworkedLevel", RPCMode.AllBuffered, ++levelPrefix, levelName);
     }
 
     [RPC]
@@ -54,7 +54,7 @@ public class NetworkedLevelLoader : MonoBehaviour {
 
         loaded = true;
 
-        networkView.RPC("OtherReady", RPCMode.Others, enemyCostume);
+        GetComponent<NetworkView>().RPC("OtherReady", RPCMode.Others, enemyCostume);
     }
 
     [RPC]
@@ -63,7 +63,7 @@ public class NetworkedLevelLoader : MonoBehaviour {
         otherLoaded = true;
         othersCostume = enemyCostume;
 
-        networkView.RPC("ConfirmOtherReady", RPCMode.Others, SaveFile.Instance().GetCurrentCostume());
+        GetComponent<NetworkView>().RPC("ConfirmOtherReady", RPCMode.Others, SaveFile.Instance().GetCurrentCostume());
     }
 
     [RPC]

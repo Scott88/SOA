@@ -37,6 +37,8 @@ public class SaveFile
         }
     }
 
+
+
     private List<LevelState> levelStates;
 
     private List<TileInfo> tileSetInfo;
@@ -54,6 +56,8 @@ public class SaveFile
 
     private bool showAds;
 
+	private bool firstSession;
+
     private static SaveFile instance;
 
     private XmlDocument saveFile;
@@ -67,6 +71,11 @@ public class SaveFile
 
         return instance;
     }
+
+	public bool IsFirstSession()
+	{
+		return firstSession;
+	}
 
     private SaveFile()
     {
@@ -98,6 +107,7 @@ public class SaveFile
         }
 
         LoadFromXML();
+
     }
 
     private XmlDocument TransferFromPrefs()
@@ -269,6 +279,9 @@ public class SaveFile
         {
             showAds = true;
         }
+
+		XmlElement notFirstSessionNode = saveNode["NotFirstSession"];
+		firstSession = notFirstSessionNode == null;
     }
 
     public void SaveToXML()

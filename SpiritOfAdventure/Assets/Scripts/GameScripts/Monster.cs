@@ -30,7 +30,7 @@ public class Monster : MonoBehaviour
 	{
 		if (!GameWin.HasWon())
 		{
-			if (!renderer.IsVisibleFrom(Camera.main) && direction == MonsterDir.MD_LEFT)
+			if (!GetComponent<Renderer>().IsVisibleFrom(Camera.main) && direction == MonsterDir.MD_LEFT)
 			{
 				Application.LoadLevel(3);
 			}
@@ -39,19 +39,19 @@ public class Monster : MonoBehaviour
 
 	void FixedUpdate()
 	{
-		if (direction == MonsterDir.MD_RIGHT && rigidbody2D.velocity.x < maxSpeed)
+		if (direction == MonsterDir.MD_RIGHT && GetComponent<Rigidbody2D>().velocity.x < maxSpeed)
 		{
-			float multiplier = (maxSpeed - rigidbody2D.velocity.x) / maxSpeed;
-			rigidbody2D.AddForce(movementForce * multiplier);
+			float multiplier = (maxSpeed - GetComponent<Rigidbody2D>().velocity.x) / maxSpeed;
+			GetComponent<Rigidbody2D>().AddForce(movementForce * multiplier);
 		}
 		else if (direction == MonsterDir.MD_NONE || GameWin.HasWon())
 		{
-			rigidbody2D.AddForce(-rigidbody2D.velocity * stoppingDampen);		
+			GetComponent<Rigidbody2D>().AddForce(-GetComponent<Rigidbody2D>().velocity * stoppingDampen);		
 		}
-		else if (direction == MonsterDir.MD_LEFT && rigidbody2D.velocity.x > -fleeSpeed)
+		else if (direction == MonsterDir.MD_LEFT && GetComponent<Rigidbody2D>().velocity.x > -fleeSpeed)
 		{
-			float multiplier = (maxSpeed - rigidbody2D.velocity.x) / maxSpeed;
-			rigidbody2D.AddForce(-movementForce * multiplier);
+			float multiplier = (maxSpeed - GetComponent<Rigidbody2D>().velocity.x) / maxSpeed;
+			GetComponent<Rigidbody2D>().AddForce(-movementForce * multiplier);
 		}
 	}
 
@@ -64,7 +64,7 @@ public class Monster : MonoBehaviour
 
 	void PlayBoopSound()
 	{
-		audio.Play();
+		GetComponent<AudioSource>().Play();
 	}
 
 	void OnCollisionEnter2D(Collision2D coll)

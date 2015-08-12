@@ -36,7 +36,7 @@ public class HintManager : MonoBehaviour
 	{
 		if (currentHint)
 		{
-			currentHint.particleSystem.Stop();
+			currentHint.GetComponent<ParticleSystem>().Stop();
 			Destroy(currentHint, 1f);
 		}
 	}

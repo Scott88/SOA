@@ -47,8 +47,8 @@ public class GameManager : MonoBehaviour
 		effectManager = FindObjectOfType(typeof(EffectManager)) as EffectManager;
 		hintManager = FindObjectOfType(typeof(HintManager)) as HintManager;
 		scoreManager = FindObjectOfType(typeof(ScoreManager)) as ScoreManager;
-		LevelTimer timer = FindObjectOfType<LevelTimer>() as LevelTimer;
-		timer.guiText.enabled = true;
+		//LevelTimer timer = FindObjectOfType<LevelTimer>() as LevelTimer;
+		//timer.GetComponent<GUIText>().enabled = true;
 
 		//We get our spirit buttons and the camera for the raycasting
 		greenGUI = GameObject.Find("SpiritGUICamera/GUIContainer/Green Spirit Button").GetComponent<SpiritGUI>();
@@ -224,7 +224,7 @@ public class GameManager : MonoBehaviour
 			}
 			else
 			{
-				tempGUI.audio.Play();
+				tempGUI.GetComponent<AudioSource>().Play();
 			}
 
 			mouseHeldOnGUI = true;
@@ -327,7 +327,7 @@ public class GameManager : MonoBehaviour
 					}
 					else
 					{
-						tempGUI.audio.Play();
+						tempGUI.GetComponent<AudioSource>().Play();
 					}
 
 					clickedOn = null;

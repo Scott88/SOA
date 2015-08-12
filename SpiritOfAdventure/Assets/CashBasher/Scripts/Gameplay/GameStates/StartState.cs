@@ -35,11 +35,11 @@ public class StartState : GameState
 
         manager.RandomizeTreasure();
 
-        manager.networkView.RPC("FadeSplashScreen", RPCMode.All);
+        manager.GetComponent<NetworkView>().RPC("FadeSplashScreen", RPCMode.All);
 
         yield return new WaitForSeconds(1.0f);
 
-        manager.networkView.RPC("FocusCameraTiles", RPCMode.All, true);
+        manager.GetComponent<NetworkView>().RPC("FocusCameraTiles", RPCMode.All, true);
 
         yield return new WaitForSeconds(1.5f);
 
@@ -47,7 +47,7 @@ public class StartState : GameState
 
         yield return new WaitForSeconds(1.0f);
 
-        manager.networkView.RPC("FocusCameraTiles", RPCMode.All, false);
+        manager.GetComponent<NetworkView>().RPC("FocusCameraTiles", RPCMode.All, false);
 
         yield return new WaitForSeconds(1.5f);
 
@@ -59,12 +59,12 @@ public class StartState : GameState
 
         if (serverFirst)
         {
-            manager.networkView.RPC("SwitchToState", RPCMode.Others, (int)GamePhase.GP_THEIR_TURN);
+            manager.GetComponent<NetworkView>().RPC("SwitchToState", RPCMode.Others, (int)GamePhase.GP_THEIR_TURN);
             manager.SwitchToState((int)GamePhase.GP_YOUR_TURN);
         }
         else
         {
-            manager.networkView.RPC("SwitchToState", RPCMode.Others, (int)GamePhase.GP_YOUR_TURN);
+            manager.GetComponent<NetworkView>().RPC("SwitchToState", RPCMode.Others, (int)GamePhase.GP_YOUR_TURN);
             manager.SwitchToState((int)GamePhase.GP_THEIR_TURN);
         }
     }

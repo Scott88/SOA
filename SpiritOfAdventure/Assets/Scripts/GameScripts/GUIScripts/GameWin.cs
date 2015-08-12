@@ -20,7 +20,7 @@ public class GameWin : MonoBehaviour
 
 	private static bool winTriggered = false;
 	private GameManager gameManager;
-	private LevelTimer timer;
+	//private LevelTimer timer;
 	private CameraMan cameraMan;
 	private Vector3 posRef;
 	private float zoomRef;
@@ -32,10 +32,10 @@ public class GameWin : MonoBehaviour
 	{
 		cameraMan = FindObjectOfType<CameraMan>() as CameraMan;
 		gameManager = FindObjectOfType<GameManager>() as GameManager;
-		timer = FindObjectOfType<LevelTimer>() as LevelTimer;
+		//timer = FindObjectOfType<LevelTimer>() as LevelTimer;
 		Win = false;
 		animator = GetComponent<Animator>();
-		timer.guiText.enabled = true;
+		//timer.GetComponent<GUIText>().enabled = true;
 
 	}
 
@@ -61,7 +61,7 @@ public class GameWin : MonoBehaviour
 	{
 		goingToWin = false;
 		winTriggered = true;
-		timer.gameObject.SetActive(false);
+		//timer.gameObject.SetActive(false);
 		Player.VictoryCheer();
 
         //if (pathA == true) 
@@ -124,7 +124,7 @@ public class GameWin : MonoBehaviour
 		Win = true;
 		winTriggered = false;
 
-		gameManager.scoreManager.CalculateFinalScore(timer.GetTimeLeft());
+		gameManager.scoreManager.CalculateFinalScore(0);
 
         ScaleToResolution[] spiritGUI = FindObjectsOfType<ScaleToResolution>();
 
@@ -144,8 +144,10 @@ public class GameWin : MonoBehaviour
 			{
 				if (canContinue)
 				{
-					if (GUI.Button(new Rect(Screen.width * (1f / 3.2f), Screen.height * (0.84f), Screen.width * (1f / 6f), Screen.height * (1f / 8f)), "Continue?"))
+	
+					if (GUI.Button(new Rect(Screen.width * (1f / 2.99f), Screen.height * (0.84f), Screen.width * (1f / 3f), Screen.height * (1f / 8f)), "Continue!!"))
 					{
+
 						gameManager.effectManager.PlayButtonSound();
 						GameManager.ResetGame();
 
@@ -168,25 +170,25 @@ public class GameWin : MonoBehaviour
 					}
 				}
 
-				if (GUI.Button(new Rect(Screen.width * (1f / 1.9f), Screen.height * (0.84f), Screen.width * (1f / 6f), Screen.height * (1f / 8f)), "Level Select"))
-				{
-                    Screen.sleepTimeout = SleepTimeout.SystemSetting;
-					gameManager.effectManager.PlayButtonSound();
-                    Time.timeScale = 1;
-					Application.LoadLevel("MainMenu");
+				//if (GUI.Button(new Rect(Screen.width * (1f / 1.9f), Screen.height * (0.84f), Screen.width * (1f / 6f), Screen.height * (1f / 8f)), "Level Select"))
+				//{
+                 //   Screen.sleepTimeout = SleepTimeout.SystemSetting;
+				//	gameManager.effectManager.PlayButtonSound();
+                 //   Time.timeScale = 1;
+				//	Application.LoadLevel("MainMenu");
 					
-				}
+				//}
 			}
 
 			if (!skippedScore)
 			{
                 GUI.Label(new Rect(Screen.width * (2f / 8.5f), Screen.height * (0.353f), Screen.width * (5f / 9.5f), Screen.height * (0.15f)),
-						  "Points: " + gameManager.scoreManager.GetFinalScore().ToString() + " Time Left: " + gameManager.scoreManager.GetDisplayTimer().ToString());
+						  "Points: " + gameManager.scoreManager.GetFinalScore().ToString());
 			}
 			else
 			{
 				GUI.Label(new Rect(Screen.width * (2f / 8.5f), Screen.height * (0.353f), Screen.width * (5f / 9.5f), Screen.height * (0.15f)),
-						  "Points: " + gameManager.scoreManager.GetActualFinalScore().ToString() + " Time Left: 0");
+						  "Points: " + gameManager.scoreManager.GetActualFinalScore().ToString());
 			}
 
 			GUI.Label(new Rect(Screen.width * (0.135f), Screen.height * (0.053f), Screen.width * (0.726f), Screen.height * (0.2f)), levelName);

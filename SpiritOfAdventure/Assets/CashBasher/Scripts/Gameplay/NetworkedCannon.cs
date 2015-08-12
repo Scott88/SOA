@@ -100,7 +100,7 @@ public class NetworkedCannon : MonoBehaviour
 
         SetPowerIndicator();
 
-        indicatorColor = indicator.renderer.material.color;
+        indicatorColor = indicator.GetComponent<Renderer>().material.color;
     }
 
     void OnCollisionEnter2D(Collision2D coll)
@@ -109,14 +109,14 @@ public class NetworkedCannon : MonoBehaviour
         {
             NetworkedCannonBall ball = coll.gameObject.GetComponent<NetworkedCannonBall>() as NetworkedCannonBall;
 
-            if (!ball.networkView.isMine || myCannon)
+            if (!ball.GetComponent<NetworkView>().isMine || myCannon)
             {
                 return;
             }
 
             if (ball.GetEnchantment() != SpiritType.ST_NULL)
             {
-                networkView.RPC("ApplyDebuff", RPCMode.All, (int)ball.GetEnchantment());
+                GetComponent<NetworkView>().RPC("ApplyDebuff", RPCMode.All, (int)ball.GetEnchantment());
             }
 
             ball.Damage();
@@ -130,7 +130,7 @@ public class NetworkedCannon : MonoBehaviour
             fadeOutTimer -= Time.deltaTime;
 
             indicatorColor.a = Mathf.Lerp(0.0f, 1.0f, fadeOutTimer);
-            indicator.renderer.material.color = indicatorColor;
+            indicator.GetComponent<Renderer>().material.color = indicatorColor;
         }
 
         if (currentState == CannonState.CS_ROTATING)
@@ -287,7 +287,7 @@ public class NetworkedCannon : MonoBehaviour
         {
             if (currentState == CannonState.CS_ROTATING)
             {
-                networkView.RPC("PointCannonAt", RPCMode.All, markerPivot.transform.localRotation);
+                GetComponent<NetworkView>().RPC("PointCannonAt", RPCMode.All, markerPivot.transform.localRotation);
 
                 return false;
             }
@@ -295,7 +295,7 @@ public class NetworkedCannon : MonoBehaviour
             {
                 power.SetActive(false);
 
-                networkView.RPC("LightTheFuse", RPCMode.All, velocity);
+                GetComponent<NetworkView>().RPC("LightTheFuse", RPCMode.All, velocity);
 
                 return true;
             }
@@ -306,7 +306,7 @@ public class NetworkedCannon : MonoBehaviour
 
     public void ForceFire()
     {
-        networkView.RPC("LightTheFuse", RPCMode.All, minVelocity);
+        GetComponent<NetworkView>().RPC("LightTheFuse", RPCMode.All, minVelocity);
     }
 
     [RPC]
@@ -427,16 +427,16 @@ public class NetworkedCannon : MonoBehaviour
         {
 			GameObject ball = Network.Instantiate(cannonBall, ballSpawnPoint.transform.position, new Quaternion(), 0) as GameObject;
 
-            ball.rigidbody2D.velocity = finalVel;
-            ball.networkView.RPC("SetVelocity", RPCMode.Others, finalVel);
+            ball.GetComponent<Rigidbody2D>().velocity = finalVel;
+            ball.GetComponent<NetworkView>().RPC("SetVelocity", RPCMode.Others, finalVel);
 
             if (buff != SpiritType.ST_NULL)
             {
-                ball.networkView.RPC("Enchant", RPCMode.All, (int)buff);
+                ball.GetComponent<NetworkView>().RPC("Enchant", RPCMode.All, (int)buff);
             }
         }
 
-        audio.Play();
+        GetComponent<AudioSource>().Play();
 
         manager.cameraMan.ShakeCamera(0.75f, 1.0f);
 
@@ -451,7 +451,7 @@ public class NetworkedCannon : MonoBehaviour
     IEnumerator DisplayMessage(string message)
     {
         indicatorColor.a = 1f;
-        indicator.renderer.material.color = indicatorColor;
+        indicator.GetComponent<Renderer>().material.color = indicatorColor;
 
         fadeOutTimer = -1f;
 

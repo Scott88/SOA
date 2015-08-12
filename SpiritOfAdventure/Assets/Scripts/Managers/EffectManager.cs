@@ -63,7 +63,7 @@ public class EffectManager : MonoBehaviour
 		}
 
 		tempParticle.transform.Translate(new Vector3(0f, 0f, -5f));
-		tempParticle.particleSystem.Play();
+		tempParticle.GetComponent<ParticleSystem>().Play();
 
 		Destroy(tempParticle, 10f);
 	}
@@ -86,13 +86,13 @@ public class EffectManager : MonoBehaviour
 		}
 
 		tempParticle.transform.Translate(new Vector3(0f, 0f, -5f));
-		tempParticle.particleSystem.Play();
+		tempParticle.GetComponent<ParticleSystem>().Play();
 
 		Destroy(tempParticle, 10f);
 	}
 
 	public void PlayButtonSound()
 	{
-		audio.PlayOneShot(buttonSounds[Random.Range(0, buttonSounds.Length - 1)]);
+		GetComponent<AudioSource>().PlayOneShot(buttonSounds[Random.Range(0, buttonSounds.Length - 1)]);
 	}
 }

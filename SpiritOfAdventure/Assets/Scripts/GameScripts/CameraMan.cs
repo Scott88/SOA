@@ -67,13 +67,13 @@ public class CameraMan : MonoBehaviour
 
 		if (followingObject)
 		{	
-			if (targetObject.rigidbody2D)
+			if (targetObject.GetComponent<Rigidbody2D>())
 			{
 				Vector3 offset;
 
 				if (!useManualLead)
 				{
-					Vector3 leadingVec = (Vector3)(targetObject.rigidbody2D.velocity);
+					Vector3 leadingVec = (Vector3)(targetObject.GetComponent<Rigidbody2D>().velocity);
 					Vector3 targetsVel = new Vector3();
 
 					if (leadingVec.magnitude < 1f)
@@ -115,9 +115,9 @@ public class CameraMan : MonoBehaviour
 
 		transform.position += shakeOffset;
 
-        if (camera.orthographicSize != targetZoom && targetZoom != 0)
+        if (GetComponent<Camera>().orthographicSize != targetZoom && targetZoom != 0)
         {
-            camera.orthographicSize = Mathf.SmoothDamp(camera.orthographicSize, targetZoom, ref zoomVel, 0.5f);
+            GetComponent<Camera>().orthographicSize = Mathf.SmoothDamp(GetComponent<Camera>().orthographicSize, targetZoom, ref zoomVel, 0.5f);
         }
 	}
 

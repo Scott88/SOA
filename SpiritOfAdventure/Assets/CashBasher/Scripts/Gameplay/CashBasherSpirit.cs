@@ -43,16 +43,16 @@ public class CashBasherSpirit : MonoBehaviour
         active = true;
         retreating = false;
 
-        audio.Play();
+        GetComponent<AudioSource>().Play();
 
         transform.position = spawnPoint;
 
         targetPosition = transform.position + Vector3.up * 2f;
         targetScale = Vector3.one;
 
-        collider2D.enabled = true;
+        GetComponent<Collider2D>().enabled = true;
 
-        networkView.RPC("NetActivate", RPCMode.Others, spawnPoint);
+        GetComponent<NetworkView>().RPC("NetActivate", RPCMode.Others, spawnPoint);
     }
 
     [RPC]
@@ -61,23 +61,23 @@ public class CashBasherSpirit : MonoBehaviour
         active = true;
         retreating = false;
 
-        audio.Play();
+        GetComponent<AudioSource>().Play();
 
         transform.position = spawnPoint;
 
         targetPosition = transform.position + Vector3.up * 2f;
         targetScale = Vector3.one;
 
-        collider2D.enabled = true;
+        GetComponent<Collider2D>().enabled = true;
     }
 
     public void Deactivate()
     {
         active = false;
         retreating = false;
-        audio.Stop();
+        GetComponent<AudioSource>().Stop();
 
-        collider2D.enabled = false;
+        GetComponent<Collider2D>().enabled = false;
 
         poofOnArrival = false;
 
@@ -90,11 +90,11 @@ public class CashBasherSpirit : MonoBehaviour
         targetPosition = spawnPoint;
         targetScale = Vector3.zero;
 
-        collider2D.enabled = false;
+        GetComponent<Collider2D>().enabled = false;
 
         poofOnArrival = false;
 
-        networkView.RPC("NetRetreat", RPCMode.Others, spawnPoint);
+        GetComponent<NetworkView>().RPC("NetRetreat", RPCMode.Others, spawnPoint);
     }
 
     [RPC]
@@ -104,7 +104,7 @@ public class CashBasherSpirit : MonoBehaviour
         targetPosition = spawnPoint;
         targetScale = Vector3.zero;
 
-        collider2D.enabled = false;
+        GetComponent<Collider2D>().enabled = false;
 
         poofOnArrival = false;
     }
@@ -116,9 +116,9 @@ public class CashBasherSpirit : MonoBehaviour
         targetPosition = position;
         targetPosition.z = -30f;
 
-        collider2D.enabled = false;
+        GetComponent<Collider2D>().enabled = false;
 
-        networkView.RPC("NetMoveHereAndPoof", RPCMode.Others, position);
+        GetComponent<NetworkView>().RPC("NetMoveHereAndPoof", RPCMode.Others, position);
     }
 
     [RPC]
@@ -129,7 +129,7 @@ public class CashBasherSpirit : MonoBehaviour
         targetPosition = position;
         targetPosition.z = -30f;
 
-        collider2D.enabled = false;      
+        GetComponent<Collider2D>().enabled = false;      
     }
 
     public void MoveHereAndTrigger(bool serverCannon)
@@ -142,9 +142,9 @@ public class CashBasherSpirit : MonoBehaviour
         targetPosition = targetCannon.transform.position;
         targetPosition.z = -30f;
 
-        collider2D.enabled = false;
+        GetComponent<Collider2D>().enabled = false;
 
-        networkView.RPC("NetMoveHereAndTrigger", RPCMode.Others, serverCannon);
+        GetComponent<NetworkView>().RPC("NetMoveHereAndTrigger", RPCMode.Others, serverCannon);
     }
 
     [RPC]
@@ -158,7 +158,7 @@ public class CashBasherSpirit : MonoBehaviour
         targetPosition = targetCannon.transform.position;
         targetPosition.z = -30f;
 
-        collider2D.enabled = false;
+        GetComponent<Collider2D>().enabled = false;
     }
 
     public void MoveHereAndHeal(Vector3 position, bool serverSet)
@@ -171,9 +171,9 @@ public class CashBasherSpirit : MonoBehaviour
         targetPosition = position;
         targetPosition.z = -30f;
 
-        collider2D.enabled = false;
+        GetComponent<Collider2D>().enabled = false;
 
-        networkView.RPC("NetMoveHereAndHeal", RPCMode.Others, position, serverSet);
+        GetComponent<NetworkView>().RPC("NetMoveHereAndHeal", RPCMode.Others, position, serverSet);
     }
 
     [RPC]
@@ -187,7 +187,7 @@ public class CashBasherSpirit : MonoBehaviour
         targetPosition = position;
         targetPosition.z = -30f;
 
-        collider2D.enabled = false;
+        GetComponent<Collider2D>().enabled = false;
     }
 
     public void MoveHere(Vector3 target)
@@ -221,13 +221,13 @@ public class CashBasherSpirit : MonoBehaviour
         else
         {
             GameObject tempParticle = (GameObject)Instantiate(fizzleEffect, transform.position + Vector3.back * 3f, Quaternion.identity);
-            tempParticle.particleSystem.Play();
+            tempParticle.GetComponent<ParticleSystem>().Play();
         }
 
         transform.localScale = Vector3.zero;
 
-        particleSystem.Stop();
-        audio.Stop();
+        GetComponent<ParticleSystem>().Stop();
+        GetComponent<AudioSource>().Stop();
 
         poofOnArrival = false;
     }
@@ -245,7 +245,7 @@ public class CashBasherSpirit : MonoBehaviour
             }
 
             transform.localScale = Vector3.SmoothDamp(transform.localScale, targetScale, ref scaleRef, 0.2f, Mathf.Infinity, Time.fixedDeltaTime);
-            audio.volume = Mathf.SmoothDamp(audio.volume, targetVolume, ref volumeRef, 0.2f, Mathf.Infinity, Time.fixedDeltaTime);
+            GetComponent<AudioSource>().volume = Mathf.SmoothDamp(GetComponent<AudioSource>().volume, targetVolume, ref volumeRef, 0.2f, Mathf.Infinity, Time.fixedDeltaTime);
 
             if (retreating && transform.localScale.x < 0.01f)
             {

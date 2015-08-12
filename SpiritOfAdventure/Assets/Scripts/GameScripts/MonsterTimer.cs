@@ -20,7 +20,7 @@ public class MonsterTimer : MonoBehaviour
 
 	void Start()
 	{
-		joint.connectedBody = player.rigidbody2D;
+		joint.connectedBody = player.GetComponent<Rigidbody2D>();
 		joint.distance = originalDistance = Vector3.Distance(transform.position, player.transform.position);
 		timer = 0f;
 	}

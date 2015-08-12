@@ -71,8 +71,8 @@ public abstract class SOAAction : MonoBehaviour
                     }
                     else
                     {
-                        audio.clip = activationSounds[Random.Range(0, activationSounds.Length - 1)];
-                        audio.Play();
+                        GetComponent<AudioSource>().clip = activationSounds[Random.Range(0, activationSounds.Length - 1)];
+                        GetComponent<AudioSource>().Play();
                     }
 				}
 

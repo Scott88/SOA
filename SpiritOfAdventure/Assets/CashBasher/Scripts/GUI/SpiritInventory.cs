@@ -54,9 +54,9 @@ public class SpiritInventory : MonoBehaviour
 
             UpdateDisplay();
 
-            if (audio)
+            if (GetComponent<AudioSource>())
             {
-                audio.Play();
+                GetComponent<AudioSource>().Play();
             }
         }
     }

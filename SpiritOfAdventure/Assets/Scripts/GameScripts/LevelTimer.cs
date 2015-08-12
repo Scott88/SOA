@@ -32,15 +32,15 @@ public class LevelTimer : MonoBehaviour
 	void Update()
 	{
 		timer -= Time.deltaTime;
-		guiText.text = display = timer.ToString("0");
+		GetComponent<GUIText>().text = display = timer.ToString("0");
 
-		if ((GameWin.HasWon() || PauseButton.paused) && guiText.enabled)
+		if ((GameWin.HasWon() || PauseButton.paused) && GetComponent<GUIText>().enabled)
 		{
-			guiText.enabled = false;
+			GetComponent<GUIText>().enabled = false;
 		}
-		else if (!(GameWin.HasWon() || PauseButton.paused) && !guiText.enabled)
+		else if (!(GameWin.HasWon() || PauseButton.paused) && !GetComponent<GUIText>().enabled)
 		{
-			guiText.enabled = true;
+			GetComponent<GUIText>().enabled = true;
 		}
 
 		if (timer <= spawnMonsterAt && !monsterSpawned)
@@ -56,7 +56,7 @@ public class LevelTimer : MonoBehaviour
 
 		if (timer <= 3f && !soundPlayed)
 		{
-			audio.Play();
+			GetComponent<AudioSource>().Play();
 			soundPlayed = true;
 		}
 	}

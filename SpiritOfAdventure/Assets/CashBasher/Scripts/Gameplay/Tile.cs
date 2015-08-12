@@ -46,7 +46,7 @@ public class Tile
 
     public void InsertSpirit(int spiritType)
     {
-        block.networkView.RPC("SetSpirit", RPCMode.All, spiritType);
+        block.GetComponent<NetworkView>().RPC("SetSpirit", RPCMode.All, spiritType);
     }
 
     public SpiritType GetDebuff()

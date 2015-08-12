@@ -12,9 +12,9 @@ public class SelfDeleter : MonoBehaviour
 
 		if (fadeOut == true && lifeTime < 1f)
 		{
-			Color tempColor = renderer.material.color;
+			Color tempColor = GetComponent<Renderer>().material.color;
 			tempColor.a = lifeTime;
-			renderer.material.color = tempColor;
+			GetComponent<Renderer>().material.color = tempColor;
 		}
 
 		if (lifeTime <= 0)

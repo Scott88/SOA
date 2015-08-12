@@ -7,7 +7,7 @@ public class AudioPlaypos : MonoBehaviour {
 
 	void Start () 
 	{
-		audio.time = pos;
+		GetComponent<AudioSource>().time = pos;
 	}
 	
 	// Update is called once per frame

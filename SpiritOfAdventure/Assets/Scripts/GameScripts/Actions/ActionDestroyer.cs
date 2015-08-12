@@ -15,7 +15,7 @@ public class ActionDestroyer : SOAAction
 
 		if (fadeOut)
 		{
-			col = renderer.material.color;
+			col = GetComponent<Renderer>().material.color;
 		}
 	}
 
@@ -25,7 +25,7 @@ public class ActionDestroyer : SOAAction
 		if (fading == true)
 		{
 			col.a -= Time.deltaTime / time;
-			renderer.material.color = col;
+			GetComponent<Renderer>().material.color = col;
 
 			if (col.a <= 0f)
 			{

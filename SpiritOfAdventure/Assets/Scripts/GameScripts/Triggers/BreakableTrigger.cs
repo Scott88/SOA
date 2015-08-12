@@ -27,7 +27,7 @@ public class BreakableTrigger : Triggerable
     {
         if (coll.tag == "CannonBall")
         {
-            if (coll.rigidbody2D.velocity.magnitude > minimumSpeed)
+            if (coll.GetComponent<Rigidbody2D>().velocity.magnitude > minimumSpeed)
             {
                 health--;
             }

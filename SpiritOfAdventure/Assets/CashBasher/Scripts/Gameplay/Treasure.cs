@@ -28,7 +28,7 @@ public class Treasure : MonoBehaviour
         {
             NetworkedCannonBall ball = coll.gameObject.GetComponent<NetworkedCannonBall>() as NetworkedCannonBall;
 
-            if (!ball.networkView.isMine)
+            if (!ball.GetComponent<NetworkView>().isMine)
             {
                 return;
             }
@@ -49,7 +49,7 @@ public class Treasure : MonoBehaviour
         Instantiate(coinExplosion, transform.position + Vector3.back * 5, Quaternion.Euler(270f, 0f, 0f));
         manager.TransferStar(transform.position, stars);
         Destroy(gameObject);
-        networkView.RPC("NetDamage", RPCMode.Others);
+        GetComponent<NetworkView>().RPC("NetDamage", RPCMode.Others);
     }
 
     [RPC]

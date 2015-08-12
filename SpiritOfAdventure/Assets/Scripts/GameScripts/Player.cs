@@ -31,17 +31,17 @@ public class Player : MonoBehaviour
 
 	void FixedUpdate () 
 	{
-		if(isMoving && rigidbody2D.velocity.x < maxSpeed)
+		if(isMoving && GetComponent<Rigidbody2D>().velocity.x < maxSpeed)
 		{
-			float multiplier = (maxSpeed - rigidbody2D.velocity.x) / maxSpeed;
-			rigidbody2D.AddForce(movementForce * multiplier);
+			float multiplier = (maxSpeed - GetComponent<Rigidbody2D>().velocity.x) / maxSpeed;
+			GetComponent<Rigidbody2D>().AddForce(movementForce * multiplier);
 		}
 		else if(!isMoving)
 		{
-			rigidbody2D.AddForce(-rigidbody2D.velocity * stoppingDampen);
+			GetComponent<Rigidbody2D>().AddForce(-GetComponent<Rigidbody2D>().velocity * stoppingDampen);
 		}
 
-		if(rigidbody2D.velocity.x > 0.5f)
+		if(GetComponent<Rigidbody2D>().velocity.x > 0.5f)
 		{
 			move = true;
 		}
@@ -56,12 +56,12 @@ public class Player : MonoBehaviour
 	{
 		if(other.name == "MaterialTrigger")
 		{
-			renderer.material = LightMaterial;
+			GetComponent<Renderer>().material = LightMaterial;
 		}
 
 		if(other.name == "MaterialTriggerOut")
 		{
-			renderer.material = SpriteDiffuse;
+			GetComponent<Renderer>().material = SpriteDiffuse;
 		}
 
 		if (other.name == "BoatStop")
@@ -72,7 +72,7 @@ public class Player : MonoBehaviour
 
 	void PlayFootstepSound()
 	{
-		audio.PlayOneShot(footstepSounds[Random.Range(0, footstepSounds.Length - 1)]);
+		GetComponent<AudioSource>().PlayOneShot(footstepSounds[Random.Range(0, footstepSounds.Length - 1)]);
 	}
 
 	public static void Stop()

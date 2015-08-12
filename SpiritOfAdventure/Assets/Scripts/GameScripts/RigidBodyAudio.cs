@@ -51,7 +51,7 @@ public class RigidBodyAudio : MonoBehaviour
 
 	void FixedUpdate()
 	{
-		float speed = Mathf.Abs(rigidbody2D.angularVelocity);
+		float speed = Mathf.Abs(GetComponent<Rigidbody2D>().angularVelocity);
 
 		if (speed < minRotationSpeed || !madeContact)
 		{

@@ -6,6 +6,6 @@ public class ActionPlayParticle : SOAAction
 	protected override void Activate()
 	{
 		ActionComplete();
-		particleSystem.Play();
+		GetComponent<ParticleSystem>().Play();
 	}
 }

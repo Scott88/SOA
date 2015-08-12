@@ -10,7 +10,7 @@ public class SpiritGUI : MonoBehaviour
 
 	void Start()
 	{
-		originalColor = renderer.material.color;
+		originalColor = GetComponent<Renderer>().material.color;
 	}
 
 	void Update()
@@ -26,7 +26,7 @@ public class SpiritGUI : MonoBehaviour
 
 			originalColor.a = Mathf.Lerp(1f, 0f, cooldownTimer / cooldownLength);
 
-			renderer.material.color = originalColor;
+			GetComponent<Renderer>().material.color = originalColor;
 
 			//Replace this with whatever sort of visual indicator the future icon will have for cooldown.
 			//renderer.material.color = Color.Lerp (originalColor, Color.black, cooldownTimer / cooldownLength);

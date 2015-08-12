@@ -33,15 +33,15 @@ public class ScoreManager : MonoBehaviour
 	
 	void Update()
 	{
-		guiText.text = GetFinalScore().ToString();
+		GetComponent<GUIText>().text = GetFinalScore().ToString();
 
-		if ((GameWin.HasWon() || PauseButton.paused) && guiText.enabled)
+		if ((GameWin.HasWon() || PauseButton.paused) && GetComponent<GUIText>().enabled)
 		{
-			guiText.enabled = false;
+			GetComponent<GUIText>().enabled = false;
 		}
-		else if (!(GameWin.HasWon() || PauseButton.paused) && !guiText.enabled)
+		else if (!(GameWin.HasWon() || PauseButton.paused) && !GetComponent<GUIText>().enabled)
 		{
-			guiText.enabled = true;
+			GetComponent<GUIText>().enabled = true;
 		}
 
 		if (animatingScore)
@@ -242,7 +242,7 @@ public class ScoreManager : MonoBehaviour
 
 			if (animatingScore)
 			{
-				audio.Play();
+				GetComponent<AudioSource>().Play();
 			}
 
 			yield return 0;

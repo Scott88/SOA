@@ -23,12 +23,12 @@ public class WaitingState : GameState
 
             if (serverFirst)
             {
-                manager.networkView.RPC("SwitchToState", RPCMode.Others, (int)GamePhase.GP_THEIR_TURN);
+                manager.GetComponent<NetworkView>().RPC("SwitchToState", RPCMode.Others, (int)GamePhase.GP_THEIR_TURN);
                 manager.SwitchToState((int)GamePhase.GP_YOUR_TURN);              
             }
             else
             {
-                manager.networkView.RPC("SwitchToState", RPCMode.Others, (int)GamePhase.GP_YOUR_TURN);
+                manager.GetComponent<NetworkView>().RPC("SwitchToState", RPCMode.Others, (int)GamePhase.GP_YOUR_TURN);
                 manager.SwitchToState((int)GamePhase.GP_THEIR_TURN);               
             }
         }

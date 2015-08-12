@@ -29,9 +29,9 @@ public class SpiritCounter : MonoBehaviour {
         spiritCount--;
         display.text = "x" + spiritCount.ToString();
 
-        if (audio)
+        if (GetComponent<AudioSource>())
         {
-            audio.Play();
+            GetComponent<AudioSource>().Play();
         }
 
         SaveFile.Instance().SetSpiritCount(type, spiritCount);

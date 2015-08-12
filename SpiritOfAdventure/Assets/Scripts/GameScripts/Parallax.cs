@@ -22,7 +22,7 @@ public class Parallax : MonoBehaviour
 			{
 				Transform child = transform.GetChild(i);
 			
-				if (child.renderer != null)
+				if (child.GetComponent<Renderer>() != null)
 				{
 					backgroundPart.Add(child);
 				}
@@ -36,7 +36,7 @@ public class Parallax : MonoBehaviour
 	{// paralax if the game is not won, not paused, if the player is moveing, or attached to a moving object.
 		if (GameWin.Win != true && PauseButton.paused != true)
 		{
-			if (!renderer || renderer.IsVisibleFrom(Camera.main))
+			if (!GetComponent<Renderer>() || GetComponent<Renderer>().IsVisibleFrom(Camera.main))
 			{
 				if (Player.move == true || Player.isAttached == true)
 				{ 
@@ -60,7 +60,7 @@ public class Parallax : MonoBehaviour
 					{
 						Transform lastChild = backgroundPart.LastOrDefault();
 						Vector3 lastPosition = lastChild.transform.position;
-						Vector3 lastSize = (lastChild.renderer.bounds.max - lastChild.renderer.bounds.min);
+						Vector3 lastSize = (lastChild.GetComponent<Renderer>().bounds.max - lastChild.GetComponent<Renderer>().bounds.min);
 
 						firstChild.position = new Vector3(lastPosition.x + lastSize.x, firstChild.position.y, firstChild.position.z);
 

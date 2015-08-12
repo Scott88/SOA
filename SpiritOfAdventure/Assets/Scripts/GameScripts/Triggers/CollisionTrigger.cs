@@ -8,7 +8,7 @@ public class CollisionTrigger : Triggerable
 	{
 		if(target)
 		{
-			if (coll.collider == target.collider2D)
+			if (coll.collider == target.GetComponent<Collider2D>())
 			{
 				Trigger();
 			}
@@ -19,7 +19,7 @@ public class CollisionTrigger : Triggerable
 	{
 		if(target)
 		{
-			if (other == target.collider2D)
+			if (other == target.GetComponent<Collider2D>())
 			{
 				Trigger();
 			}

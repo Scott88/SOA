@@ -29,7 +29,7 @@ public class Spirit : MonoBehaviour
 	{
 		movingToTarget = false;
 		follower = GetComponent<FollowPlayer>();
-		targetVolume = audio.volume;
+		targetVolume = GetComponent<AudioSource>().volume;
 	}
 
 	void Start()
@@ -52,7 +52,7 @@ public class Spirit : MonoBehaviour
 		movingToTarget = true;
 		poofOnArrival = true;
 		targetPosition = position;
-		collider2D.enabled = false;
+		GetComponent<Collider2D>().enabled = false;
 		targetPosition.z = -30f;
 	}
 
@@ -64,7 +64,7 @@ public class Spirit : MonoBehaviour
 		poofOnArrival = true;
 		targetPosition = position;
 		spiritReceiver = receiver;
-		collider2D.enabled = false;
+		GetComponent<Collider2D>().enabled = false;
 		targetPosition.z = -30f;
 	}
 
@@ -93,25 +93,25 @@ public class Spirit : MonoBehaviour
 			gameManager.effectManager.PlayFizzleParticle(type, targetPosition);
 		}
 
-		particleSystem.Stop();
+		GetComponent<ParticleSystem>().Stop();
 		follower.WarpOffscreen();
-		audio.Stop();
+		GetComponent<AudioSource>().Stop();
 	}
 
 	public void Select()
 	{
 		follower.Follow();
-		particleSystem.Play();
-		collider2D.enabled = true;
-		audio.Play ();
+		GetComponent<ParticleSystem>().Play();
+		GetComponent<Collider2D>().enabled = true;
+		GetComponent<AudioSource>().Play ();
 	}
 
 	public void Deselect()
 	{
 		follower.HideAway();
-		particleSystem.Stop();
-		collider2D.enabled = false;
-		audio.Stop();
+		GetComponent<ParticleSystem>().Stop();
+		GetComponent<Collider2D>().enabled = false;
+		GetComponent<AudioSource>().Stop();
 	}
 
 	//Here, if the spirit is moving to the target, once it gets close enough, it will either trigger the object
@@ -142,7 +142,7 @@ public class Spirit : MonoBehaviour
 			}*/
 
 			transform.localScale = Vector3.SmoothDamp(transform.localScale, targetScale, ref scaleRef, 0.2f, Mathf.Infinity, Time.fixedDeltaTime);
-			audio.volume = Mathf.SmoothDamp(audio.volume, targetVolume, ref volumeRef, 0.2f, Mathf.Infinity, Time.fixedDeltaTime);
+			GetComponent<AudioSource>().volume = Mathf.SmoothDamp(GetComponent<AudioSource>().volume, targetVolume, ref volumeRef, 0.2f, Mathf.Infinity, Time.fixedDeltaTime);
 
 			if(Vector3.Distance (transform.position, targetPosition) < 1f && poofOnArrival)
 			{

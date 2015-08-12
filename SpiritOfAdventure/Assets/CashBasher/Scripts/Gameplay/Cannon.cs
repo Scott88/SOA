@@ -276,9 +276,9 @@ public class Cannon : MonoBehaviour
 
         GameObject ball = Instantiate(cannonBall, ballSpawnPoint.transform.position, new Quaternion()) as GameObject;
 
-        ball.rigidbody2D.velocity = finalVel;
+        ball.GetComponent<Rigidbody2D>().velocity = finalVel;
 
-        audio.Play();
+        GetComponent<AudioSource>().Play();
 
         currentState = CannonState.CS_FIRED;
         knockbackTimer = knockbackDuration;

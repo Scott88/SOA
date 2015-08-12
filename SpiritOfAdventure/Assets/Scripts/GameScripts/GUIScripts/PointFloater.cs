@@ -17,7 +17,7 @@ public class PointFloater : MonoBehaviour
 		{
 			transform.Translate(new Vector3(0f, -0.3f * Time.deltaTime, 0f));
 
-			Color tempColor = guiText.material.color;
+			Color tempColor = GetComponent<GUIText>().material.color;
 			tempColor.a -= Time.deltaTime;
 
 			if (tempColor.a <= 0f)
@@ -25,13 +25,13 @@ public class PointFloater : MonoBehaviour
 				Destroy(gameObject);
 			}
 
-			guiText.material.color = tempColor;
+			GetComponent<GUIText>().material.color = tempColor;
 		}
 		else if(points > 0)
 		{
 			transform.Translate(new Vector3(0f, 0.3f * Time.deltaTime, 0f));
 
-			Color tempColor = guiText.material.color;
+			Color tempColor = GetComponent<GUIText>().material.color;
 			tempColor.a += Time.deltaTime;
 
 			if (tempColor.a > 1f)
@@ -40,16 +40,16 @@ public class PointFloater : MonoBehaviour
 				Destroy(gameObject);
 			}
 
-			guiText.material.color = tempColor;
+			GetComponent<GUIText>().material.color = tempColor;
 		}
 
-		if (PauseButton.paused && guiText.enabled)
+		if (PauseButton.paused && GetComponent<GUIText>().enabled)
 		{
-			guiText.enabled = false;
+			GetComponent<GUIText>().enabled = false;
 		}
-		else if(!PauseButton.paused && !guiText.enabled)
+		else if(!PauseButton.paused && !GetComponent<GUIText>().enabled)
 		{
-			guiText.enabled = true;
+			GetComponent<GUIText>().enabled = true;
 		}
 	}
 
@@ -61,15 +61,15 @@ public class PointFloater : MonoBehaviour
 		{
 			gameManager.scoreManager.AddScore(points);
 			transform.position = new Vector3(0.98f, 0.88f, 0f);
-			guiText.text = points.ToString();
+			GetComponent<GUIText>().text = points.ToString();
 		}
 		else
 		{
 			transform.position = new Vector3(0.98f, 0.58f, 0f);
-			Color tempColor = guiText.material.color;
+			Color tempColor = GetComponent<GUIText>().material.color;
 			tempColor.a = 0f;
-			guiText.material.color = tempColor;
-			guiText.text = "+" + points.ToString();
+			GetComponent<GUIText>().material.color = tempColor;
+			GetComponent<GUIText>().text = "+" + points.ToString();
 		}
 	}
 }

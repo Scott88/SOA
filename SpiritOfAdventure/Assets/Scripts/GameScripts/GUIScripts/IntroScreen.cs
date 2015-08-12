@@ -22,9 +22,9 @@ public class IntroScreen : MonoBehaviour
 		translateVel = new Vector3 ();
 		scaleVel = new Vector3 ();
 
-		alphaController = renderer.material.color;
+		alphaController = GetComponent<Renderer>().material.color;
 		alphaController.a = 0;
-		renderer.material.color = alphaController;
+		GetComponent<Renderer>().material.color = alphaController;
 
         startTranslation = transform.position;
         startScale = transform.localScale;
@@ -41,7 +41,7 @@ public class IntroScreen : MonoBehaviour
 		{
 			timer -= Time.deltaTime;
 			alphaController.a = 1 - timer / fadeInTime;
-			renderer.material.color = alphaController;
+			GetComponent<Renderer>().material.color = alphaController;
 			yield return 0;
 		}
 
@@ -109,7 +109,7 @@ public class IntroScreen : MonoBehaviour
 		{
 			timer -= Time.deltaTime;
 			alphaController.a = timer / fadeOutTime;
-			renderer.material.color = alphaController;
+			GetComponent<Renderer>().material.color = alphaController;
 			yield return 0;
 		}
 

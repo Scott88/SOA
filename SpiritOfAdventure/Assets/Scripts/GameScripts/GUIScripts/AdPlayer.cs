@@ -41,19 +41,19 @@ public class AdPlayer : MonoBehaviour
             Advertisement.allowPrecache = true;
 #if UNITY_ANDROID
 #if UNITY_EDITOR
-            Advertisement.Initialize("24667", true);
-            initialized = true;
+            //Advertisement.Initialize("24667", true);
+            //initialized = true;
 #else
-            Advertisement.Initialize("24667");
-            initialized = true;
+            //Advertisement.Initialize("24667");
+            //initialized = true;
 #endif
 #elif UNITY_IOS
 #if UNITY_EDITOR
-            //Advertisement.Initialize("PUT IOS NUMBER HERE", true);
-            //initialized = true;
+			Advertisement.Initialize("31945", true);
+            initialized = true;
 #else
-            //Advertisement.Initialize("PUT IOS NUMBER HERE");
-            //initialized = true;
+			Advertisement.Initialize("31945");
+            initialized = true;
 #endif
 #endif
         }

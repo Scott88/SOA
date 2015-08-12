@@ -23,15 +23,15 @@ public class SoundRandomizer : MonoBehaviour
 
 		if (timer <= 0f)
 		{
-			audio.clip = sounds[Random.Range(0, sounds.Length - 1)];
-			audio.volume = Random.Range(minVolume, maxVolume);
+			GetComponent<AudioSource>().clip = sounds[Random.Range(0, sounds.Length - 1)];
+			GetComponent<AudioSource>().volume = Random.Range(minVolume, maxVolume);
 
 			if (randomizePan)
 			{
-				audio.pan = Random.Range(-1f, 1f);
+				GetComponent<AudioSource>().panStereo = Random.Range(-1f, 1f);
 			}
 
-			audio.Play();
+			GetComponent<AudioSource>().Play();
 
 			timer = Random.Range(minTime, maxTime);
 		}

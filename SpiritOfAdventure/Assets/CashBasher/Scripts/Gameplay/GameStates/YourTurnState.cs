@@ -79,7 +79,7 @@ public class YourTurnState : GameState
 
     IEnumerator Preshow()
     {
-        yourCannon.collider2D.enabled = false;
+        yourCannon.GetComponent<Collider2D>().enabled = false;
 
         nextTurn = false;
 
@@ -132,7 +132,7 @@ public class YourTurnState : GameState
     public void ReadyNextTurn()
     {
         timer = 1f;
-        manager.networkView.RPC("UpdateEffectStatus", RPCMode.Others);
+        manager.GetComponent<NetworkView>().RPC("UpdateEffectStatus", RPCMode.Others);
         nextTurn = true;
     }
 
@@ -153,7 +153,7 @@ public class YourTurnState : GameState
         {
             if (timer <= 0.0f)
             {
-                manager.networkView.RPC("SwitchToState", RPCMode.Others, (int)GamePhase.GP_YOUR_TURN);
+                manager.GetComponent<NetworkView>().RPC("SwitchToState", RPCMode.Others, (int)GamePhase.GP_YOUR_TURN);
                 manager.SwitchToState((int)GamePhase.GP_THEIR_TURN);
             }
         }
@@ -349,13 +349,13 @@ public class YourTurnState : GameState
             {
                 manager.cameraMan.FollowWaypoint(manager.clientCamFocus);
                 cameraFocusLeft = false;
-                manager.networkView.RPC("FocusCamera", RPCMode.Others, cameraFocusLeft);
+                manager.GetComponent<NetworkView>().RPC("FocusCamera", RPCMode.Others, cameraFocusLeft);
             }
             else if (!cameraFocusLeft && manager.playerCamera.transform.position.x < moveLeftPos)
             {
                 manager.cameraMan.FollowWaypoint(manager.serverCamFocus);
                 cameraFocusLeft = true;
-                manager.networkView.RPC("FocusCamera", RPCMode.Others, cameraFocusLeft);
+                manager.GetComponent<NetworkView>().RPC("FocusCamera", RPCMode.Others, cameraFocusLeft);
             }
 
             cameraGrabbed = false;
@@ -472,6 +472,6 @@ public class YourTurnState : GameState
         nextTurn = false; 
         timer = 1.0f;
 
-        yourCannon.collider2D.enabled = true;
+        yourCannon.GetComponent<Collider2D>().enabled = true;
     }
 }
