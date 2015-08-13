@@ -1,0 +1,6 @@
+framework module ItavioSdk {
+  umbrella header "ItavioSdk.h"
+
+  export *
+  module * { export * }
+}
