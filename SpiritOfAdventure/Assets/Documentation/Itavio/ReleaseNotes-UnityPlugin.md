@@ -1,9 +1,14 @@
 # Itavio Sdk
 ## Unity Plugin Release Notes
-**Updated:** 06/22/2015  
-**Itavio Unity Plugin Version :** 0.2.0
+**Updated:** 07/17/2015  
+**Itavio Unity Plugin Version :** 0.2.1
 
 ---
+### Version 0.2.1 - 07/17/15
+* Updated android libraries
+* Updated the Itavio Android Sdk version 0.2.1
+* Updated the Itavio iOS Sdk version 0.2.1
+
 ### Version 0.2.0 - 06/22/15
 * Added `Staging` environment
 * Added `Integration` environment

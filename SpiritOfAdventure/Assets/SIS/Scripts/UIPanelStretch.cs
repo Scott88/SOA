@@ -17,7 +17,31 @@ public class UIPanelStretch : MonoBehaviour
     public int maxCellSizeX;
     public int maxCellSizeY;
 
+    [ContextMenu("Reposition")]
     public void Reposition()
+    {
+
+        RealReposition();
+
+        if (gameObject.activeInHierarchy)
+        {
+            StartCoroutine(_Reposition(0.5f));
+        }
+    }
+
+    private IEnumerator _Reposition(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+
+        RealReposition();
+    }
+
+    private void OnEnable()
+    {
+        Reposition();
+    }
+
+    private void RealReposition()
     {
         RectTransform rectTrans = GetComponent<RectTransform>();
         GridLayoutGroup grid = GetComponent<GridLayoutGroup>();
@@ -25,7 +49,7 @@ public class UIPanelStretch : MonoBehaviour
         if (rectTrans != null && grid != null)
         {
             RectTransform child = transform.GetChild(0).GetComponent<RectTransform>();
-            
+
             switch (grid.startAxis)
             {
                 case GridLayoutGroup.Axis.Vertical:
@@ -42,7 +66,7 @@ public class UIPanelStretch : MonoBehaviour
                     break;
             }
 
-            if(maxCellSizeX > 0 && grid.cellSize.x > maxCellSizeX)
+            if (maxCellSizeX > 0 && grid.cellSize.x > maxCellSizeX)
                 grid.cellSize = new Vector2(maxCellSizeX, grid.cellSize.y);
             if (maxCellSizeY > 0 && grid.cellSize.y > maxCellSizeY)
                 grid.cellSize = new Vector2(grid.cellSize.x, maxCellSizeY);

@@ -20,7 +20,7 @@ To integrate ItavioSdk into your Unity application:
 
 ## Step 2 - Define Platforms
 1.  Select `/Assets/Plugins/Itavio/Resources/itavioConfig`
-2.  In the **Inspector**, add a new platform, name it and fill out the values with the Itavio provided *secret key id* and *secret key*.
+2.  In the **Inspector**, add a new platform, name it and fill out the values for the desired environment with the Itavio provided *secret key id* and *secret key*.
 
 ## Step 3 - Initialize Itavio
 1.  Add this directive to the `MonoBehaviour` that will be making calls to the `ItavioManager`:
@@ -78,7 +78,7 @@ Be sure that `itavioManager` has been initialized before calling any of these me
 3.  To check the link status use the property `itavioManager.IsLinked`
     ```csharp
     if(itavioManager.IsLinked) {
-      // If Itavio has already been linked against an account 
+      // If Itavio has already been linked against an account
     }
     ```
 
@@ -92,7 +92,7 @@ Be sure that `itavioManager` has been initialized before calling any of these me
     ```csharp
     itavioManager.finalizeDebit(true);
     ```
-    Alternatively, if the purchase was cancelled
+    Alternatively, if the purchase was cancelled or failed
     ```csharp
     itavioManager.finalizeDebit(false);
     ```

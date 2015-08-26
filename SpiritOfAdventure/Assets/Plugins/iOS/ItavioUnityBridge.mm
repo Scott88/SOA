@@ -118,9 +118,9 @@ extern "C" {
         }];
     }
     
-    void itavioCheckForParent(bool showGetAppDialog)
+    void itavioCheckForParent(bool showGetAppDialog, bool ignoreSuppression)
     {
-        if ([[ITSdk sharedInstance] checkForParent:showGetAppDialog]) {
+        if ([[ITSdk sharedInstance] checkForParent:showGetAppDialog shouldIgnoreSuppression:ignoreSuppression]) {
             // Itavio Parent App is installed
             NSDictionary *dict = [NSDictionary dictionaryWithObjectsAndKeys: @YES, @"hasParentApp", nil];
             UnitySendMessage(UNITY_CLASS, UNITY_ON_CHECK_FOR_PARENT, NSDictToJsonCString(dict));

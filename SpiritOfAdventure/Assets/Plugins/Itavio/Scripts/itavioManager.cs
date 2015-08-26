@@ -219,7 +219,7 @@ namespace itavio
         /// Check for Itavio parent app
         /// </summary>
         /// <param name="showGetAppDialog">Show the user a dialog prompt to get the parent app if it is not present</param>
-        public static void checkForParent(bool showGetAppDialog = false)
+        public static void checkForParent(bool showGetAppDialog = false, bool ignoreSuppression = false)
         {
             itavioDbg.Log("Check For Parent - Show Dialog: " + showGetAppDialog);
 #if ITAVIO_ANDROID
@@ -231,7 +231,7 @@ namespace itavio
 #elif ITAVIO_IOS
             if (PluginExists)
             {
-                itavioCheckForParent(showGetAppDialog);
+                itavioCheckForParent(showGetAppDialog, ignoreSuppression);
             }
 #else   // Unsupported Platform
             itavioDbg.LogWarning("Check For Parent Stub");
@@ -436,8 +436,7 @@ namespace itavio
         private static extern void itavioCompleteDebit();
 
         [DllImport("__Internal")]
-        private static extern void itavioCheckForParent(bool showGetAppDialog);
-
+        private static extern void itavioCheckForParent(bool showGetAppDialog, bool ignoreSuppression);
         
         [DllImport("__Internal")]
         private static extern bool itavioHasLink();

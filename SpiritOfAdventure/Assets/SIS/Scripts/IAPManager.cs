@@ -159,12 +159,17 @@ namespace SIS
 			OpenIABEventManager.purchaseFailedEvent += PurchaseFailed;
 			OpenIABEventManager.consumePurchaseSucceededEvent += ConsumeSucceeded;
 			OpenIABEventManager.consumePurchaseFailedEvent += PurchaseFailed;
-			//iOS only
-			OpenIABEventManager.transactionRestoredEvent += TransactionRestored;
+            //itavio
+            OpenIABEventManager.purchaseFailedEvent += itavioPurchaseFailed;
+            OpenIABEventManager.consumePurchaseFailedEvent += itavioConsumePurchaseFailed;
+            //iOS only
+            OpenIABEventManager.transactionRestoredEvent += TransactionRestored;
 			OpenIABEventManager.restoreSucceededEvent += RestoreSucceeded;
 			OpenIABEventManager.restoreFailedEvent += RestoreFailed;
 
-			Options opt = new Options();
+
+
+            Options opt = new Options();
 			opt.verifyMode = OptionsVerifyMode.VERIFY_SKIP;
 			opt.storeKeys = new Dictionary<string, string>
 			{
@@ -204,11 +209,21 @@ namespace SIS
 			OnLevelWasLoaded(-1);
 		}
 
+        private void itavioConsumePurchaseFailed(string obj)
+        {
+            itavioManager.finalizeDebit(false);
+        }
 
-		/// <summary>
-		/// initiate shop manager initialization on scene change
-		/// </summary>
-		public void OnLevelWasLoaded(int level)
+        private void itavioPurchaseFailed(int arg1, string arg2)
+        {
+            itavioManager.finalizeDebit(false);
+        }
+
+
+        /// <summary>
+        /// initiate shop manager initialization on scene change
+        /// </summary>
+        public void OnLevelWasLoaded(int level)
 		{
 			if(instance != this)
 				return;
@@ -252,7 +267,11 @@ namespace SIS
 			OpenIABEventManager.transactionRestoredEvent -= TransactionRestored;
 			OpenIABEventManager.restoreSucceededEvent -= RestoreSucceeded;
 			OpenIABEventManager.restoreFailedEvent -= RestoreFailed;
-		}
+
+
+            OpenIABEventManager.purchaseFailedEvent -= itavioPurchaseFailed;
+            OpenIABEventManager.consumePurchaseFailedEvent -= itavioConsumePurchaseFailed;
+        }
 
 
 		// initialize IAP ids:
@@ -359,7 +378,7 @@ namespace SIS
 				string sku = GetIAPObject(productId).GetIdentifier();
 				SkuDetails skuDetails = inventory.GetSkuDetails(sku);
 
-				itavioManager.startDebit<Action<string>>(Convert.ToDouble(skuDetails.PriceValue), skuDetails.CurrencyCode, OpenIAB.purchaseProduct, sku);
+				itavioManager.startDebit<Action<string, string>>(Convert.ToDouble(skuDetails.PriceValue), skuDetails.CurrencyCode, OpenIAB.purchaseProduct, sku, "");
 			}
 		}
 
@@ -388,7 +407,7 @@ namespace SIS
 				string sku = GetIAPObject(productId).GetIdentifier();
 				SkuDetails skuDetails = inventory.GetSkuDetails(sku);
 
-				itavioManager.startDebit<Action<string>>(Convert.ToDouble(skuDetails.PriceValue), skuDetails.CurrencyCode, OpenIAB.purchaseSubscription, sku);
+				itavioManager.startDebit<Action<string, string>>(Convert.ToDouble(skuDetails.PriceValue), skuDetails.CurrencyCode, OpenIAB.purchaseSubscription, sku, "");
 			}
 			else
 				BillingNotSupported("Subscriptions not available.");
@@ -419,6 +438,7 @@ namespace SIS
 		// Method that fires the purchase succeeded action
 		private void ConsumeSucceeded(Purchase prod)
 		{
+            itavioManager.finalizeDebit(true);
 			inventory.ErasePurchase(prod.Sku);
 			purchaseSucceededEvent(GetIAPIdentifier(prod.Sku));
 		}
@@ -526,6 +546,7 @@ namespace SIS
 
 			if (obj.type == IAPType.nonConsumable || obj.type == IAPType.subscription)
 			{
+                itavioManager.finalizeDebit(true);
 				DBManager.SetToPurchased(id);
 			}
 

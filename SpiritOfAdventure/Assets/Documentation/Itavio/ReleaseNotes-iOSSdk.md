@@ -1,9 +1,14 @@
 # Itavio Sdk
 ## iOS Sdk Release Notes
-**Updated:** 06/22/2015
-**Itavio iOS Sdk Version :** 0.2.0
+**Updated:** 07/17/2015
+**Itavio iOS Sdk Version :** 0.2.1
 
 ---
+### Version 0.2.1 - 07/17/15
+* Fixed AppStore submission blocker
+* Fixed tap-through dialogs bug
+* Updated *Confirm Link* dialog
+
 ### Version 0.2.0 - 06/22/15
 * Added *Uninstall Detected* dialog
 * Added `Staging` environment

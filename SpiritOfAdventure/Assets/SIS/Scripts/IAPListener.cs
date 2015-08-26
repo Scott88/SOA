@@ -6,7 +6,6 @@
 
 using UnityEngine;
 using System.Collections;
-using itavio;
 
 namespace SIS
 {
@@ -49,8 +48,6 @@ namespace SIS
         /// </summary>
         public void HandleSuccessfulPurchase(string id)
         {
-            itavioManager.finalizeDebit(true);
-
             //differ between ids set in the IAP Settings editor
             if (debug) Debug.Log("HandleSuccessfulPurchase: " + id);
             //get instantiated shop item based on the IAP id
@@ -245,7 +242,6 @@ namespace SIS
         //we do the same here
         void HandleFailedPurchase(string error)
         {
-            itavioManager.finalizeDebit(false);
 
             if (ShopManager.GetInstance())
                 ShopManager.ShowMessage(error);

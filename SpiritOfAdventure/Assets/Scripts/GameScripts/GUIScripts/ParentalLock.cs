@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using itavio;
 
 public class ParentalLock : MonoBehaviour
 {
@@ -23,6 +24,39 @@ public class ParentalLock : MonoBehaviour
     private bool ready = false;
 
     public void SetUpTest()
+    {
+        itavioManager.OnCheckForParent += ItavioManager_OnCheckForParent;
+        itavioManager.checkForParent(true);
+
+    }
+
+    private void ItavioManager_OnCheckForParent(bool result)
+    {
+        if (!result) // not using itavio ~ skill testing question
+        {
+            SetUpTestSkill();
+        }
+        else
+        {
+            // Itavio Enabled skip skill test
+            lockPrompt.SetActive(false);
+            store.SetActive(true);
+            lilyBucksStore.SetActive(true);
+
+            for (int j = 0; j < otherMenus.Length; j++)
+            {
+                otherMenus[j].SetActive(false);
+            }
+
+            ready = false;
+        }
+
+        itavioManager.OnCheckForParent -= ItavioManager_OnCheckForParent;
+    }
+
+
+    //public void SetUpTest
+    public void SetUpTestSkill()
     {
         store.SetActive(false);
 

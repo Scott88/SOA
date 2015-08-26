@@ -1,9 +1,15 @@
 # Itavio Sdk
 ## Android Sdk Release Notes
-**Updated:** 06/22/2015
-**Itavio Android Sdk Version :** 0.2.0
+**Updated:** 07/17/2015
+**Itavio Android Sdk Version :** 0.2.1
 
 ---
+### Version 0.2.1 - 07/17/15
+* Reduced filesize
+* Improved DEX reference count
+* Updated *Get App* dialog
+* Updated dependencies
+
 ### Version 0.2.0 - 06/22/15
 * Added *Uninstall Detected* dialog
 * Added `Staging` environment

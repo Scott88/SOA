@@ -149,12 +149,11 @@ public class itavioSample : MonoBehaviour
         {
             itavioManager.linkWithParentApp(m_showGetAppDialog);
         }
-        GUI.enabled = itavioManager.IsLinked;
+
         if (GUILayout.Button("Re-Link with Parent", GUILayout.ExpandWidth(true), GUILayout.ExpandHeight(true)))
         {
             itavioManager.linkWithParentApp(m_showGetAppDialog, true);
         }
-        GUI.enabled = true;
         GUILayout.EndHorizontal();
 #endif
 

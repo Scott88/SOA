@@ -1,5 +1,4 @@
-﻿using UnityEngine;
-using UnityEditor;
+﻿using UnityEditor;
 using System.Collections.Generic;
 using System.IO;
 using System;
@@ -18,12 +17,12 @@ public class itavioAssetPostProcessor : AssetPostprocessor {
     private static readonly Dictionary<string, string> k_currentAndroidFiles = new Dictionary<string,string>{
         {"ItavioPlugin{0}.aar", ""},
         {"ItavioUnityPlugin{0}.jar", ""},
-        {"android-async-http-{0}.jar", "1.4.7"},
-        {"appcompat-v7-{0}.aar", "22.2.0"},
+        {"android-async-http-{0}.jar", "1.4.8"},
+        {"appcompat-v7-{0}.aar", "22.2.1"},
         {"library-{0}.aar", "2.1.4"},
         {"library-{0}.jar", "2.4.0"},
         {"MaterialDesign-{0}.aar", "1.5"},
-        {"support-v4-{0}.aar", "22.2.0"}
+        {"support-v4-{0}.aar", "22.2.1"}
     };
 
     static void OnPostprocessAllAssets(string[] importedAssets, string[] deletedAssets, string[] movedAssets, string[] movedFromAssetPaths)
